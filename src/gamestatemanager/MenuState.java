@@ -85,18 +85,17 @@ public class MenuState extends GameState {
 	
 	private void select() {
 		switch (options[currentOption]) {
-			case PLAY:
-				//example of what will be done if the user selects play
-				//gsm.getStates().push(new WorldState(gsm));
-				break;
-		 case SETTINGS:
-			 gsm.getStates().push(new SettingsState(gsm));
-			 break;
-		 case QUIT:
-			 System.exit(0);
-			 break;
-		 default:
-			 break;
+		case PLAY:
+			gsm.getStates().push(new DevTestState(gsm));
+			break;
+		case SETTINGS:
+			gsm.getStates().push(new SettingsState(gsm));
+			break;
+		case QUIT:
+			System.exit(0);
+			break;
+		default:
+			break;
 		}
 	}
 }
