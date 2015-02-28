@@ -1,4 +1,4 @@
-package gameshell.io;
+package gfx;
 
 import gfx.AssetManager.ImageHashKey;
 
