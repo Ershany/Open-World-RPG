@@ -22,7 +22,7 @@ public class MenuState extends GameState {
 		currentOption = 0;
 		font = new Font("Algerian", Font.PLAIN, 60);
 	}
-
+	
 	public void update() {
 		
 	}
@@ -41,7 +41,7 @@ public class MenuState extends GameState {
 			else {
 				g.setColor(Color.BLACK);
 			}
-
+			
 			g.drawString(options[i], (Game.WIDTH / 2) - (options[i].length() * 17), (i *100) + Game.HEIGHT / 5);
 		}
 	}
