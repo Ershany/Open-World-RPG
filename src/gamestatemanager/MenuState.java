@@ -9,7 +9,23 @@ import java.awt.event.KeyEvent;
 
 public class MenuState extends GameState {
 
-	private String[] options = {"Play", "Information", "Credits", "Quit"};
+	/*(potential)TODO : I think we should look into an abstract MenuState super class? I feel we're going to run into
+	plenty of menus in the future, and I bet most of them are going to be reusing this code anyway.
+	Or (I like this one better) we could just have a Menu class we make and modify, adding buttons and their on-click instructions
+	I suppose it'd require a custom button class, too, but I believe that it'd be much cleaner code.
+	Tomorrow I'll write up a branch and you can see how you feel about it and whether or not we should do it
+		
+	*/
+	
+	
+	private final String PLAY = "Play";
+	private final String SETTINGS = "Settings";
+	private final String INFORMATION = "Information";
+	private final String CREDITS = "Credits";
+	private final String QUIT = "Quit";
+	
+	
+	private String[] options = {PLAY, INFORMATION, SETTINGS, CREDITS, QUIT};
 	private int currentOption;
 
 	private Font font;
@@ -58,7 +74,7 @@ public class MenuState extends GameState {
 			else currentOption++;
 		}
 
-		if(k == KeyEvent.VK_ENTER) select();
+		if(k == KeyEvent.VK_ENTER) { select(); }
 	}
 	public void keyReleased(int k) {
 		
@@ -68,12 +84,19 @@ public class MenuState extends GameState {
 	}
 	
 	private void select() {
-		if(options[currentOption].equals("Quit")) {
-			System.exit(0);
-		}
-		if(options[currentOption].equals("Play")) {
-			//example of what will be done if the user selects play
-			//gsm.getStates().push(new WorldState(gsm));
+		switch (options[currentOption]) {
+			case PLAY:
+				//example of what will be done if the user selects play
+				//gsm.getStates().push(new WorldState(gsm));
+				break;
+		 case SETTINGS:
+			 gsm.getStates().push(new SettingsState(gsm));
+			 break;
+		 case QUIT:
+			 System.exit(0);
+			 break;
+		 default:
+			 break;
 		}
 	}
 }

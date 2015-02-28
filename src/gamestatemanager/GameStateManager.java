@@ -7,6 +7,7 @@ import java.util.Stack;
 
 public class GameStateManager {
 
+	
 	private Graphics2D g;
 
 	private Stack<GameState> states;

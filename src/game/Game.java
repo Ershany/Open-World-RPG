@@ -32,22 +32,28 @@ public class Game extends Canvas implements Runnable, KeyListener {
 	private Graphics2D g2;
 	private GameStateManager gsm;
 
+	
+	
 	public Game() {
 		Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
 		WIDTH = (int) dimension.getWidth();
 		HEIGHT = (int) dimension.getHeight();
 
+		
 		frame = new JFrame(NAME);
 		frame.setSize(WIDTH, HEIGHT);
+		frame.setUndecorated(true);
 		frame.setLayout(new BorderLayout());
 		frame.add(this, BorderLayout.CENTER);
 		frame.setLocationRelativeTo(null);
 		frame.setResizable(false);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
 		frame.setVisible(true);
 		frame.setExtendedState(Frame.MAXIMIZED_BOTH);
 		frame.toFront();
 
+		
 		start();
 	}
 
