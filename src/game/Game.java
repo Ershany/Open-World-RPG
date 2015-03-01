@@ -18,7 +18,7 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
 
-public class Game extends Canvas implements Runnable, KeyListener {
+public class Game extends Canvas implements Runnable{
 
 	public static String NAME = "RPG";
 	public static int WIDTH;
