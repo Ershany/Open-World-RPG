@@ -65,7 +65,7 @@ public class Game extends Canvas implements Runnable{
 		gsm = new GameStateManager(g2);
 
 		addKeyListener(new KeyMaster(gsm));
-		MouseMaster mm = new MouseMaster(gsm);
+		MouseMaster mm = new MouseMaster();
 		addMouseListener(mm);
 		addMouseMotionListener(mm);
 		
@@ -146,7 +146,5 @@ public class Game extends Canvas implements Runnable{
 	public static void main(String[] args) {
 		new Game();
 	}
-
-	
 
 }

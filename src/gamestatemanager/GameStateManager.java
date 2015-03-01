@@ -9,7 +9,7 @@ import java.util.Stack;
 
 import javax.swing.event.MouseInputListener;
 
-public class GameStateManager implements MouseMotionListener, MouseInputListener {
+public class GameStateManager {
 
 	
 	private Graphics2D g;
@@ -43,48 +43,10 @@ public class GameStateManager implements MouseMotionListener, MouseInputListener
 	public void keyTyped(int k) {
 		states.peek().keyTyped(k);
 	}
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		// TODO fill these?
-		// Up to you where it goes from here
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		
-	}
-
-	@Override
-	public void mouseExited(MouseEvent e) {
-		
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		
-	}
-
-	@Override
-	public void mouseDragged(MouseEvent e) {
-		
-	}
-
-	@Override
-	public void mouseMoved(MouseEvent e) {
-		
-	}
-
-	
 	
 	//getters
 	public Stack<GameState> getStates() {
 		return states;
 	}
-
 	
 }
