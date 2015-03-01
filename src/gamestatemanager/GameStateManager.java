@@ -3,9 +3,13 @@ package gamestatemanager;
 import game.Game;
 
 import java.awt.Graphics2D;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import java.util.Stack;
 
-public class GameStateManager {
+import javax.swing.event.MouseInputListener;
+
+public class GameStateManager implements MouseMotionListener, MouseInputListener {
 
 	
 	private Graphics2D g;
@@ -39,10 +43,48 @@ public class GameStateManager {
 	public void keyTyped(int k) {
 		states.peek().keyTyped(k);
 	}
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO fill these?
+		// Up to you where it goes from here
+	}
 
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		
+	}
+
+	
+	
 	//getters
 	public Stack<GameState> getStates() {
 		return states;
 	}
 
+	
 }

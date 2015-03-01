@@ -1,6 +1,8 @@
 package game;
 
 import gamestatemanager.GameStateManager;
+import input.KeyMaster;
+import input.MouseMaster;
 
 import java.awt.BorderLayout;
 import java.awt.Canvas;
@@ -62,8 +64,11 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		g2 = (Graphics2D) image.getGraphics();
 		gsm = new GameStateManager(g2);
 
-		addKeyListener(this);
-
+		addKeyListener(new KeyMaster(gsm));
+		MouseMaster mm = new MouseMaster(gsm);
+		addMouseListener(mm);
+		addMouseMotionListener(mm);
+		
 		gameThread = new Thread(this, "Game Thread");
 		gameThread.start();
 	}
@@ -142,15 +147,6 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		new Game();
 	}
 
-	/*------------------------------------------Key Listeners---------------------------------*/
-	public void keyPressed(KeyEvent k) {
-		gsm.keyPressed(k.getKeyCode());
-	}
-	public void keyReleased(KeyEvent k) {
-		gsm.keyReleased(k.getKeyCode());
-	}
-	public void keyTyped(KeyEvent k) {
-		gsm.keyTyped(k.getKeyCode());
-	}
+	
 
 }
