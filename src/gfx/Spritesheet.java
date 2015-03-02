@@ -10,7 +10,7 @@ public class Spritesheet {
 	//objects (we can keep them here or init them in the states we use them)
 	//or just keep universal stuff like player and such and have rare
 	//sprites get initialized in the states initialization 
-	public static Spritesheet sheet1 = new Spritesheet("/testSheet.png", 32);
+	public static Spritesheet sheet1 = new Spritesheet("/sprites/tiles.bmp", 32);
 	
 	private String path;
 	private int spriteSize;

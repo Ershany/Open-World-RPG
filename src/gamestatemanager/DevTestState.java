@@ -1,33 +1,27 @@
 package gamestatemanager;
 
-import gfx.Sprite;
-import input.MouseMaster;
-
-import java.awt.Color;
 import java.awt.Graphics2D;
+
+import tilemap.Tilemap;
 
 public class DevTestState extends GameState {
 
+	private Tilemap tilemap;
+	
 	public DevTestState(GameStateManager gsm) {
 		super(gsm);
 	}
 
 	public void init() {
-		
+		tilemap = new Tilemap("/maps/devtest.bmp");
 	}
 
 	public void update() {
-		
+		tilemap.update();
 	}
 
 	public void render(Graphics2D g) {
-		g.drawImage(Sprite.sprite1.getImage(), 50, 50, null);
-		g.drawImage(Sprite.sprite2.getImage(), 100, 50, null);
-		g.drawImage(Sprite.sprite3.getImage(), 150, 50, null);
-		g.drawImage(Sprite.sprite4.getImage(), 200, 50, null);
-		
-		g.setColor(Color.RED);
-		g.drawRect(MouseMaster.getMouseX(), MouseMaster.getMouseY(), 16, 16);
+		tilemap.render(g);
 	}
 
 	public void keyPressed(int k) {

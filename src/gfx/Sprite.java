@@ -7,10 +7,8 @@ public class Sprite {
 	//objects (we can keep them here or init them in the states we use them)
 	//or just keep universal stuff like player and such and have rare
 	//sprites get initialized in the states initialization 
-	public static Sprite sprite1 = new Sprite(0, 0, Spritesheet.sheet1);
-	public static Sprite sprite2 = new Sprite(1, 0, Spritesheet.sheet1);
-	public static Sprite sprite3 = new Sprite(0, 1, Spritesheet.sheet1);
-	public static Sprite sprite4 = new Sprite(1, 1, Spritesheet.sheet1);
+	public static Sprite grass = new Sprite(0, 0, Spritesheet.sheet1);
+	public static Sprite stone = new Sprite(1, 0, Spritesheet.sheet1);
 	
 	private Spritesheet sheet;
 	

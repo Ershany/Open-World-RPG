@@ -35,7 +35,6 @@ public class Game extends Canvas implements Runnable{
 	private GameStateManager gsm;
 
 	
-	
 	public Game() {
 		Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
 		WIDTH = (int) dimension.getWidth();
