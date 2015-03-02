@@ -1,5 +1,8 @@
 package tilemap;
 
+import game.Game;
+import input.MouseMaster;
+
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -61,13 +64,36 @@ public class Tilemap {
 		}
 		
 		//temp for testing
-		xOffset++;
-		yOffset++;
+		if(MouseMaster.getMouseX() > Game.WIDTH - (Game.WIDTH / 5)) xOffset += 5;
+		else if(MouseMaster.getMouseX() < Game.WIDTH / 5) xOffset -= 5;
+		if(MouseMaster.getMouseY() < Game.HEIGHT / 5) yOffset -= 5;
+		else if(MouseMaster.getMouseY() > Game.HEIGHT - (Game.HEIGHT / 5)) yOffset += 5;
 	}
 	
 	public void render(Graphics2D g) {
-		for(int i = 0; i < tiles.length; i++) {
-			tiles[i].render(xOffset, yOffset, g);
+		//basic rendering
+		//for(int i = 0; i < tiles.length; i++) {
+			//tiles[i].render(xOffset, yOffset, g);
+		//}
+		
+		
+		//optimized rendering
+		//it does not iterate through the whole array, instead it closer to your position
+		//it also will not render anything off of the screen
+		for(int i = (xOffset / Tile.TILESIZE) + (yOffset / Tile.TILESIZE) * width; 
+			i < ((xOffset + Game.WIDTH + 50) / Tile.TILESIZE + (yOffset + Game.HEIGHT + 50) / Tile.TILESIZE * width);
+			i++) {
+				try {
+				if(tiles[i].getX() * Tile.TILESIZE < xOffset - 50) continue;
+				if(tiles[i].getX() * Tile.TILESIZE > xOffset + Game.WIDTH + 50) continue;
+				if(tiles[i].getY() * Tile.TILESIZE < yOffset - 50) continue;
+				if(tiles[i].getY() * Tile.TILESIZE > yOffset + Game.HEIGHT + 50) continue;
+				} catch(ArrayIndexOutOfBoundsException e) {
+					continue;
+				}
+				
+				//if it made it to this point, render the tile as it is on the screen
+				tiles[i].render(xOffset, yOffset, g);
 		}
 	}
 	
