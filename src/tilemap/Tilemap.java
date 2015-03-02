@@ -62,12 +62,6 @@ public class Tilemap {
 		for(int i = 0; i < tiles.length; i++) {
 			tiles[i].update();
 		}
-		
-		//temp for testing
-		if(MouseMaster.getMouseX() > Game.WIDTH - (Game.WIDTH / 5)) xOffset += 5;
-		else if(MouseMaster.getMouseX() < Game.WIDTH / 5) xOffset -= 5;
-		if(MouseMaster.getMouseY() < Game.HEIGHT / 5) yOffset -= 5;
-		else if(MouseMaster.getMouseY() > Game.HEIGHT - (Game.HEIGHT / 5)) yOffset += 5;
 	}
 	
 	public void render(Graphics2D g) {
@@ -116,5 +110,9 @@ public class Tilemap {
 	}
 	public void setYOffset(int newOffset) {
 		yOffset = newOffset;
+	}
+	public void addOffset(int xOffset, int yOffset) {
+		this.xOffset += xOffset;
+		this.yOffset += yOffset;
 	}
 }
