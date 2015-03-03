@@ -3,7 +3,6 @@ package tiles;
 import gfx.Sprite;
 
 import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 
 public class StoneTile extends Tile {
 

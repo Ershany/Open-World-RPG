@@ -1,6 +1,6 @@
 package gfx;
 
-import gfx.AssetManager.ImageHashKey;
+import gfx.AssetManager;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;

@@ -1,7 +1,6 @@
 package tilemap;
 
 import game.Game;
-import input.MouseMaster;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;

@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.Random;
 
-import tilemap.Tilemap;
 import entity.Entity;
 
 public class Particle extends Entity {

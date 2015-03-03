@@ -3,11 +3,8 @@ package gamestatemanager;
 import game.Game;
 
 import java.awt.Graphics2D;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
 import java.util.Stack;
 
-import javax.swing.event.MouseInputListener;
 
 public class GameStateManager {
 
@@ -19,7 +16,10 @@ public class GameStateManager {
 	public GameStateManager(Graphics2D g) {
 		this.g = g;
 		states = new Stack<GameState>();
-		states.push(new MenuState(this));
+		
+		//states.push(new MenuState(this));
+		states.push(new MenuExampleState(this));
+		
 	}
 
 	public void update() {
