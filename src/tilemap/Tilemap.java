@@ -11,6 +11,7 @@ import javax.imageio.ImageIO;
 import tiles.GrassTile;
 import tiles.StoneTile;
 import tiles.Tile;
+import tiles.WaterTile;
 
 public class Tilemap {
 
@@ -52,6 +53,9 @@ public class Tilemap {
 				}
 				if(pixels[x + y * width] == 0xFF7F7F7F) {
 					tiles[x + y * width] = new StoneTile(x, y);
+				}
+				if(pixels[x + y * width] == 0xFF00A2E8) {
+					tiles[x + y * width] = new WaterTile(x, y);
 				}
 			}
 		}

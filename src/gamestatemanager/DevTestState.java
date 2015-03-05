@@ -20,6 +20,8 @@ public class DevTestState extends GameState {
 	private boolean paused;
 	private PauseMenu pauseMenu;
 	private List<Particle> particles = new ArrayList<Particle>();
+	
+	private int offsetSpeed = 8;
 
 	public DevTestState(GameStateManager gsm) {
 		super(gsm);
@@ -27,7 +29,7 @@ public class DevTestState extends GameState {
 
 	public void init() {
 		tilemap = new Tilemap("/maps/devtest.bmp");
-		pauseMenu = new PauseMenu(gsm,this);
+		pauseMenu = new PauseMenu(gsm, this);
 	}
 
 	public void update() {
@@ -35,8 +37,7 @@ public class DevTestState extends GameState {
 			tilemap.update();
 
 			// update particles and check if they should be removed, if so
-			// remove
-			// them
+			// remove them
 			for (int i = 0; i < particles.size(); i++) {
 				particles.get(i).update();
 				if (particles.get(i).getRemoved())
@@ -45,18 +46,18 @@ public class DevTestState extends GameState {
 
 			// offset with mouse
 			if (MouseMaster.getMouseX() > Game.WIDTH - (Game.WIDTH / 5))
-				tilemap.addOffset(5, 0);
+				tilemap.addOffset(offsetSpeed, 0);
 			else if (MouseMaster.getMouseX() < Game.WIDTH / 5)
-				tilemap.addOffset(-5, 0);
+				tilemap.addOffset(-offsetSpeed, 0);
 			if (MouseMaster.getMouseY() < Game.HEIGHT / 5)
-				tilemap.addOffset(0, -5);
+				tilemap.addOffset(0, -offsetSpeed);
 			else if (MouseMaster.getMouseY() > Game.HEIGHT - (Game.HEIGHT / 5))
-				tilemap.addOffset(0, 5);
+				tilemap.addOffset(0, offsetSpeed);
 
 			// particles
 			if (MouseMaster.getMouseB() == 1) {
-				particles.add(new Particle(MouseMaster.getMouseX(), MouseMaster
-						.getMouseY(), 120, Color.RED));
+				particles.add(new Particle(MouseMaster.getMouseX() + tilemap.getXOffset(), MouseMaster
+						.getMouseY() + tilemap.getYOffset(), 120, Color.RED));
 			}
 		}
 	}
@@ -65,12 +66,11 @@ public class DevTestState extends GameState {
 		tilemap.render(g);
 
 		for (int i = 0; i < particles.size(); i++) {
-			particles.get(i).render(g);
+			particles.get(i).render(tilemap.getXOffset(), tilemap.getYOffset(), g);
 		}
 
 		if (paused) {
 			pauseMenu.render(g);
-
 		}
 	}
 
@@ -81,7 +81,6 @@ public class DevTestState extends GameState {
 		}
 		if (paused) {
 			pauseMenu.keyPressed(k);
-
 		}
 	}
 

@@ -16,6 +16,7 @@ public class Particle extends Entity {
 	
 	private int updatesGoneBy;
 	
+	//ensure to pass in the x + xOffset, y + yOffset. 
 	public Particle(float x, float y, int particleLife, Color color) {
 		super(x, y);
 		this.particleLife = particleLife;
@@ -34,8 +35,8 @@ public class Particle extends Entity {
 		if(updatesGoneBy >= particleLife) removed = true;
 	}
 	
-	public void render(Graphics2D g) {
+	public void render(int xOffset, int yOffset, Graphics2D g) {
 		g.setColor(color);
-		g.fillRect((int) x, (int) y, 2, 2);
+		g.fillRect((int) x - xOffset, (int) y - yOffset, 2, 2);
 	}
 }

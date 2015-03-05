@@ -10,6 +10,10 @@ public class Sprite {
 	public static Sprite grass = new Sprite(0, 0, Spritesheet.sheet1);
 	public static Sprite stone = new Sprite(1, 0, Spritesheet.sheet1);
 	
+	public static Sprite water1 = new Sprite(0, 1, Spritesheet.sheet1);
+	public static Sprite water2 = new Sprite(1, 1, Spritesheet.sheet1);
+	public static Sprite water3 = new Sprite(2, 1, Spritesheet.sheet1);
+	
 	private Spritesheet sheet;
 	
 	private BufferedImage sprite;

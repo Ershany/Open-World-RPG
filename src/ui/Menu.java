@@ -81,7 +81,6 @@ public abstract class Menu {
 	}
 
 	private void select() {
-
 		buttons[selected].doAction();
 	}
 
