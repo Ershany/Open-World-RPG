@@ -6,10 +6,13 @@ import input.MouseMaster;
 
 import java.awt.BorderLayout;
 import java.awt.Canvas;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
@@ -37,7 +40,13 @@ public class Game extends Canvas implements Runnable{
 		Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
 		WIDTH = (int) dimension.getWidth();
 		HEIGHT = (int) dimension.getHeight();
-
+		
+		//cursor
+		Toolkit toolkit = Toolkit.getDefaultToolkit();
+		Image image = toolkit.getImage("res/cursors/normal.png");
+		Point hotSpot = new Point(0, 0);
+		Cursor cursor = toolkit.createCustomCursor(image, hotSpot, "Default Cursor");
+		setCursor(cursor);
 		
 		frame = new JFrame(NAME);
 		frame.setSize(WIDTH, HEIGHT);
