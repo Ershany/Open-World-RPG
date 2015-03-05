@@ -22,7 +22,8 @@ public class DevTestState extends GameState {
 	private List<Particle> particles = new ArrayList<Particle>();
 	
 	private int offsetSpeed = 8;
-
+	private boolean upPressed, downPressed, rightPressed, leftPressed;
+	
 	public DevTestState(GameStateManager gsm) {
 		super(gsm);
 	}
@@ -45,19 +46,53 @@ public class DevTestState extends GameState {
 			}
 
 			// offset with mouse
-			if (MouseMaster.getMouseX() > Game.WIDTH - (Game.WIDTH / 5))
+			if (MouseMaster.getMouseX() > Game.WIDTH - 5)
 				tilemap.addOffset(offsetSpeed, 0);
-			else if (MouseMaster.getMouseX() < Game.WIDTH / 5)
+			else if (MouseMaster.getMouseX() < 5)
 				tilemap.addOffset(-offsetSpeed, 0);
-			if (MouseMaster.getMouseY() < Game.HEIGHT / 5)
+			if (MouseMaster.getMouseY() < 5)
 				tilemap.addOffset(0, -offsetSpeed);
-			else if (MouseMaster.getMouseY() > Game.HEIGHT - (Game.HEIGHT / 5))
+			else if (MouseMaster.getMouseY() > Game.HEIGHT -5)
 				tilemap.addOffset(0, offsetSpeed);
 
-			// particles
+			// particle testing
 			if (MouseMaster.getMouseB() == 1) {
-				particles.add(new Particle(MouseMaster.getMouseX() + tilemap.getXOffset(), MouseMaster
-						.getMouseY() + tilemap.getYOffset(), 120, Color.RED));
+				if(upPressed && rightPressed) {
+					particles.add(new Particle(MouseMaster.getMouseX() + tilemap.getXOffset(), MouseMaster
+							.getMouseY() + tilemap.getYOffset(), 20, 1.3f, Color.RED, Particle.Type.NORTHEAST));
+				}
+				else if(upPressed && leftPressed) {
+					particles.add(new Particle(MouseMaster.getMouseX() + tilemap.getXOffset(), MouseMaster
+							.getMouseY() + tilemap.getYOffset(), 20, 1.3f, Color.RED, Particle.Type.NORTHWEST));
+				}
+				else if(downPressed && leftPressed) {
+					particles.add(new Particle(MouseMaster.getMouseX() + tilemap.getXOffset(), MouseMaster
+							.getMouseY() + tilemap.getYOffset(), 20, 1.3f, Color.RED, Particle.Type.SOUTHWEST));
+				}
+				else if(downPressed && rightPressed) {
+					particles.add(new Particle(MouseMaster.getMouseX() + tilemap.getXOffset(), MouseMaster
+							.getMouseY() + tilemap.getYOffset(), 20, 1.3f, Color.RED, Particle.Type.SOUTHEAST));
+				}
+				else if(upPressed) {
+					particles.add(new Particle(MouseMaster.getMouseX() + tilemap.getXOffset(), MouseMaster
+							.getMouseY() + tilemap.getYOffset(), 20, 1.3f, Color.RED, Particle.Type.NORTH));
+				}
+				else if(downPressed) {
+					particles.add(new Particle(MouseMaster.getMouseX() + tilemap.getXOffset(), MouseMaster
+							.getMouseY() + tilemap.getYOffset(), 20, 1.3f, Color.RED, Particle.Type.SOUTH));
+				}
+				else if(rightPressed) {
+					particles.add(new Particle(MouseMaster.getMouseX() + tilemap.getXOffset(), MouseMaster
+							.getMouseY() + tilemap.getYOffset(), 20, 1.3f, Color.RED, Particle.Type.EAST));
+				}
+				else if(leftPressed) {
+					particles.add(new Particle(MouseMaster.getMouseX() + tilemap.getXOffset(), MouseMaster
+							.getMouseY() + tilemap.getYOffset(), 20, 1.3f, Color.RED, Particle.Type.WEST));
+				}
+				else {
+					particles.add(new Particle(MouseMaster.getMouseX() + tilemap.getXOffset(), MouseMaster
+							.getMouseY() + tilemap.getYOffset(), 20, 1.3f, Color.RED));
+				}
 			}
 		}
 	}
@@ -82,10 +117,20 @@ public class DevTestState extends GameState {
 		if (paused) {
 			pauseMenu.keyPressed(k);
 		}
+		
+		//check to see if arrow keys are held
+		if(k == KeyEvent.VK_W) upPressed = true;
+		if(k == KeyEvent.VK_S) downPressed = true;
+		if(k == KeyEvent.VK_D) rightPressed = true;
+		if(k == KeyEvent.VK_A) leftPressed = true; 
 	}
 
 	public void keyReleased(int k) {
-
+		//check to see if arrow keys are released
+		if(k == KeyEvent.VK_W) upPressed = false;
+		if(k == KeyEvent.VK_S) downPressed = false;
+		if(k == KeyEvent.VK_D) rightPressed = false;
+		if(k == KeyEvent.VK_A) leftPressed = false; 
 	}
 
 	public void keyTyped(int k) {

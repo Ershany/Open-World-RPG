@@ -17,7 +17,7 @@ public class GrassTile extends Tile {
 
 	@Override
 	public void render(int xOffset, int yOffset, Graphics2D g) {
-		g.drawImage(tileImage, (x * Tile.TILESIZE) - xOffset, (y * TILESIZE) - yOffset, null);
+		g.drawImage(tileImage, (x << 5) - xOffset, (y << 5) - yOffset, null);
 	}
 
 }
