@@ -16,6 +16,7 @@ import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import java.net.URL;
 
 import javax.swing.JFrame;
 
@@ -42,11 +43,10 @@ public class Game extends Canvas implements Runnable{
 		HEIGHT = (int) dimension.getHeight();
 		
 		//cursor
-		Toolkit toolkit = Toolkit.getDefaultToolkit();
-		Image image = toolkit.getImage("res/cursors/normal.png");
+		URL url = getClass().getResource("/cursors/normal.png");
+		Image image = Toolkit.getDefaultToolkit().getImage(url);
 		Point hotSpot = new Point(0, 0);
-		Cursor cursor = toolkit.createCustomCursor(image, hotSpot, "Default Cursor");
-		setCursor(cursor);
+		setCursor(Toolkit.getDefaultToolkit().createCustomCursor(image, hotSpot, "Default Cursor"));
 		
 		frame = new JFrame(NAME);
 		frame.setSize(WIDTH, HEIGHT);
