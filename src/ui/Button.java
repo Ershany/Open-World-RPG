@@ -20,4 +20,9 @@ public abstract class Button {
 
 	}
 
+	public void setName(String name) {
+		this.name = name;
+
+	}
+
 }

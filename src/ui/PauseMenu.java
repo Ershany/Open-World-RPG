@@ -26,12 +26,6 @@ public class PauseMenu extends Menu {
 				dts.setPaused(false);
 			}
 		};
-		Button settings = new Button(gsm, "Settings") {
-			@Override
-			public void doAction() {
-				gsm.getStates().push(new SettingsState(gsm));
-			}
-		};
 		Button save = new Button(gsm, "Save") {
 			@Override
 			public void doAction() {
@@ -49,7 +43,7 @@ public class PauseMenu extends Menu {
 			}
 		};
 
-		buttons = new Button[] { play, settings, save, load, quit };
+		buttons = new Button[] { play, save, load, quit };
 	}
 
 	@Override
