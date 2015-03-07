@@ -29,8 +29,8 @@ Button fullscreen = new Button(gsm, "Fullscreen : "
 		};
 
 		Button res = new Button(gsm, "Resolution : "
-				+ settingsPlaceholder.CURRENT_RESOLUTION.getWidth() + " x "
-				+ settingsPlaceholder.CURRENT_RESOLUTION.getHeight()) {
+				+ ((int)settingsPlaceholder.CURRENT_RESOLUTION.getWidth()) + " x "
+				+ ((int)settingsPlaceholder.CURRENT_RESOLUTION.getHeight())) {
 			@Override
 			public void doAction() {
 				settingsPlaceholder.RES_INDEX++;
@@ -39,8 +39,8 @@ Button fullscreen = new Button(gsm, "Fullscreen : "
 				}
 				settingsPlaceholder.CURRENT_RESOLUTION = Settings.RESOLUTIONS[settingsPlaceholder.RES_INDEX];
 				this.setName("Resolution : "
-				+ settingsPlaceholder.CURRENT_RESOLUTION.getWidth() + " x "
-				+ settingsPlaceholder.CURRENT_RESOLUTION.getHeight());
+				+ ((int)settingsPlaceholder.CURRENT_RESOLUTION.getWidth()) + " x "
+				+ ((int)settingsPlaceholder.CURRENT_RESOLUTION.getHeight()));
 			}
 		};
 

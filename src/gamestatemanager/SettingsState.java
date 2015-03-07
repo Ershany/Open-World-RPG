@@ -11,8 +11,6 @@ import ui.SettingsMenu;
 
 public class SettingsState extends GameState {
 
-
-
 	SettingsMenu settingsMenu;
 	
 	
@@ -29,13 +27,13 @@ public class SettingsState extends GameState {
 	}
 	
 	public void render(Graphics2D g) {
-	settingsMenu.render(g);
+		settingsMenu.render(g);
 	}
 	
 	
 	/*---------------------Key Listener Methods--------------------------*/
 	public void keyPressed(int k) {
-		settingsMenu.keyPressed(k);;
+		settingsMenu.keyPressed(k);
 	}
 	public void keyReleased(int k) {
 		
