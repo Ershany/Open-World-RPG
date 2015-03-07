@@ -6,6 +6,8 @@ import java.awt.Graphics2D;
 
 public class GrassTile extends Tile {
 
+	//Testing
+	
 	public GrassTile(int x, int y) {
 		super(x, y, Sprite.grass.getImage());
 	}
