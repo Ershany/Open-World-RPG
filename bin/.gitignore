@@ -1,1 +1,13 @@
-/game/
+
+/.gitignore
+/cursors/
+/entity/
+/gamestatemanager/
+/gfx/
+/input/
+/maps/
+/sprites/
+/tilemap/
+/tiles/
+/ui/
+/util/
