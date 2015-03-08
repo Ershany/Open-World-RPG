@@ -18,7 +18,7 @@ public class SettingsMenu extends Menu {
 	@Override
 	protected void buildButtons() {
 		settingsPlaceholder = new SettingsPlaceholder();
-Button fullscreen = new Button(gsm, "Fullscreen : "
+		Button fullscreen = new Button(gsm, "Fullscreen : "
 				+ settingsPlaceholder.FULLSCREEN) {
 
 			@Override
@@ -29,8 +29,9 @@ Button fullscreen = new Button(gsm, "Fullscreen : "
 		};
 
 		Button res = new Button(gsm, "Resolution : "
-				+ ((int)settingsPlaceholder.CURRENT_RESOLUTION.getWidth()) + " x "
-				+ ((int)settingsPlaceholder.CURRENT_RESOLUTION.getHeight())) {
+				+ ((int) settingsPlaceholder.CURRENT_RESOLUTION.getWidth())
+				+ " x "
+				+ ((int) settingsPlaceholder.CURRENT_RESOLUTION.getHeight())) {
 			@Override
 			public void doAction() {
 				settingsPlaceholder.RES_INDEX++;
@@ -39,30 +40,22 @@ Button fullscreen = new Button(gsm, "Fullscreen : "
 				}
 				settingsPlaceholder.CURRENT_RESOLUTION = Settings.RESOLUTIONS[settingsPlaceholder.RES_INDEX];
 				this.setName("Resolution : "
-				+ ((int)settingsPlaceholder.CURRENT_RESOLUTION.getWidth()) + " x "
-				+ ((int)settingsPlaceholder.CURRENT_RESOLUTION.getHeight()));
+						+ ((int) settingsPlaceholder.CURRENT_RESOLUTION
+								.getWidth())
+						+ " x "
+						+ ((int) settingsPlaceholder.CURRENT_RESOLUTION
+								.getHeight()));
 			}
 		};
 
 		Button apply = new Button(gsm, "Apply") {
 			@Override
 			public void doAction() {
-				try {
 					settingsPlaceholder.commit();
-					
+
 					Game.frame.setVisible(false);
-				//    Game.currentGame.toRestart = true;
-				
-					//Game.restart();
-				Game.currentGame.toRestart = true;
-				Game.currentGame.running = false;
-				//	Game.frame.remove(Game.currentGame);
-				//	Game.frame.dispose();
-				///.launch();
-				} catch (Exception e) {
-					// TODO : Don't duck, fix this somehow?
-					// Issue is with canvas?
-				}
+					Game.currentGame.toRestart = true;
+					Game.currentGame.running = false;
 
 			}
 		};
