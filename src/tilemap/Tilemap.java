@@ -9,6 +9,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import tiles.GrassTile;
+import tiles.SandTile;
 import tiles.StoneTile;
 import tiles.Tile;
 import tiles.WaterTile;
@@ -56,6 +57,12 @@ public class Tilemap {
 				}
 				if(pixels[x + y * width] == 0xFF00A2E8) {
 					tiles[x + y * width] = new WaterTile(x, y);
+				}
+				if(pixels[x + y * width] == 0xFF00A2E8) {
+					tiles[x + y * width] = new WaterTile(x, y);
+				}
+				if(pixels[x + y * width] == 0xFFE5D932) {
+					tiles[x + y * width] = new SandTile(x, y);
 				}
 			}
 		}
