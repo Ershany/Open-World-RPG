@@ -21,5 +21,9 @@ public class GrassTile extends Tile {
 	public void render(int xOffset, int yOffset, Graphics2D g) {
 		g.drawImage(tileImage, (x << 5) - xOffset, (y << 5) - yOffset, null);
 	}
+	
+	public String toString() {
+		return "Grass";
+	}
 
 }

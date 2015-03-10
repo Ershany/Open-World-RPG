@@ -125,12 +125,12 @@ public class Game extends Canvas implements Runnable {
 
 			if (delta >= 1) {
 				delta--;
-				// frames++;
+				//frames++;
 				updates++;
 
 				update();
-				// render();
-				// renderToScreen();
+				//render();
+				//renderToScreen();
 			}
 			frames++; // temp for testing FPS
 			render(); // temp for testing FPS
@@ -140,7 +140,6 @@ public class Game extends Canvas implements Runnable {
 				updates = 0;
 				frames = 0;
 				timer += 1000;
-
 			}
 		}
 

@@ -1,8 +1,8 @@
 package ui;
 
 import game.Game;
-import gamestatemanager.DevTestState;
 import gamestatemanager.GameStateManager;
+import gamestatemanager.DevTestStateTwo;
 import gamestatemanager.SettingsState;
 
 import java.awt.Color;
@@ -18,7 +18,8 @@ public class MainMenu extends Menu {
 		Button play = new Button(gsm, "Play") {
 			@Override
 			public void doAction() {
-				gsm.getStates().push(new DevTestState(gsm));
+				//gsm.getStates().push(new DevTestState(gsm));
+				gsm.getStates().push(new DevTestStateTwo(gsm));
 			}
 		};
 		Button settings = new Button(gsm, "Settings") {

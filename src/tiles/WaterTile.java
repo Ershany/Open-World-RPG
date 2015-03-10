@@ -11,6 +11,7 @@ public class WaterTile extends Tile {
 	public WaterTile(int x, int y) {
 		super(x, y, Sprite.water1.getImage());
 		anim = 0;
+		solid = true;
 	}
 
 	public void update() {
@@ -34,4 +35,8 @@ public class WaterTile extends Tile {
 		g.drawImage(tileImage, (x << 5) - xOffset, (y << 5) - yOffset, null);
 	}
 
+	public String toString() {
+		return "Water";
+	}
+	
 }

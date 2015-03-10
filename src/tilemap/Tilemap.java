@@ -57,35 +57,17 @@ public class Tilemap {
 				case 0xFF008000:
 					toPlace = new GrassTile(x, y);
 					break;
-				case 0xFF7F7F7F:
+				case 0xFF808080:
 					toPlace = new StoneTile(x, y);
 					break;
 				case 0xFF00A2E8:
 					toPlace = new WaterTile(x, y);
 					break;
-				case 0xFFE5D932:
+				case 0xFFE0E040:
 					toPlace = new SandTile(x, y);
 					break;
 				}
 				tiles[loc] = toPlace;
-				
-				/**	
-				if (pixels[x + y * width] == 0xFF008000) {
-					tiles[x + y * width] = new GrassTile(x, y);
-				}
-				if (pixels[x + y * width] == 0xFF7F7F7F) {
-					tiles[x + y * width] = new StoneTile(x, y);
-				}
-				if (pixels[x + y * width] == 0xFF00A2E8) {
-					tiles[x + y * width] = new WaterTile(x, y);
-				}
-				if (pixels[x + y * width] == 0xFF00A2E8) {
-					tiles[x + y * width] = new WaterTile(x, y);
-				}
-				if (pixels[x + y * width] == 0xFFE5D932) {
-					tiles[x + y * width] = new SandTile(x, y);
-				}
-				**/
 			}
 		}
 	}
@@ -97,11 +79,6 @@ public class Tilemap {
 	}
 
 	public void render(Graphics2D g) {
-		// basic rendering
-		// for(int i = 0; i < tiles.length; i++) {
-		// tiles[i].render(xOffset, yOffset, g);
-		// }
-
 		// optimized rendering
 		// it does not iterate through the whole array, instead it closer to
 		// your position

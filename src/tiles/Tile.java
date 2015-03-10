@@ -32,4 +32,7 @@ public abstract class Tile {
 	public int getY() {
 		return y;
 	}
+	public boolean getSolid() {
+		return solid;
+	}
 }
