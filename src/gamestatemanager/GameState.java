@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 public abstract class GameState {
 
 	protected GameStateManager gsm;
+	protected boolean paused;
 
 	public GameState(GameStateManager gsm) {
 		this.gsm = gsm;
@@ -19,5 +20,9 @@ public abstract class GameState {
 	public abstract void keyPressed(int k);
 	public abstract void keyReleased(int k);
 	public abstract void keyTyped(int k);
+	
+	public void setPaused(boolean paused) {
+		this.paused = paused;
+	}
 
 }

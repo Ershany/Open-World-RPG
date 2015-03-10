@@ -1,21 +1,21 @@
 package ui;
 
+import game.Game;
+import gamestatemanager.DevTestState;
+import gamestatemanager.GameState;
+import gamestatemanager.GameStateManager;
+
 import java.awt.Color;
 import java.awt.Font;
 
-import game.Game;
-import gamestatemanager.DevTestState;
-import gamestatemanager.GameStateManager;
-import gamestatemanager.SettingsState;
-
 public class PauseMenu extends Menu {
 
-	DevTestState dts;
+	GameState gameState;
 
-	public PauseMenu(GameStateManager gsm, DevTestState dts) {
+	public PauseMenu(GameStateManager gsm, GameState gameState) {
 		super(Game.WIDTH / 3, Game.HEIGHT / 3, Game.WIDTH / 3, Game.HEIGHT / 3,
 				gsm);
-		this.dts = dts;
+		this.gameState = gameState;
 	}
 
 	@Override
@@ -23,7 +23,7 @@ public class PauseMenu extends Menu {
 		Button play = new Button(gsm, "Resume") {
 			@Override
 			public void doAction() {
-				dts.setPaused(false);
+				gameState.setPaused(false);
 			}
 		};
 		Button save = new Button(gsm, "Save") {
