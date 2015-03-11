@@ -9,6 +9,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import tiles.GrassTile;
+import tiles.RedBrickTile;
 import tiles.SandTile;
 import tiles.StoneTile;
 import tiles.Tile;
@@ -65,6 +66,9 @@ public class Tilemap {
 					break;
 				case 0xFFE0E040:
 					toPlace = new SandTile(x, y);
+					break;
+				case 0xFF802600:
+					toPlace = new RedBrickTile(x, y);
 					break;
 				}
 				tiles[loc] = toPlace;

@@ -9,6 +9,8 @@ public abstract class Tile {
 	public static final int TILESIZE = 32;
 	
 	protected boolean solid;
+	protected boolean projectileSolid;
+	
 	protected BufferedImage tileImage;
 	protected int x, y;
 	
@@ -34,5 +36,8 @@ public abstract class Tile {
 	}
 	public boolean getSolid() {
 		return solid;
+	}
+	public boolean getProjectileSolid() {
+		return projectileSolid;
 	}
 }

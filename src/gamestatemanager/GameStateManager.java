@@ -28,8 +28,6 @@ public class GameStateManager {
 	}
 
 	public void render() {
-		//clear the image and then render the new pixel data
-		g.clearRect(0, 0, Game.WIDTH, Game.HEIGHT);
 		states.peek().render(g);
 	}
 

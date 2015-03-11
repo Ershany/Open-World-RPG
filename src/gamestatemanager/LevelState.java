@@ -10,6 +10,7 @@ import tilemap.Tilemap;
 import tiles.Tile;
 import ui.PauseMenu;
 import entity.Player;
+import gfx.Particle;
 
 public abstract class LevelState extends GameState{
 
@@ -21,6 +22,7 @@ public abstract class LevelState extends GameState{
 	private Player player;
 	private Tilemap tilemap;
 	
+	private List<Particle> particles = new ArrayList<Particle>();
 	private List<Projectile> projectiles = new ArrayList<Projectile>();
 	
 	public LevelState(GameStateManager gsm, String mapName) {
@@ -66,12 +68,18 @@ public abstract class LevelState extends GameState{
 		for(int i = 0; i < projectiles.size(); i++) {
 			projectiles.get(i).update();
 		}
+		for(int i = 0; i < particles.size(); i++) {
+			particles.get(i).update();
+		}
 	}
-	
+
 	private void renderLists(Graphics2D g) {
 		//loop through and render all of the entities in the lists
 		for(int i = 0; i < projectiles.size(); i++) {
 			projectiles.get(i).render(g);
+		}
+		for(int i = 0; i < particles.size(); i++) {
+			particles.get(i).render(tilemap.getXOffset(), tilemap.getYOffset(), g);
 		}
 	}
 	
@@ -79,6 +87,9 @@ public abstract class LevelState extends GameState{
 		//loop through lists and check if the entities should be removed
 		for(int i = 0; i < projectiles.size(); i++) {
 			if(projectiles.get(i).getRemoved()) projectiles.remove(i);
+		}
+		for(int i = 0; i < particles.size(); i++) {
+			if(particles.get(i).getRemoved()) particles.remove(i);
 		}
 	}
 	
@@ -111,6 +122,9 @@ public abstract class LevelState extends GameState{
 	}
 	
 	//adding
+	public void addParticle(Particle p) {
+		particles.add(p);
+	}
 	public void addProjectile(Projectile p) {
 		projectiles.add(p);
 	}

@@ -65,10 +65,6 @@ public class Game extends Canvas implements Runnable {
 			yOffset = 0;
 
 		}
-
-
-		
-		//cursor
 	
 		
 		frame.setLayout(new BorderLayout());
