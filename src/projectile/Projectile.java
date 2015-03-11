@@ -22,9 +22,9 @@ public class Projectile extends Entity {
 		super(xOrig, yOrig);
 		this.projectileLife = projectileLife;
 		
-		angle = Math.atan2(xDest - x, yDest - y);
-		xa = (float)Math.sin(angle) * speed;
-		ya = (float)Math.cos(angle) * speed;
+		angle = Math.atan2(yDest - y, xDest - x);
+		xa = (float)Math.cos(angle) * speed;
+		ya = (float)Math.sin(angle) * speed;
 		
 		this.currentState = currentState;
 		tilemap = currentState.getTilemap();
