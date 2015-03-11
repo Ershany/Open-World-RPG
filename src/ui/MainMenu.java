@@ -19,7 +19,7 @@ public class MainMenu extends Menu {
 			@Override
 			public void doAction() {
 				//gsm.getStates().push(new DevTestState(gsm));
-				gsm.getStates().push(new DevTestStateTwo(gsm));
+				gsm.getStates().push(new DevTestStateTwo(gsm, "/maps/devtest.bmp"));
 			}
 		};
 		Button settings = new Button(gsm, "Settings") {

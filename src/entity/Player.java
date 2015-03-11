@@ -1,14 +1,16 @@
 package entity;
 
 import game.Game;
+import gamestatemanager.LevelState;
+import input.MouseMaster;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 
+import projectile.Projectile;
 import tilemap.Tilemap;
-import tiles.Tile;
 
 public class Player extends Mob {
 
@@ -21,8 +23,8 @@ public class Player extends Mob {
 	//corners  x2/y2 top right, x3/y3 bottom left, x4/y4 bottom right, x5/y5 middle left, x6/y6 middle right
 	private float x2, x3, x4, x5, x6, y2, y3, y4, y5, y6;
 	
-	public Player(int x, int y, int level, Tilemap map) {
-		super(x, y, level, map);
+	public Player(int x, int y, int level, LevelState state, Tilemap tilemap) {
+		super(x, y, level, state, tilemap);
 	}
 
 	@Override
@@ -45,6 +47,22 @@ public class Player extends Mob {
 	@Override	
 	public void update() {
 		//movement
+		checkMovement();
+		
+		//shooting
+		checkShooting();
+		
+		//set offsets
+		updateOffset();
+	}
+
+	@Override
+	public void render(Graphics2D g) {
+		g.setColor(Color.RED);
+		g.fillRect((int)x - currentTilemap.getXOffset(), (int)y - currentTilemap.getYOffset(), width, height);
+	}
+	
+	private void checkMovement() {
 		if(upHeld) {
 			if(!currentTilemap.getTile((int)x, (int)(y - speed)).getSolid() &&
 			!currentTilemap.getTile((int)x2, (int)(y2 - speed)).getSolid() &&
@@ -105,16 +123,18 @@ public class Player extends Mob {
 				x6 += speed;
 			}
 		}
-		
-		//set offsets
+	}
+	
+	private void updateOffset() {
 		currentTilemap.setXOffset((int)x - (Game.WIDTH / 2) + (width / 2));
 		currentTilemap.setYOffset((int)y - (Game.HEIGHT / 2) + (height / 2)); 
 	}
-
-	@Override
-	public void render(Graphics2D g) {
-		g.setColor(Color.RED);
-		g.fillRect((int)x - currentTilemap.getXOffset(), (int)y - currentTilemap.getYOffset(), width, height);
+	
+	private void checkShooting() {
+		if(MouseMaster.getMouseB() == 1) {
+			//pass in the xDest and yDest with the xOffsets and yOffsets
+			currentState.addProjectile(new Projectile(x, y, MouseMaster.getMouseX() + currentState.getTilemap().getXOffset(), MouseMaster.getMouseY() + currentState.getTilemap().getYOffset(), 7.2f, 60, currentState));
+		}
 	}
 	
 	public void keyPressed(int k) {

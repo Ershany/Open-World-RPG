@@ -1,5 +1,8 @@
 package entity;
 
+import gamestatemanager.GameState;
+import gamestatemanager.LevelState;
+
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
@@ -27,11 +30,13 @@ public abstract class Mob extends Entity {
 	protected Rectangle hitbox; //used for intersection of weapons and such (or picking up things) not for solid collision detection
 	
 	protected Tilemap currentTilemap;
+	protected LevelState currentState;
 	
-	public Mob(float x, float y, int level, Tilemap currentTileMap) {
+	public Mob(float x, float y, int level, LevelState currentState, Tilemap currentTilemap) {
 		super(x, y);
 		this.level = level;
-		this.currentTilemap = currentTileMap;
+		this.currentState = currentState;
+		this.currentTilemap = currentTilemap;
 		
 		init();
 	}
