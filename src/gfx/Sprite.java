@@ -22,6 +22,9 @@ public class Sprite {
 	public static Sprite slime1 = new Sprite(0, 0, Spritesheet.enemySheet);
 	public static Sprite slime2 = new Sprite(1, 0, Spritesheet.enemySheet);
 	public static Sprite slime3 = new Sprite(2, 0, Spritesheet.enemySheet);
+	public static Sprite deathSlime1 = new Sprite(3, 0, Spritesheet.enemySheet);
+	public static Sprite deathSlime2 = new Sprite(4, 0, Spritesheet.enemySheet);
+	public static Sprite deathSlime3 = new Sprite(5, 0, Spritesheet.enemySheet);
 	
 	private Spritesheet sheet;
 	

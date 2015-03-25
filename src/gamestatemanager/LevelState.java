@@ -64,9 +64,8 @@ public abstract class LevelState extends GameState{
 	@Override
 	public void render(Graphics2D g) {
 		tilemap.render(g);
-		player.render(g);
-		
 		renderLists(g);
+		player.render(g);
 		
 		if (paused) {
 			pauseMenu.render(g);

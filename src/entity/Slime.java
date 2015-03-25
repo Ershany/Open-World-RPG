@@ -19,6 +19,8 @@ public class Slime extends Mob {
 	public float[] xVals, yVals;
 	private BufferedImage slimeSprite;
 	
+	private boolean dying;
+	
 	private boolean moveUp, moveDown, moveRight, moveLeft;
 	
 	public Slime(float x, float y, int level, LevelState currentState,
@@ -53,14 +55,26 @@ public class Slime extends Mob {
 
 	@Override
 	public void update() {
-		//checkDeath
-		checkDeath();
+		if(!dying) {
+			//checkDeath
+			checkDeath();
 		
-		//anim
-		animate();
+			//anim
+			animate();
 		
-		//move
-		move();
+			//move
+			move();
+		}
+		else {
+			anim++;
+			
+			if(anim == 120) removed = true;
+			
+			//anim was reset with the slime died
+			if(anim == 21) slimeSprite = Sprite.deathSlime3.getImage();
+			else if(anim == 14) slimeSprite = Sprite.deathSlime2.getImage();
+			else if(anim == 7) slimeSprite = Sprite.deathSlime1.getImage();
+		}
 	}
 
 	@Override
@@ -72,7 +86,7 @@ public class Slime extends Mob {
 		//ensure anim doesnt get too high
 		if(anim > 10000) anim = 0;
 		else anim++;
-		
+
 		if(anim % 180 == 0) slimeSprite = Sprite.slime1.getImage();
 		else if(anim % 120 == 0) slimeSprite = Sprite.slime2.getImage();
 		else if(anim % 60 == 0) slimeSprite = Sprite.slime3.getImage();
@@ -137,9 +151,10 @@ public class Slime extends Mob {
 	}
 	
 	private void checkDeath() {
-		if(currentHealth <= 0) {
-			removed = true;
-			new ParticleSpawner(currentState).spawn(x, y, 20, 2.3f, Color.GREEN, 10);
+		if(currentHealth <= 0 && !dying) {
+			dying = true;
+			anim = 0;
+			new ParticleSpawner(currentState).spawn(x + (width / 2), y + (height / 2), 15, 1.4f, Color.GREEN, 15);
 		}
 	}
 
