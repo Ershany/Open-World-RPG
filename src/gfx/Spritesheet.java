@@ -11,6 +11,7 @@ public class Spritesheet {
 	//or just keep universal stuff like player and such and have rare
 	//sprites get initialized in the states initialization 
 	public static Spritesheet sheet1 = new Spritesheet("/sprites/tiles.bmp", 32);
+	public static Spritesheet enemySheet = new Spritesheet("/sprites/Enemies_1.bmp", 32);
 	
 	private String path;
 	private int spriteSize;

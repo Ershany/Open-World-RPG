@@ -6,9 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import projectile.Projectile;
+import spawners.SlimeSpawner;
 import tilemap.Tilemap;
 import tiles.Tile;
 import ui.PauseMenu;
+import entity.Mob;
 import entity.Player;
 import gfx.Particle;
 
@@ -24,6 +26,10 @@ public abstract class LevelState extends GameState{
 	
 	private List<Particle> particles = new ArrayList<Particle>();
 	private List<Projectile> projectiles = new ArrayList<Projectile>();
+	private List<Mob> enemies = new ArrayList<Mob>();
+	
+	//temp
+	private SlimeSpawner slimeSpawner;
 	
 	public LevelState(GameStateManager gsm, String mapName) {
 		super(gsm);
@@ -35,7 +41,9 @@ public abstract class LevelState extends GameState{
 	
 	@Override
 	public void init() {
+		//temp init for testing
 		player = new Player(88 * Tile.TILESIZE, 20 * Tile.TILESIZE, 1, this, tilemap);
+		slimeSpawner = new SlimeSpawner(this);
 		
 		pauseMenu = new PauseMenu(gsm, this);
 	}
@@ -46,8 +54,10 @@ public abstract class LevelState extends GameState{
 			tilemap.update();
 			player.update();
 			
+			checkHit();
 			updateLists();
 			checkRemoved();
+			spawners();
 		}
 	}
 	
@@ -71,6 +81,9 @@ public abstract class LevelState extends GameState{
 		for(int i = 0; i < particles.size(); i++) {
 			particles.get(i).update();
 		}
+		for(int i = 0; i < enemies.size(); i++) {
+			enemies.get(i).update();
+		}
 	}
 
 	private void renderLists(Graphics2D g) {
@@ -81,6 +94,9 @@ public abstract class LevelState extends GameState{
 		for(int i = 0; i < particles.size(); i++) {
 			particles.get(i).render(tilemap.getXOffset(), tilemap.getYOffset(), g);
 		}
+		for(int i = 0; i < enemies.size(); i++) {
+			enemies.get(i).render(g);
+		}
 	}
 	
 	private void checkRemoved() {
@@ -90,6 +106,34 @@ public abstract class LevelState extends GameState{
 		}
 		for(int i = 0; i < particles.size(); i++) {
 			if(particles.get(i).getRemoved()) particles.remove(i);
+		}
+		for(int i = 0; i < enemies.size(); i++) {
+			if(enemies.get(i).getRemoved()) enemies.remove(i);
+		}
+	}
+	
+	private void spawners() {
+		slimeSpawner.update();
+	}
+	
+	//checks for things like bullet collision
+	private void checkHit() {
+		//if there are no projectiles, do not bother checking for collision
+		if(projectiles.size() == 0) return;
+		for(int i = 0; i < projectiles.size(); i++) {
+			for(int j = 0; j < enemies.size(); j++) {
+				Projectile tempP = projectiles.get(i);
+				Mob tempM = enemies.get(j);
+				
+				//if the projectile hits the enemy
+				if(tempP.getHitbox().intersects(tempM.getHitbox())) {
+					tempM.hit(tempP.getDamage());
+					projectiles.remove(i);
+					
+					//if the list of projecitles is now empty, get out of this method
+					if(projectiles.size() == 0) return;
+				}
+			}
 		}
 	}
 	
@@ -120,6 +164,9 @@ public abstract class LevelState extends GameState{
 	public Tilemap getTilemap() {
 		return tilemap;
 	}
+	public Player getPlayer() {
+		return player;
+	}
 	
 	//adding
 	public void addParticle(Particle p) {
@@ -127,5 +174,8 @@ public abstract class LevelState extends GameState{
 	}
 	public void addProjectile(Projectile p) {
 		projectiles.add(p);
+	}
+	public void addMob(Mob b) {
+		enemies.add(b);
 	}
 }
