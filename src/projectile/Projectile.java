@@ -10,6 +10,9 @@ import gamestatemanager.LevelState;
 
 public class Projectile extends Entity {
 
+	//TO-DO 
+	//CLEANUP
+	
 	private int ticksPassed;
 	private int projectileLife;
 	
