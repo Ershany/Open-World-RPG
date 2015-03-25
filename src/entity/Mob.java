@@ -27,9 +27,6 @@ public abstract class Mob extends Entity {
 	protected float damage;
 	protected float speed;
 	
-	protected int width, height;
-	protected int anim;
-	
 	protected Rectangle hitbox; //used for intersection of weapons and such (or picking up things) not for solid collision detection
 	
 	protected Tilemap currentTilemap;
@@ -40,7 +37,6 @@ public abstract class Mob extends Entity {
 		this.level = level;
 		this.currentState = currentState;
 		this.currentTilemap = currentTilemap;
-		anim = 0;
 		
 		init();
 	}
@@ -48,13 +44,9 @@ public abstract class Mob extends Entity {
 	public abstract void init(); //initialize stats, hitbox, and more
 	public abstract void update();
 	public abstract void render(Graphics2D g);
-	
-	public void hit(float damage) {
-		currentHealth -= damage;
-	}
 
 	//getters
-	public Rectangle getHitbox() {
+	public Rectangle getHitBox() {
 		return hitbox;
 	}
 	public int getLevel() {

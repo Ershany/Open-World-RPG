@@ -16,13 +16,12 @@ public class Player extends Mob {
 
 	//to be added in the future
 	//private Inventory inventory;
+	private int width, height;
 	
 	private boolean upHeld, downHeld, rightHeld, leftHeld;
-	private boolean shouldShoot;
 	
-	private int shootCooldown = 120;
-	private int currentShootCooldown = 0;
-	
+	//corners  x2/y2 top right, x3/y3 bottom left, x4/y4 bottom right, x5/y5 middle left, x6/y6 middle right
+	//private float x2, x3, x4, x5, x6, y2, y3, y4, y5, y6;
 	private float[] xVals, yVals;
 	
 	
@@ -32,13 +31,14 @@ public class Player extends Mob {
 
 	@Override
 	public void init() {
+		
+		
 		health = level * 5; //it should be:    health = (level * 5) + inventory.getArmor();
 		currentHealth = health;
 		damage = level * 2;  //it should be:   damage = (level * 2) + inventory.getWeapon().getDamage();
 		speed = 2.9f;
 		width = 32;
 		height = 48;
-		shouldShoot = true;
 		
 		hitbox = new Rectangle(width, height);
 		
@@ -48,6 +48,7 @@ public class Player extends Mob {
 		for (int i = 0; i<= xVals.length-1; i++) {
 			xVals [i] = x + width*((i+1)%2);			
 		}
+		System.out.println("new player created");
 		
 		yVals [0] = y;
 		yVals [1] = y + height;
@@ -74,13 +75,13 @@ public class Player extends Mob {
 		g.fillRect((int)x - currentTilemap.getXOffset(), (int)y - currentTilemap.getYOffset(), width, height);
 	}
 	
-	private void move (float testSpeedX, float testSpeedY) {
+	private boolean move (float testSpeedX, float testSpeedY) {
 		if (currentTilemap.getTile((int) (x +  testSpeedX), (int)(y + testSpeedY)).getSolid()) {
-			return;
+			return false;
 		}
-		for (int i = 0; i <= xVals.length-1; i++) {
+		for (int i = 0; i<= xVals.length-1; i++) {
 			if (currentTilemap.getTile((int) (xVals[i] +  testSpeedX), (int)(yVals[i] + testSpeedY)).getSolid()) {
-				return;
+				return false;
 			}
 		}
 
@@ -91,7 +92,8 @@ public class Player extends Mob {
 				yVals[i]  += testSpeedY;	
 		}
 		
-		hitbox.x = (int)x; hitbox.y = (int)y;
+		
+		return true;
 	}
 	
 	private void checkMovement() {
@@ -113,7 +115,70 @@ public class Player extends Mob {
 		}
 		
 	}
-
+		/*int xMod = 0;
+		int yMod = 0;
+		if(upHeld) {
+			if(!currentTilemap.getTile((int)x, (int)(y - speed)).getSolid() &&
+			!currentTilemap.getTile((int)x2, (int)(y2 - speed)).getSolid() &&
+			!currentTilemap.getTile((int)x3, (int)(y3 - speed)).getSolid() &&
+			!currentTilemap.getTile((int)x4, (int)(y4 - speed)).getSolid() &&
+			!currentTilemap.getTile((int)x5, (int)(y5 - speed)).getSolid() && 
+			!currentTilemap.getTile((int)x6, (int)(y6 - speed)).getSolid()) 
+			
+			{
+				y -= speed;
+				y2 -= speed;
+				y3 -= speed;
+				y4 -= speed;
+				y5 -= speed;
+				y6 -= speed;
+			}
+		}
+		if(downHeld) {
+			if(!currentTilemap.getTile((int)x, (int)(y + speed)).getSolid() &&
+			!currentTilemap.getTile((int)x2, (int)(y2 + speed)).getSolid() &&
+			!currentTilemap.getTile((int)x3, (int)(y3 + speed)).getSolid() &&
+			!currentTilemap.getTile((int)x4, (int)(y4 + speed)).getSolid() &&
+			!currentTilemap.getTile((int)x5, (int)(y5 + speed)).getSolid() &&
+			!currentTilemap.getTile((int)x6, (int)(y6 + speed)).getSolid()){
+				y += speed;
+				y2 += speed;
+				y3 += speed;
+				y4 += speed;
+				y5 += speed;
+				y6 += speed;
+			}
+		}
+		if(leftHeld) {
+			if(!currentTilemap.getTile((int)(x - speed), (int)y).getSolid() &&
+			!currentTilemap.getTile((int)(x2 - speed), (int)y2).getSolid() &&
+			!currentTilemap.getTile((int)(x3 - speed), (int)y3).getSolid() &&
+			!currentTilemap.getTile((int)(x4 - speed), (int)y4).getSolid() &&
+			!currentTilemap.getTile((int)(x5 - speed), (int)y5).getSolid() && 
+			!currentTilemap.getTile((int)(x6 - speed), (int)y6).getSolid()) {
+				x -= speed;
+				x2 -= speed;
+				x3 -= speed;
+				x4 -= speed;
+				x5 -= speed;
+				x6 -= speed;
+			}
+		}
+		if(rightHeld) {
+			if(!currentTilemap.getTile((int)(x + speed), (int)y).getSolid() &&
+			!currentTilemap.getTile((int)(x2 + speed), (int)y2).getSolid() &&
+			!currentTilemap.getTile((int)(x3 + speed), (int)y3).getSolid() &&
+			!currentTilemap.getTile((int)(x4 + speed), (int)y4).getSolid() &&
+			!currentTilemap.getTile((int)(x5 + speed), (int)y5).getSolid() &&
+			!currentTilemap.getTile((int)(x6 + speed), (int)y6).getSolid()) {
+				x += speed;
+				x2 += speed;
+				x3 += speed;
+				x4 += speed;
+				x5 += speed;
+				x6 += speed;
+			}
+		}*/
 	
 	private void updateOffset() {
 		currentTilemap.setXOffset((int)x - (Game.WIDTH / 2) + (width / 2));
@@ -121,18 +186,9 @@ public class Player extends Mob {
 	}
 	
 	private void checkShooting() {
-		if(!shouldShoot) {
-			currentShootCooldown++;
-			if(currentShootCooldown == shootCooldown) {
-				shouldShoot = true;
-				currentShootCooldown = 0;
-			}
-		}
-		
-		if(MouseMaster.getMouseB() == 1 && shouldShoot) {
+		if(MouseMaster.getMouseB() == 1) {
 			//pass in the xDest and yDest with the xOffsets and yOffsets
-			currentState.addProjectile(new Projectile(x, y, MouseMaster.getMouseX() + currentState.getTilemap().getXOffset(), MouseMaster.getMouseY() + currentState.getTilemap().getYOffset(), 5, 5, 7.2f, 60, damage, currentState));
-			shouldShoot = false;
+			currentState.addProjectile(new Projectile(x, y, MouseMaster.getMouseX() + currentState.getTilemap().getXOffset(), MouseMaster.getMouseY() + currentState.getTilemap().getYOffset(), 7.2f, 60, currentState));
 		}
 	}
 	
@@ -167,14 +223,5 @@ public class Player extends Mob {
 	}
 	public void keyTyped(int k) {
 		
-	}
-	
-	
-	//getters
-	public float getX() {
-		return x;
-	}
-	public float getY() {
-		return y;
 	}
 }
