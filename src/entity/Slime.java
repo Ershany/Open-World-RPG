@@ -66,14 +66,7 @@ public class Slime extends Mob {
 			move();
 		}
 		else {
-			anim++;
-			
-			if(anim == 120) removed = true;
-			
-			//anim was reset with the slime died
-			if(anim == 21) slimeSprite = Sprite.deathSlime3.getImage();
-			else if(anim == 14) slimeSprite = Sprite.deathSlime2.getImage();
-			else if(anim == 7) slimeSprite = Sprite.deathSlime1.getImage();
+			animateDeath();
 		}
 	}
 
@@ -90,6 +83,17 @@ public class Slime extends Mob {
 		if(anim % 180 == 0) slimeSprite = Sprite.slime1.getImage();
 		else if(anim % 120 == 0) slimeSprite = Sprite.slime2.getImage();
 		else if(anim % 60 == 0) slimeSprite = Sprite.slime3.getImage();
+	}
+	
+	private void animateDeath() {
+		//anim was reset with the slime died
+		anim++;
+		
+		if(anim == 480) removed = true;
+		
+		if(anim == 21) slimeSprite = Sprite.deathSlime3.getImage();
+		else if(anim == 14) slimeSprite = Sprite.deathSlime2.getImage();
+		else if(anim == 7) slimeSprite = Sprite.deathSlime1.getImage();
 	}
 	
 	private void move() {
