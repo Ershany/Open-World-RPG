@@ -86,7 +86,7 @@ public class MenuState extends GameState {
 	private void select() {
 		switch (options[currentOption]) {
 		case PLAY:
-			gsm.getStates().push(new DevTestState(gsm));
+			gsm.getStates().push(new DevTestState(gsm, "/maps/devtest.bmp", 100 * 32, 60 * 32));
 			break;
 		case SETTINGS:
 			gsm.getStates().push(new SettingsState(gsm));

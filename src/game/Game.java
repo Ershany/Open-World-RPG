@@ -9,14 +9,12 @@ import java.awt.Canvas;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.Point;
-import java.awt.Toolkit;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
-import java.net.URL;
 
 import javax.swing.JFrame;
+
+import util.CursorManager;
 
 public class Game extends Canvas implements Runnable {
 
@@ -34,18 +32,15 @@ public class Game extends Canvas implements Runnable {
 	public static Game currentGame;
 	public boolean toRestart = false;
 	private int xOffset, yOffset;
+	
+	private CursorManager cm;
 
 	public Game() {
 		running = true;
 		// cursor
-		URL url = getClass().getResource("/cursors/normal.png");
-		Image image = Toolkit.getDefaultToolkit().getImage(url);
+		cm = new CursorManager(this);
+		CursorManager.setCursor(1);
 		
-		
-		Point hotSpot = new Point(0, 0);
-		setCursor(Toolkit.getDefaultToolkit().createCustomCursor(image, hotSpot, "Default Cursor"));
-
-
 		frame = new JFrame(Settings.NAME);
 		if (Settings.FULLSCREEN) {
 			frame.setSize((int) Settings.FULLSCREEN_RESOLUTION.getWidth(),

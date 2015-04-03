@@ -1,13 +1,14 @@
 package tiles;
 
-import gfx.Sprite;
-
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 
-public class SandTile extends Tile {
+public class InterchangeableHillTile extends Tile {
 
-	public SandTile(int x, int y) {
-		super(x, y, Sprite.sand.getImage());
+	public InterchangeableHillTile(int x, int y, BufferedImage tileImage) {
+		super(x, y, tileImage);
+		solid = true;
+		projectileSolid = true;
 	}
 
 	@Override
@@ -20,8 +21,4 @@ public class SandTile extends Tile {
 		g.drawImage(tileImage, (x << 5) - xOffset, (y << 5) - yOffset, null);
 	}
 
-	public String toString() {
-		return "Sand";
-	}
-	
 }

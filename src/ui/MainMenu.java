@@ -2,10 +2,12 @@ package ui;
 
 import game.Game;
 import gamestatemanager.GameStateManager;
-import gamestatemanager.DevTestStateTwo;
+import gamestatemanager.DevTestState;
 import gamestatemanager.SettingsState;
 
 import java.awt.Color;
+
+import tiles.Tile;
 
 public class MainMenu extends Menu {
 
@@ -19,7 +21,7 @@ public class MainMenu extends Menu {
 			@Override
 			public void doAction() {
 				//gsm.getStates().push(new DevTestState(gsm));
-				gsm.getStates().push(new DevTestStateTwo(gsm, "/maps/devtest.bmp"));
+				gsm.getStates().push(new DevTestState(gsm, "/maps/devtest.bmp", 134 * Tile.TILESIZE, 58 * Tile.TILESIZE));
 			}
 		};
 		Button settings = new Button(gsm, "Settings") {

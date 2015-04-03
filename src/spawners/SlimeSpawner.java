@@ -20,7 +20,7 @@ public class SlimeSpawner {
 	}
 	
 	public void update() {
-		if(random.nextInt(180) == 0) 
+		if(random.nextInt(540) == 0) 
 			currentState.addMob(new Slime(currentState.getPlayer().getX() + (random.nextInt(1000) - 500), currentState.getPlayer().getY() - (random.nextInt(1000) - 500), 1, currentState, currentTilemap));
 	}
 	

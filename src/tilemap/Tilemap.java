@@ -1,6 +1,7 @@
 package tilemap;
 
 import game.Game;
+import gfx.Sprite;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
@@ -8,10 +9,12 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import tiles.GrassTile;
-import tiles.RedBrickTile;
-import tiles.SandTile;
-import tiles.StoneTile;
+import tiles.InterchangeableDoorTile;
+import tiles.InterchangeableFloorTile;
+import tiles.InterchangeableHillTile;
+import tiles.InterchangeableRoofTile;
+import tiles.InterchangeableWallTile;
+import tiles.NullTile;
 import tiles.Tile;
 import tiles.WaterTile;
 
@@ -56,19 +59,43 @@ public class Tilemap {
 				Tile toPlace = null;
 				switch (colorCode) {
 				case 0xFF008000:
-					toPlace = new GrassTile(x, y);
+					toPlace = new InterchangeableFloorTile(x, y, Sprite.grass.getImage());
 					break;
 				case 0xFF808080:
-					toPlace = new StoneTile(x, y);
+					toPlace = new InterchangeableFloorTile(x, y, Sprite.stone.getImage());
 					break;
 				case 0xFF00A2E8:
 					toPlace = new WaterTile(x, y);
 					break;
 				case 0xFFE0E040:
-					toPlace = new SandTile(x, y);
+					toPlace = new InterchangeableFloorTile(x, y, Sprite.sand.getImage());
 					break;
 				case 0xFF802600:
-					toPlace = new RedBrickTile(x, y);
+					toPlace = new InterchangeableWallTile(x, y, Sprite.redBrick.getImage());
+					break;
+				case 0xFF512000:
+					toPlace = new InterchangeableRoofTile(x, y, Sprite.roof1.getImage());
+					break;
+				case 0xFF893700:
+					toPlace = new InterchangeableWallTile(x, y, Sprite.wall1.getImage());
+					break;
+				case 0xFFD35400:
+					toPlace = new InterchangeableDoorTile(x, y, Sprite.door1.getImage());
+					break;
+				case 0xFFD89A70:
+					toPlace = new InterchangeableFloorTile(x, y, Sprite.woodFloor.getImage());
+					break;
+				case 0xFF682900:
+					toPlace = new InterchangeableHillTile(x, y, Sprite.rockHill.getImage());
+					break;
+				case 0xFF685900:
+					toPlace = new InterchangeableHillTile(x, y, Sprite.rockHillTop.getImage());
+					break;
+				case 0xFF687C00:
+					toPlace = new InterchangeableHillTile(x, y, Sprite.rockHillBottom.getImage());
+					break;
+				default:
+					toPlace = new NullTile(x, y, null);
 					break;
 				}
 				tiles[loc] = toPlace;
@@ -92,14 +119,14 @@ public class Tilemap {
 				+ Game.HEIGHT + 50)
 				/ Tile.TILESIZE * width); i++) {
 			try {
-				if (tiles[i].getX() * Tile.TILESIZE < xOffset - 50)
+				if (tiles[i].getX() * Tile.TILESIZE < xOffset - 32)
 					continue;
-				if (tiles[i].getX() * Tile.TILESIZE > xOffset + Game.WIDTH + 50)
+				if (tiles[i].getX() * Tile.TILESIZE > xOffset + Game.WIDTH + 0)
 					continue;
-				if (tiles[i].getY() * Tile.TILESIZE < yOffset - 50)
+				if (tiles[i].getY() * Tile.TILESIZE < yOffset - 32)
 					continue;
 				if (tiles[i].getY() * Tile.TILESIZE > yOffset + Game.HEIGHT
-						+ 50)
+						+ 0)
 					continue;
 			} catch (ArrayIndexOutOfBoundsException e) {
 				continue;
@@ -115,9 +142,20 @@ public class Tilemap {
 	public int getXOffset() {
 		return xOffset;
 	}
-
 	public int getYOffset() {
 		return yOffset;
+	}
+	public int[] getPixels() {
+		return pixels;
+	}
+	public Tile[] getTiles() {
+		return tiles;
+	}
+	public int getWidth() {
+		return width;
+	}
+	public int getHeight() {
+		return height;
 	}
 
 	// pass in pixel precision x and y

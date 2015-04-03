@@ -2,6 +2,7 @@ package entity;
 
 import game.Game;
 import gamestatemanager.LevelState;
+import hud.HUD;
 import input.MouseMaster;
 
 import java.awt.Color;
@@ -16,6 +17,7 @@ public class Player extends Mob {
 
 	//to be added in the future
 	//private Inventory inventory;
+	private HUD hud;
 	
 	private boolean upHeld, downHeld, rightHeld, leftHeld;
 	private boolean shouldShoot;
@@ -32,7 +34,7 @@ public class Player extends Mob {
 
 	@Override
 	public void init() {
-		health = level * 5; //it should be:    health = (level * 5) + inventory.getArmor();
+		health = (level * 5) + 10; //it should be:    health = (level * 5) + inventory.getArmor();
 		currentHealth = health;
 		damage = level * 2;  //it should be:   damage = (level * 2) + inventory.getWeapon().getDamage();
 		speed = 2.9f;
@@ -54,6 +56,8 @@ public class Player extends Mob {
 		yVals [2] = y + height;
 		yVals [3] = y + (height / 2);
 		yVals [4] = y + (height / 2);
+		
+		hud = new HUD(this);
 	}
 
 	@Override	
@@ -64,12 +68,26 @@ public class Player extends Mob {
 		//shooting
 		checkShooting();
 		
+		//check death
+		checkDeath();
+		
 		//set offsets
 		updateOffset();
+		
+		//update HUD
+		hud.update();
 	}
 
 	@Override
 	public void render(Graphics2D g) {
+		//render player
+		drawPlayer(g);
+		
+		//render HUD
+		hud.render(g);
+	}
+	
+	private void drawPlayer(Graphics2D g) {
 		g.setColor(Color.RED);
 		g.fillRect((int)x - currentTilemap.getXOffset(), (int)y - currentTilemap.getYOffset(), width, height);
 	}
@@ -131,6 +149,14 @@ public class Player extends Mob {
 			//pass in the xDest and yDest with the xOffsets and yOffsets
 			currentState.addProjectile(new Projectile(x, y, MouseMaster.getMouseX() + currentState.getTilemap().getXOffset(), MouseMaster.getMouseY() + currentState.getTilemap().getYOffset(), 5, 5, 7.2f, 60, damage, currentState));
 			shouldShoot = false;
+		}
+	}
+	
+	private void checkDeath() {
+		//casted to int to avoid HUD confusion, so if the HUD rounds and shows the player has 0 life, he won't die, but with me rounding the currentHealth, we can find out  what the HUD is displaying and act accordingly
+		if((int)currentHealth <= 0) {
+			//temp
+			System.out.println("dead");
 		}
 	}
 	

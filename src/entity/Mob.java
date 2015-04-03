@@ -63,6 +63,9 @@ public abstract class Mob extends Entity {
 	public float getHealth() {
 		return health;
 	}
+	public float getCurrentHealth() {
+		return currentHealth;
+	}
 	public float getDamage() {
 		return damage;
 	}
@@ -71,5 +74,11 @@ public abstract class Mob extends Entity {
 	}
 	public Tilemap getTileMap() {
 		return currentTilemap;
+	}
+	public int getWidth() {
+		return width;
+	}
+	public int getHeight() {
+		return height;
 	}
 }

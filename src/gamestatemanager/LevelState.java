@@ -1,5 +1,7 @@
 package gamestatemanager;
 
+import input.MouseMaster;
+
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -8,8 +10,9 @@ import java.util.List;
 import projectile.Projectile;
 import spawners.SlimeSpawner;
 import tilemap.Tilemap;
-import tiles.Tile;
+import tiles.InterchangeableDoorTile;
 import ui.PauseMenu;
+import util.CursorManager;
 import entity.Mob;
 import entity.Player;
 import gfx.Particle;
@@ -17,24 +20,25 @@ import gfx.Particle;
 public abstract class LevelState extends GameState{
 
 	//container
-	private PauseMenu pauseMenu;
+	protected PauseMenu pauseMenu;
 	
-	private String mapName;
+	protected String mapName;
 	
-	private Player player;
-	private Tilemap tilemap;
+	protected Player player;
+	protected Tilemap tilemap;
 	
-	private List<Particle> particles = new ArrayList<Particle>();
-	private List<Projectile> projectiles = new ArrayList<Projectile>();
-	private List<Mob> enemies = new ArrayList<Mob>();
+	protected List<Particle> particles = new ArrayList<Particle>();
+	protected List<Projectile> projectiles = new ArrayList<Projectile>();
+	protected List<Mob> enemies = new ArrayList<Mob>();
 	
 	//temp
 	private SlimeSpawner slimeSpawner;
 	
-	public LevelState(GameStateManager gsm, String mapName) {
+	public LevelState(GameStateManager gsm, String mapName, int xSpawn, int ySpawn) {
 		super(gsm);
 		this.mapName = mapName;
 		tilemap = new Tilemap(mapName);
+		player = new Player(xSpawn, ySpawn, 1, this, tilemap);
 		
 		init();
 	}
@@ -42,7 +46,6 @@ public abstract class LevelState extends GameState{
 	@Override
 	public void init() {
 		//temp init for testing
-		player = new Player(88 * Tile.TILESIZE, 20 * Tile.TILESIZE, 1, this, tilemap);
 		slimeSpawner = new SlimeSpawner(this);
 		
 		pauseMenu = new PauseMenu(gsm, this);
@@ -58,6 +61,8 @@ public abstract class LevelState extends GameState{
 			updateLists();
 			checkRemoved();
 			spawners();
+			checkCursor();
+			checkRightClickInteractions();
 		}
 	}
 	
@@ -148,6 +153,24 @@ public abstract class LevelState extends GameState{
 			}
 		}
 	}
+	
+	//checks to see if the mouse is over anything that should change the cursor
+	private void checkCursor() {
+		if(tilemap.getTile(MouseMaster.getMouseX() + tilemap.getXOffset(), MouseMaster.getMouseY() + tilemap.getYOffset()) instanceof InterchangeableDoorTile) {
+			if(CursorManager.getCursor() != 2) {
+				CursorManager.setCursor(2);
+			}
+			return;
+		}
+		else if (CursorManager.getCursor() != 1){
+			CursorManager.setCursor(1);
+		}
+	}
+	
+	
+	//absract methods
+	public abstract void checkRightClickInteractions();
+	
 
 	@Override
 	public void keyReleased(int k) {

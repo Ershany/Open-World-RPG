@@ -1,22 +1,16 @@
 package gamestatemanager;
 
 import input.MouseMaster;
-
-import java.awt.Graphics2D;
-import java.awt.event.KeyEvent;
-
-import tilemap.Tilemap;
 import tiles.InterchangeableDoorTile;
+import tiles.NullTile;
 import tiles.Tile;
-import ui.PauseMenu;
-import entity.Player;
 
-public class DevTestState extends LevelState {
+public class DevTestHouseState extends LevelState {
 
-	public DevTestState(GameStateManager gsm, String map, int xSpawn, int ySpawn) {
-		super(gsm, map, xSpawn, ySpawn);
+	public DevTestHouseState(GameStateManager gsm, String mapName, int xSpawn, int ySpawn) {
+		super(gsm, mapName, xSpawn, ySpawn);
 	}
-	
+
 	private Tile tile;
 	//checks for any right click interactions, like right clicking to enter a door
 	public void checkRightClickInteractions() {
@@ -29,10 +23,10 @@ public class DevTestState extends LevelState {
 				if(Math.abs((player.getX() + player.getWidth() / 2) - ((tile.getX() << 5) + 16)) <= 48 &&
 				   Math.abs((player.getY() + player.getHeight() / 2) - ((tile.getY() << 5) + 16)) <= 48) {
 					gsm.getStates().pop();
-					gsm.getStates().push(new DevTestHouseState(gsm, "/maps/devtestHouse.bmp", 48 * 32, 36 * 32));
+					gsm.getStates().push(new DevTestState(gsm, "/maps/devtest.bmp", 154 * 32, (49 * 32) + 16));
 				}
 			}
 		}
 	}
-	
+
 }

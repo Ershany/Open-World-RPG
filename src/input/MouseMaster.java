@@ -1,14 +1,19 @@
 package input;
 
 
+import game.Game;
+
+import java.awt.Image;
+import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
+import java.net.URL;
 
 import javax.swing.event.MouseInputListener;
 
 public class MouseMaster implements MouseMotionListener, MouseInputListener {
 
-	
 	private static int mouseX, mouseY, mouseB;
 	
 	public MouseMaster() {
