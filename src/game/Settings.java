@@ -8,7 +8,7 @@ public class Settings {
 	public static Dimension CURRENT_RESOLUTION;
 	public static Dimension FULLSCREEN_RESOLUTION;
 
-	public static String NAME = "RPG";
+	public static String NAME = "Project Harbinger";
 	public static int WIDTH;
 	public static int HEIGHT;
 	public static double FPSUPS = 60;

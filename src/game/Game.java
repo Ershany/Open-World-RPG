@@ -12,6 +12,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
 import util.CursorManager;
@@ -61,7 +62,7 @@ public class Game extends Canvas implements Runnable {
 
 		}
 	
-		
+		frame.setIconImage(new ImageIcon("res/icons/gameLogo.png").getImage());
 		frame.setLayout(new BorderLayout());
 		frame.add(this, BorderLayout.CENTER);
 		frame.setLocationRelativeTo(null);
