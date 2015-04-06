@@ -78,7 +78,7 @@ public class Game extends Canvas implements Runnable {
 		image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 		g2 = (Graphics2D) image.getGraphics();
 		gsm = new GameStateManager(g2);
-
+		
 		addKeyListener(new KeyMaster(gsm));
 		MouseMaster mm = new MouseMaster();
 		addMouseListener(mm);

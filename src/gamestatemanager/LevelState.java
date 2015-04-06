@@ -3,6 +3,7 @@ package gamestatemanager;
 import input.MouseMaster;
 
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,7 @@ import ui.PauseMenu;
 import util.CursorManager;
 import entity.Mob;
 import entity.Player;
+import entity.Slime;
 import gfx.Particle;
 
 public abstract class LevelState extends GameState{
@@ -58,6 +60,7 @@ public abstract class LevelState extends GameState{
 			player.update();
 			
 			checkHit();
+			checkBulletHit();
 			updateLists();
 			checkRemoved();
 			spawners();
@@ -92,14 +95,14 @@ public abstract class LevelState extends GameState{
 
 	private void renderLists(Graphics2D g) {
 		//loop through and render all of the entities in the lists
-		for(int i = 0; i < projectiles.size(); i++) {
-			projectiles.get(i).render(g);
-		}
 		for(int i = 0; i < particles.size(); i++) {
 			particles.get(i).render(tilemap.getXOffset(), tilemap.getYOffset(), g);
 		}
 		for(int i = 0; i < enemies.size(); i++) {
 			enemies.get(i).render(g);
+		}
+		for(int i = 0; i < projectiles.size(); i++) {
+			projectiles.get(i).render(g);
 		}
 	}
 	
@@ -134,7 +137,7 @@ public abstract class LevelState extends GameState{
 	}
 	
 	//checks for things like bullet collision
-	private void checkHit() {
+	private void checkBulletHit() {
 		//if there are no projectiles, do not bother checking for collision
 		if(projectiles.size() == 0) return;
 		for(int i = 0; i < projectiles.size(); i++) {
@@ -143,7 +146,7 @@ public abstract class LevelState extends GameState{
 				Mob tempM = enemies.get(j);
 					
 				//if the projectile hits the enemy
-				if(tempP.getHitbox().intersects(tempM.getHitbox())) {
+				if(tempP.getHitbox().intersects(tempM.getHitbox()) && !tempM.getDying()) {
 					tempM.hit(tempP.getDamage());
 					projectiles.remove(i);
 					
@@ -154,19 +157,34 @@ public abstract class LevelState extends GameState{
 		}
 	}
 	
+	//melee collision
+	private void checkHit() {
+		//check if an enemy hits you
+		for(int i = 0; i < enemies.size(); i++) {
+			//check if there is a player
+			if(player == null) return;
+			
+			Mob temp = enemies.get(i);
+			
+			//slime
+			if(temp instanceof Slime) {
+				if(temp.getHitbox().intersects(player.getHitbox()) && !temp.getDying()) player.hit(temp.getDamage());
+			}
+		}
+	}
+	
 	//checks to see if the mouse is over anything that should change the cursor
 	private void checkCursor() {
+		//check for doors
 		if(tilemap.getTile(MouseMaster.getMouseX() + tilemap.getXOffset(), MouseMaster.getMouseY() + tilemap.getYOffset()) instanceof InterchangeableDoorTile) {
 			if(CursorManager.getCursor() != 2) {
 				CursorManager.setCursor(2);
 			}
-			return;
 		}
 		else if (CursorManager.getCursor() != 1){
 			CursorManager.setCursor(1);
 		}
 	}
-	
 	
 	//absract methods
 	public abstract void checkRightClickInteractions();
@@ -188,6 +206,9 @@ public abstract class LevelState extends GameState{
 	}
 	public Player getPlayer() {
 		return player;
+	}
+	public List<Mob> getEnemies() {
+		return enemies;
 	}
 	
 	//adding

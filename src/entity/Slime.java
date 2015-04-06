@@ -19,8 +19,6 @@ public class Slime extends Mob {
 	public float[] xVals, yVals;
 	private BufferedImage slimeSprite;
 	
-	private boolean dying;
-	
 	private boolean moveUp, moveDown, moveRight, moveLeft;
 	
 	public Slime(float x, float y, int level, LevelState currentState,
@@ -30,12 +28,13 @@ public class Slime extends Mob {
 
 	@Override
 	public void init() {
-		health = level;
+		health = 1 + (level * 2);
 		currentHealth = health;
 		damage = level;
 		speed = 0.6f;
 		width = 32;
 		height = 32;
+		name = "Slime";
 		
 		hitbox = new Rectangle(width, height);
 		

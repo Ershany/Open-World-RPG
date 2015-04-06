@@ -61,7 +61,6 @@ public abstract class Menu {
 
 	public void keyPressed(int k) {
 		if (k == KeyEvent.VK_UP || k == KeyEvent.VK_W) {
-
 			if (selected == 0) {
 				selected = buttons.length - 1;
 			} else {

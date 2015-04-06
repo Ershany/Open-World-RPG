@@ -31,9 +31,12 @@ public class Sprite {
 	public static Sprite rockHillBottom = new Sprite(2, 3, Spritesheet.sheet1);
 	
 	//HUD
-	public static Sprite healthHUD = new Sprite("/hudStuff/healthBar.png");
-	public static Sprite minimap = new Sprite("/hudStuff/minimap.bmp");
+	public static Sprite healthHUD = new Sprite("/hudStuff/healthBar.bmp");
 	public static Sprite minimapOutline = new Sprite("/hudStuff/minimapOutline.bmp");
+	
+	//portraits
+	public static Sprite playerPortrait = new Sprite("/hudStuff/portraits/playerPortrait.bmp");
+	public static Sprite slimePortrait = new Sprite("/hudStuff/portraits/slimePortrait.bmp");
 	
 	//slime
 	public static Sprite slime1 = new Sprite(0, 0, Spritesheet.enemySheet);

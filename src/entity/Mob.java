@@ -26,9 +26,13 @@ public abstract class Mob extends Entity {
 	protected float currentHealth; 
 	protected float damage;
 	protected float speed;
+	protected boolean invincible;
+	protected String name;
 	
 	protected int width, height;
 	protected int anim;
+	
+	protected boolean dying;
 	
 	protected Rectangle hitbox; //used for intersection of weapons and such (or picking up things) not for solid collision detection
 	
@@ -50,7 +54,10 @@ public abstract class Mob extends Entity {
 	public abstract void render(Graphics2D g);
 
 	public void hit(float damage) {
-		currentHealth -= damage;
+		if(!invincible) {
+			currentHealth -= damage;
+			if(currentHealth < 0) currentHealth = 0;
+		}
 	}
 	
 	//getters
@@ -80,5 +87,14 @@ public abstract class Mob extends Entity {
 	}
 	public int getHeight() {
 		return height;
+	}
+	public boolean getInvincible() {
+		return invincible;
+	}
+	public String getName() {
+		return name;
+	}
+	public boolean getDying() {
+		return dying;
 	}
 }

@@ -18,12 +18,15 @@ public class Player extends Mob {
 	//to be added in the future
 	//private Inventory inventory;
 	private HUD hud;
+	private Mob focusedMob;
 	
 	private boolean upHeld, downHeld, rightHeld, leftHeld;
 	private boolean shouldShoot;
 	
 	private int shootCooldown = 120;
 	private int currentShootCooldown = 0;
+	private int invincibleCooldown = 60;
+	private int currentInvincibleCooldown = 0;
 	
 	private float[] xVals, yVals;
 	
@@ -41,6 +44,7 @@ public class Player extends Mob {
 		width = 32;
 		height = 48;
 		shouldShoot = true;
+		name = "Player Name";
 		
 		hitbox = new Rectangle(width, height);
 		
@@ -67,6 +71,15 @@ public class Player extends Mob {
 		
 		//shooting
 		checkShooting();
+		
+		//check for focused mob
+		checkFocus();
+		
+		//update the focused mob
+		updateFocus();
+		
+		//cooldowns
+		checkCooldowns();
 		
 		//check death
 		checkDeath();
@@ -137,14 +150,6 @@ public class Player extends Mob {
 	}
 	
 	private void checkShooting() {
-		if(!shouldShoot) {
-			currentShootCooldown++;
-			if(currentShootCooldown == shootCooldown) {
-				shouldShoot = true;
-				currentShootCooldown = 0;
-			}
-		}
-		
 		if(MouseMaster.getMouseB() == 1 && shouldShoot) {
 			//pass in the xDest and yDest with the xOffsets and yOffsets
 			currentState.addProjectile(new Projectile(x, y, MouseMaster.getMouseX() + currentState.getTilemap().getXOffset(), MouseMaster.getMouseY() + currentState.getTilemap().getYOffset(), 5, 5, 7.2f, 60, damage, currentState));
@@ -157,6 +162,68 @@ public class Player extends Mob {
 		if((int)currentHealth <= 0) {
 			//temp
 			System.out.println("dead");
+		}
+	}
+	
+	//override the mob hit method
+	public void hit(float damage) {
+		if(!invincible) {
+			currentHealth -= damage;
+			if(currentHealth < 0) currentHealth = 0;
+			invincible = true;
+		}
+	}
+	
+	private void checkCooldowns() {
+		//shooting cooldown
+		if(!shouldShoot) {
+			currentShootCooldown++;
+			if(currentShootCooldown == shootCooldown) {
+				shouldShoot = true;
+				currentShootCooldown = 0;
+			}
+		}
+		
+		//invincibility cooldown (after the player gets hit, they can't recieve damage for a short time)
+		if(invincible) {
+			currentInvincibleCooldown++;
+			if(currentInvincibleCooldown >= invincibleCooldown) {
+				invincible = false;
+				currentInvincibleCooldown = 0;
+			}
+		}
+	}
+	
+	private Rectangle mouse;
+	private Mob tempMob;
+	//When you focus a mob, it will 
+	private void checkFocus() {
+		//if the player right clicks, check to see if he clicked an enemy
+		if(MouseMaster.getMouseB() == 3) {
+			//enemies
+			for(int i = 0; i < currentState.getEnemies().size(); i++) {
+				//first iteration get the mouse coords
+				if(i == 0) {
+					mouse = MouseMaster.getHitbox();
+					mouse.x += currentState.getTilemap().getXOffset();
+					mouse.y += currentState.getTilemap().getYOffset();
+				}	
+				tempMob = currentState.getEnemies().get(i);
+				if(tempMob.getHitbox().contains(mouse)) {
+					focusedMob = tempMob;
+				}
+			}
+		}
+	}
+	
+	//will check if the mob has died or despawned, if so it will take it out of focus
+	private void updateFocus() {
+		//if there is no mob in focus, get out of this method
+		if(focusedMob == null) return;
+		
+		//if the mob in focus is removed, set the focusedMob to null
+		if(focusedMob.getRemoved() == true) {
+			focusedMob = null;
 		}
 	}
 	
@@ -200,5 +267,8 @@ public class Player extends Mob {
 	}
 	public float getY() {
 		return y;
+	}
+	public Mob getFocusedMob() {
+		return focusedMob;
 	}
 }

@@ -20,7 +20,6 @@ public class SettingsMenu extends Menu {
 		settingsPlaceholder = new SettingsPlaceholder();
 		Button fullscreen = new Button(gsm, "Fullscreen : "
 				+ settingsPlaceholder.FULLSCREEN) {
-
 			@Override
 			public void doAction() {
 				settingsPlaceholder.FULLSCREEN = !settingsPlaceholder.FULLSCREEN;

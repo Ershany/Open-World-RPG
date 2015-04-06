@@ -13,7 +13,6 @@ public class SettingsState extends GameState {
 
 	SettingsMenu settingsMenu;
 	
-	
 	public SettingsState(GameStateManager gsm) {
 		super(gsm);
 		settingsMenu = new SettingsMenu(gsm);

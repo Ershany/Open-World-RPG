@@ -1,20 +1,16 @@
 package input;
 
 
-import game.Game;
-
-import java.awt.Image;
-import java.awt.Point;
-import java.awt.Toolkit;
+import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
-import java.net.URL;
 
 import javax.swing.event.MouseInputListener;
 
 public class MouseMaster implements MouseMotionListener, MouseInputListener {
 
 	private static int mouseX, mouseY, mouseB;
+	private static Rectangle hitbox = new Rectangle(0, 0, 1, 1);
 	
 	public MouseMaster() {
 		mouseX = -1;
@@ -51,12 +47,16 @@ public class MouseMaster implements MouseMotionListener, MouseInputListener {
 	public void mouseDragged(MouseEvent e) {
 		mouseX = e.getX();
 		mouseY = e.getY();
+		hitbox.x = mouseX;
+		hitbox.y = mouseY;
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
 		mouseX = e.getX();
 		mouseY = e.getY();
+		hitbox.x = mouseX;
+		hitbox.y = mouseY;
 	}
 	
 	
@@ -69,6 +69,9 @@ public class MouseMaster implements MouseMotionListener, MouseInputListener {
 	}
 	public static int getMouseY() {
 		return mouseY;
+	}
+	public static Rectangle getHitbox() {
+		return hitbox;
 	}
 	
 }

@@ -1,8 +1,9 @@
 package ui;
 
 import game.Game;
-import gamestatemanager.GameStateManager;
 import gamestatemanager.DevTestState;
+import gamestatemanager.GameStateManager;
+import gamestatemanager.ControlsState;
 import gamestatemanager.SettingsState;
 
 import java.awt.Color;
@@ -30,9 +31,10 @@ public class MainMenu extends Menu {
 				gsm.getStates().push(new SettingsState(gsm));
 			}
 		};
-		Button info = new Button(gsm, "Information") {
+		Button controls = new Button(gsm, "Controls") {
 			@Override
 			public void doAction() {
+				gsm.getStates().push(new ControlsState(gsm));
 			}
 		};
 		Button credits = new Button(gsm, "Credits") {
@@ -47,7 +49,7 @@ public class MainMenu extends Menu {
 			}
 		};
 
-		buttons = new Button[] { play, settings, info, credits, quit };
+		buttons = new Button[] { play, settings, controls, credits, quit };
 
 	}
 
