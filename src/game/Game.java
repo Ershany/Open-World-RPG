@@ -1,6 +1,7 @@
 package game;
 
 import gamestatemanager.GameStateManager;
+import gfx.Sprite;
 import input.KeyMaster;
 import input.MouseMaster;
 
@@ -12,7 +13,6 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
 import util.CursorManager;
@@ -62,7 +62,7 @@ public class Game extends Canvas implements Runnable {
 
 		}
 	
-		frame.setIconImage(new ImageIcon("res/icons/gameLogo.png").getImage());
+		frame.setIconImage(Sprite.logo.getImage());
 		frame.setLayout(new BorderLayout());
 		frame.add(this, BorderLayout.CENTER);
 		frame.setLocationRelativeTo(null);
@@ -99,12 +99,11 @@ public class Game extends Canvas implements Runnable {
 	}
 
 	public void run() {
+		int frames = 0;
+		int updates = 0;
 		running = true;
 		double nsPerTick = 1000000000 / Settings.FPSUPS;
 		double delta = 0;
-
-		int frames = 0;
-		int updates = 0;
 
 		long timer = System.currentTimeMillis();
 		long before = System.nanoTime();
@@ -114,7 +113,7 @@ public class Game extends Canvas implements Runnable {
 			after = System.nanoTime();
 			delta += (after - before) / nsPerTick;
 			before = after;
-
+			
 			if (delta >= 1) {
 				delta--;
 				//frames++;
@@ -128,7 +127,7 @@ public class Game extends Canvas implements Runnable {
 			render(); // temp for testing FPS
 			renderToScreen(); // temp for testing FPS
 			if (System.currentTimeMillis() - timer >= 1000) {
-				System.out.println("FPS: " + frames + " UPS: " + updates);
+				System.out.println("FPS:" + frames + "  UPS:" + updates);
 				updates = 0;
 				frames = 0;
 				timer += 1000;
@@ -166,7 +165,7 @@ public class Game extends Canvas implements Runnable {
 		g.fillRect(0, 0, (int) Settings.FULLSCREEN_RESOLUTION.getWidth(),
 				(int) Settings.FULLSCREEN_RESOLUTION.getHeight());
 		g.drawImage(image, xOffset, yOffset, null);
-
+		
 		g.dispose();
 		bs.show();
 

@@ -11,6 +11,9 @@ public class Sprite {
 	//or just keep universal stuff like player and such and have rare
 	//sprites get initialized in the states initialization 
 	
+	//logo
+	public static Sprite logo = new Sprite("/icons/gameLogo.png");
+	
 	//tiles
 	public static Sprite grass = new Sprite(0, 0, Spritesheet.sheet1);
 	public static Sprite stone = new Sprite(1, 0, Spritesheet.sheet1);
