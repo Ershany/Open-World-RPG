@@ -1,7 +1,7 @@
 package ui;
 
 import game.Game;
-import gamestatemanager.DevTestState;
+import gameplaystates.DevTestState;
 import gamestatemanager.GameStateManager;
 import gamestatemanager.ControlsState;
 import gamestatemanager.SettingsState;

@@ -13,6 +13,7 @@ public class CursorManager {
 	
 	private static URL url1 = Game.class.getResource("/cursors/normal.png");   //option 1
 	private static URL url2 = Game.class.getResource("/cursors/interact.png"); //option 2
+	private static URL url3 = Game.class.getResource("/cursors/ranged.png"); //option 3
 	private static int currentCursor;
 	
 	//Make an object out of this class and then your other classes can reference this class's method statically to change the cursor
@@ -24,14 +25,20 @@ public class CursorManager {
 		if(cursorOption == 1) {
 			Image image = Toolkit.getDefaultToolkit().getImage(url1);
 			Point hotSpot = new Point(0, 0);
-			game.setCursor(Toolkit.getDefaultToolkit().createCustomCursor(image, hotSpot, "Default Cursor"));
+			game.setCursor(Toolkit.getDefaultToolkit().createCustomCursor(image, hotSpot, "Melee Cursor"));
 			currentCursor = 1;
 		}
 		else if(cursorOption == 2) {
 			Image image = Toolkit.getDefaultToolkit().getImage(url2);
 			Point hotSpot = new Point(0, 0);
-			game.setCursor(Toolkit.getDefaultToolkit().createCustomCursor(image, hotSpot, "Default Cursor"));
+			game.setCursor(Toolkit.getDefaultToolkit().createCustomCursor(image, hotSpot, "Interact Cursor"));
 			currentCursor = 2;
+		}
+		else if(cursorOption == 3) {
+			Image image = Toolkit.getDefaultToolkit().getImage(url3);
+			Point hotSpot = new Point(0, 0);
+			game.setCursor(Toolkit.getDefaultToolkit().createCustomCursor(image, hotSpot, "Ranged Cursor"));
+			currentCursor = 3;
 		}
 	}
 	

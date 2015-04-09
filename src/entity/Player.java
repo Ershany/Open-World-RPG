@@ -22,6 +22,7 @@ public class Player extends Mob {
 	
 	private boolean upHeld, downHeld, rightHeld, leftHeld;
 	private boolean shouldShoot;
+	private boolean rangedForm;
 	
 	private int shootCooldown = 120;
 	private int currentShootCooldown = 0;
@@ -69,6 +70,9 @@ public class Player extends Mob {
 		//movement
 		checkMovement();
 		
+		//melee
+		checkMelee();
+		
 		//shooting
 		checkShooting();
 		
@@ -77,6 +81,9 @@ public class Player extends Mob {
 		
 		//update the focused mob
 		updateFocus();
+		
+		//check form
+		checkForm();
 		
 		//cooldowns
 		checkCooldowns();
@@ -88,13 +95,16 @@ public class Player extends Mob {
 		updateOffset();
 		
 		//update HUD
-		hud.update();
+		hud.update(); 
 	}
 
 	@Override
 	public void render(Graphics2D g) {
 		//render player
 		drawPlayer(g);
+		
+		//render reload bar
+		drawReloadBar(g);
 		
 		//render HUD
 		hud.render(g);
@@ -103,6 +113,14 @@ public class Player extends Mob {
 	private void drawPlayer(Graphics2D g) {
 		g.setColor(Color.RED);
 		g.fillRect((int)x - currentTilemap.getXOffset(), (int)y - currentTilemap.getYOffset(), width, height);
+	}
+	
+	private void drawReloadBar(Graphics2D g) {
+		//firstly check if we are in rangedForm to render the bar and if it is on cooldown
+		if(!rangedForm || currentShootCooldown <= 0) return;
+		
+		g.setColor(Color.RED);
+		g.fillRect(MouseMaster.getMouseX() + 30, MouseMaster.getMouseY(), 3, (int)(0.25 * (shootCooldown - currentShootCooldown)));
 	}
 	
 	private void move (float testSpeedX, float testSpeedY) {
@@ -126,8 +144,6 @@ public class Player extends Mob {
 	
 	private void checkMovement() {
 		//TODO : Fix diag
-		
-		
 		if (upHeld) {
 			move(0,-speed);
 		}
@@ -146,15 +162,23 @@ public class Player extends Mob {
 	
 	private void updateOffset() {
 		currentTilemap.setXOffset((int)x - (Game.WIDTH / 2) + (width / 2));
-		currentTilemap.setYOffset((int)y - (Game.HEIGHT / 2) + (height / 2)); 
+		currentTilemap.setYOffset((int)y - (Game.HEIGHT / 2) + (height / 2));
 	}
 	
 	private void checkShooting() {
+		//firstly ensure we are in range form, if not get out of this method
+		if(!rangedForm) return;
+		
 		if(MouseMaster.getMouseB() == 1 && shouldShoot) {
 			//pass in the xDest and yDest with the xOffsets and yOffsets
 			currentState.addProjectile(new Projectile(x, y, MouseMaster.getMouseX() + currentState.getTilemap().getXOffset(), MouseMaster.getMouseY() + currentState.getTilemap().getYOffset(), 5, 5, 7.2f, 60, damage, currentState));
 			shouldShoot = false;
 		}
+	}
+	
+	private void checkMelee() {
+		//firstly ensure we are in melee form, if not get out of this method
+		if(rangedForm) return;
 	}
 	
 	private void checkDeath() {
@@ -175,8 +199,8 @@ public class Player extends Mob {
 	}
 	
 	private void checkCooldowns() {
-		//shooting cooldown
-		if(!shouldShoot) {
+		//shooting cooldown (ensure the player is in ranged form for the cooldown to count down) 
+		if(!shouldShoot && rangedForm) {
 			currentShootCooldown++;
 			if(currentShootCooldown == shootCooldown) {
 				shouldShoot = true;
@@ -227,6 +251,17 @@ public class Player extends Mob {
 		}
 	}
 	
+	//checks to see if the player changes form (melee - ranged)
+	private void checkForm() {
+		if(MouseMaster.getCurrentNotches() < 0 || MouseMaster.getCurrentNotches() > 0) {
+			//reset current notches
+			MouseMaster.resetCurrentNotches();
+			
+			//change focus
+			rangedForm = !rangedForm;
+		}
+	}
+	
 	public void keyPressed(int k) {
 		if(k == KeyEvent.VK_W) {
 			upHeld = true;
@@ -270,5 +305,8 @@ public class Player extends Mob {
 	}
 	public Mob getFocusedMob() {
 		return focusedMob;
+	}
+	public boolean getRangedForm() {
+		return rangedForm;
 	}
 }

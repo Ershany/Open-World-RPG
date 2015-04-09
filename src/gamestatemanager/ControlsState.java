@@ -21,7 +21,7 @@ public class ControlsState extends GameState {
 
 	@Override
 	public void init() {
-		font = new Font("Algerian", Font.PLAIN, 40);
+		font = new Font("Algerian", Font.PLAIN, 30);
 	}
 
 	@Override
@@ -35,14 +35,15 @@ public class ControlsState extends GameState {
 		
 		g.setFont(font);
 		g.setColor(Color.BLACK);
-		g.drawString("Move Up:       W", Game.WIDTH / 2 - 200, 240);
-		g.drawString("Move Down:  S", Game.WIDTH / 2 - 200, 280);
-		g.drawString("Move Right: D", Game.WIDTH / 2 - 200, 320);
-		g.drawString("Move Left:   A", Game.WIDTH / 2 - 200, 360);
-		g.drawString("Attack:  Left Click", Game.WIDTH / 2 - 200, 400);
-		g.drawString("Focus Target: Right Click", Game.WIDTH / 2 - 200, 440);
-		g.drawString("Opening Doors: Right Click", Game.WIDTH / 2 - 200, 480);
-		g.drawString("Menu: Escape Key", Game.WIDTH / 2 - 200, 520);
+		g.drawString("Move Up:       W", Game.WIDTH / 2 - 200, 260);
+		g.drawString("Move Down:  S", Game.WIDTH / 2 - 200, 285);
+		g.drawString("Move Right: D", Game.WIDTH / 2 - 200, 310);
+		g.drawString("Move Left:   A", Game.WIDTH / 2 - 200, 335);
+		g.drawString("Attack:  Left Click", Game.WIDTH / 2 - 200, 360);
+		g.drawString("Focus Target: Right Click", Game.WIDTH / 2 - 200, 385);
+		g.drawString("Opening Doors: Right Click", Game.WIDTH / 2 - 200, 410);
+		g.drawString("Menu: Escape Key", Game.WIDTH / 2 - 200, 435);
+		g.drawString("Form Swap: MouseWheel", Game.WIDTH / 2 - 200, 460);
 	}
 
 	@Override

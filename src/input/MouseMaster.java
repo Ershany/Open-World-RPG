@@ -4,12 +4,15 @@ package input;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 
 import javax.swing.event.MouseInputListener;
 
-public class MouseMaster implements MouseMotionListener, MouseInputListener {
+public class MouseMaster implements MouseMotionListener, MouseInputListener, MouseWheelListener {
 
 	private static int mouseX, mouseY, mouseB;
+	private static int currentNotches;
 	private static Rectangle hitbox = new Rectangle(0, 0, 1, 1);
 	
 	public MouseMaster() {
@@ -59,6 +62,15 @@ public class MouseMaster implements MouseMotionListener, MouseInputListener {
 		hitbox.y = mouseY;
 	}
 	
+	@Override
+	public void mouseWheelMoved(MouseWheelEvent e) {
+		currentNotches = e.getWheelRotation();
+	}
+	
+	//setters
+	public static void resetCurrentNotches() {
+		currentNotches = 0;
+	}
 	
 	//getters
 	public static int getMouseB() {
@@ -72,6 +84,9 @@ public class MouseMaster implements MouseMotionListener, MouseInputListener {
 	}
 	public static Rectangle getHitbox() {
 		return hitbox;
+	}
+	public static int getCurrentNotches() {
+		return currentNotches;
 	}
 	
 }

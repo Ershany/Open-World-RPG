@@ -181,8 +181,15 @@ public abstract class LevelState extends GameState{
 				CursorManager.setCursor(2);
 			}
 		}
-		else if (CursorManager.getCursor() != 1){
-			CursorManager.setCursor(1);
+		else {
+			//if the player is in melee form (check cursor then)
+			if(CursorManager.getCursor() != 1 && player.getRangedForm() == false) {
+				CursorManager.setCursor(1);
+			}
+			//if the player is ranged form (check cursor then)
+			else if (CursorManager.getCursor() != 3 && player.getRangedForm()){
+				CursorManager.setCursor(3);
+			}
 		}
 	}
 	

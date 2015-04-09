@@ -16,6 +16,7 @@ public abstract class Menu {
 	private int buttonGap;
 	protected Button[] buttons;
 	protected GameStateManager gsm;
+	protected boolean showFill = true;
 
 	public Menu(float x, float y, float width, float height,
 			GameStateManager gsm) {
@@ -42,7 +43,7 @@ public abstract class Menu {
 	public void render(Graphics2D g) {
 		g.setFont(getFont());
 		g.setColor(getFillColor());
-		g.fill(background);
+		if(showFill) g.fill(background);
 
 		for (int i = 0; i < buttons.length; i++) {
 			if (selected == i) {
@@ -78,7 +79,7 @@ public abstract class Menu {
 			select();
 		}
 	}
-
+	
 	private void select() {
 		buttons[selected].doAction();
 	}
@@ -121,6 +122,12 @@ public abstract class Menu {
 
 	public void setButtonGap(int buttonGap) {
 		this.buttonGap = buttonGap;
+	}
+	public void setShowFill(boolean option) {
+		this.showFill = option;
+	}
+	public boolean getShowFill() {
+		return showFill;
 	}
 
 }
