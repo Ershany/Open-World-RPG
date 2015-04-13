@@ -12,17 +12,26 @@ public class Spritesheet {
 	//sprites get initialized in the states initialization 
 	public static Spritesheet sheet1 = new Spritesheet("/sprites/tiles.bmp", 32);
 	public static Spritesheet enemySheet = new Spritesheet("/sprites/enemies_1.png", 32);
+	public static Spritesheet playerSheet = new Spritesheet("/sprites/player.png", 32, 48);
 	
 	private String path;
-	private int spriteSize;
 	private int width, height;
+	private int spriteWidth, spriteHeight;
 	
 	private BufferedImage sheet;
 	
-	
 	public Spritesheet(String path, int spriteSize) {
 		this.path = path;
-		this.spriteSize = spriteSize;
+		this.spriteWidth = spriteSize;
+		this.spriteHeight = spriteSize;
+		
+		load();
+	}
+	
+	public Spritesheet(String path, int spriteWidth, int spriteHeight) {
+		this.path = path;
+		this.spriteWidth = spriteWidth;
+		this.spriteHeight = spriteHeight;
 		
 		load();
 	}
@@ -45,8 +54,11 @@ public class Spritesheet {
 	public int getHeight() {
 		return height;
 	}
-	public int getSize() {
-		return spriteSize;
+	public int getSpriteWidth() {
+		return spriteWidth;
+	}
+	public int getSpriteHeight() {
+		return spriteHeight;
 	}
 	public BufferedImage getImage() {
 		return sheet;

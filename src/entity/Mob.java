@@ -25,6 +25,7 @@ public abstract class Mob extends Entity {
 	protected float health; 
 	protected float currentHealth; 
 	protected float damage;
+	protected float rangedDamage;
 	protected float speed;
 	protected boolean invincible;
 	protected String name;
@@ -75,6 +76,9 @@ public abstract class Mob extends Entity {
 	}
 	public float getDamage() {
 		return damage;
+	}
+	public float getRangedDamage() {
+		return rangedDamage;
 	}
 	public float getSpeed() {
 		return speed;

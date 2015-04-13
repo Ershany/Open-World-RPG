@@ -6,6 +6,7 @@ import java.awt.Rectangle;
 
 import spawners.ParticleSpawner;
 import tilemap.Tilemap;
+import util.AngleMaster;
 import entity.Entity;
 import gamestatemanager.LevelState;
 
@@ -38,7 +39,7 @@ public class Projectile extends Entity {
 		this.height = height;
 		hitbox = new Rectangle(width, height);
 		
-		angle = Math.atan2(yDest - y, xDest - x);
+		angle = AngleMaster.calculateAngle((int)xOrig, (int)yOrig, (int)xDest, (int)yDest);
 		xa = (float)Math.cos(angle) * speed;
 		ya = (float)Math.sin(angle) * speed;
 		
@@ -64,7 +65,7 @@ public class Projectile extends Entity {
 	}
 	
 	public void render(Graphics2D g) {
-		g.setColor(Color.RED);
+		g.setColor(Color.BLACK);
 		g.fillRect((int)x - tilemap.getXOffset(), (int)y - tilemap.getYOffset(), width, height);
 	}
 	

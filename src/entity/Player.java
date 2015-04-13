@@ -2,6 +2,7 @@ package entity;
 
 import game.Game;
 import gamestatemanager.LevelState;
+import gfx.Sprite;
 import hud.HUD;
 import input.MouseMaster;
 
@@ -12,24 +13,43 @@ import java.awt.event.KeyEvent;
 
 import projectile.Projectile;
 import tilemap.Tilemap;
+import animate.PlayerAnimate;
 
 public class Player extends Mob {
 
+	//TODO:
+	//updateStats() method needs to be complete when the inventory is finished
+	
+	
 	//to be added in the future
 	//private Inventory inventory;
 	private HUD hud;
 	private Mob focusedMob;
 	
+	private float projectileSpeed;
+	
 	private boolean upHeld, downHeld, rightHeld, leftHeld;
+	
+	private boolean shouldMelee;
 	private boolean shouldShoot;
 	private boolean rangedForm;
 	
-	private int shootCooldown = 120;
+	//cooldowns
+	private int shootCooldown = 120; //it should be: shootCooldown = inventory.getRangedWeaponSpeed();
 	private int currentShootCooldown = 0;
+	
 	private int invincibleCooldown = 60;
 	private int currentInvincibleCooldown = 0;
 	
+	private int meleeCooldown = 60; //it should be: meleeCooldown = inventory.getWeaponSpeed();
+	private int currentMeleeCooldown = 0;
+	
+	//melee hit box size (how big your melee is)
+	private int meleeBase = 48;
+	private int meleeHeight = 32;
+	
 	private float[] xVals, yVals;
+	private PlayerAnimate playerAnim;
 	
 	
 	public Player(int x, int y, int level, LevelState state, Tilemap tilemap) {
@@ -40,10 +60,13 @@ public class Player extends Mob {
 	public void init() {
 		health = (level * 5) + 10; //it should be:    health = (level * 5) + inventory.getArmor();
 		currentHealth = health;
-		damage = level * 2;  //it should be:   damage = (level * 2) + inventory.getWeapon().getDamage();
+		damage = level * 3;  //it should be:   damage = (level * 3) + inventory.getWeapon().getDamage();
+		rangedDamage = level * 2;
+		projectileSpeed = 14.2f; //it should be: projectileSpeed = inventory.getWeapon().getProjectileSpeed();
 		speed = 2.9f;
 		width = 32;
 		height = 48;
+		shouldMelee = true;
 		shouldShoot = true;
 		name = "Player Name";
 		
@@ -63,6 +86,7 @@ public class Player extends Mob {
 		yVals [4] = y + (height / 2);
 		
 		hud = new HUD(this);
+		playerAnim = new PlayerAnimate(this);
 	}
 
 	@Override	
@@ -88,11 +112,17 @@ public class Player extends Mob {
 		//cooldowns
 		checkCooldowns();
 		
+		//update the stats of your player
+		updateStats();
+		
 		//check death
 		checkDeath();
 		
 		//set offsets
 		updateOffset();
+		
+		//update player anim
+		playerAnim.update();
 		
 		//update HUD
 		hud.update(); 
@@ -111,8 +141,7 @@ public class Player extends Mob {
 	}
 	
 	private void drawPlayer(Graphics2D g) {
-		g.setColor(Color.RED);
-		g.fillRect((int)x - currentTilemap.getXOffset(), (int)y - currentTilemap.getYOffset(), width, height);
+		playerAnim.render(g);
 	}
 	
 	private void drawReloadBar(Graphics2D g) {
@@ -155,7 +184,6 @@ public class Player extends Mob {
 		}
 		if (rightHeld) {
 			move(speed,0);
-			
 		}
 		
 	}
@@ -171,14 +199,61 @@ public class Player extends Mob {
 		
 		if(MouseMaster.getMouseB() == 1 && shouldShoot) {
 			//pass in the xDest and yDest with the xOffsets and yOffsets
-			currentState.addProjectile(new Projectile(x, y, MouseMaster.getMouseX() + currentState.getTilemap().getXOffset(), MouseMaster.getMouseY() + currentState.getTilemap().getYOffset(), 5, 5, 7.2f, 60, damage, currentState));
+			currentState.addProjectile(new Projectile(x, y, MouseMaster.getMouseX() + currentState.getTilemap().getXOffset(), MouseMaster.getMouseY() + currentState.getTilemap().getYOffset(), 3, 3, projectileSpeed, 240, rangedDamage, currentState));
 			shouldShoot = false;
 		}
 	}
 	
+	private int xDest; private int yDest;
+	private int xDiff; private int yDiff;
+	private Rectangle meleeSwing = new Rectangle();
 	private void checkMelee() {
 		//firstly ensure we are in melee form, if not get out of this method
 		if(rangedForm) return;
+		
+		if(MouseMaster.getMouseB() == 1 && shouldMelee) {
+			xDest = MouseMaster.getMouseX() + currentTilemap.getXOffset();
+			yDest = MouseMaster.getMouseY() + currentTilemap.getYOffset();
+			xDiff = xDest - ((int)x + (width / 2));
+			yDiff = yDest - ((int)y + (height / 2));
+			
+			if(Math.abs(xDiff) > Math.abs(yDiff)) { //left or right attack
+				if(xDiff > 0) { //right attack
+					meleeSwing.x = (int)x + meleeHeight; meleeSwing.y = (int)y;
+					meleeSwing.width = meleeHeight; meleeSwing.height = meleeBase;
+				} 
+				else { //left attack
+					meleeSwing.x = (int)x - meleeHeight; meleeSwing.y = (int)y;
+					meleeSwing.width = meleeHeight; meleeSwing.height = meleeBase;
+				}
+			}
+			else { //up or down attack
+				if(yDiff > 0) { //down attack
+					meleeSwing.x = (int)x - (meleeHeight / 4); meleeSwing.y = (int)y + meleeBase;
+					meleeSwing.width = meleeBase; meleeSwing.height = meleeHeight;
+				}
+				else { //up attack
+					meleeSwing.x = (int)x - (meleeHeight / 4); meleeSwing.y = (int)y - meleeHeight;
+					meleeSwing.width = meleeBase; meleeSwing.height = meleeHeight;
+				}
+			}
+			//finally check meleeHit
+			checkMeleeHit();
+			//then clear the rectangle
+			meleeSwing.x = -1; meleeSwing.y = -1; meleeSwing.width = 0; meleeSwing.height = 0;
+			shouldMelee = false;
+		}
+	}
+	
+	private Mob tempEnemy;
+	//helper method for checkMelee
+	private void checkMeleeHit() {
+		for(int i = 0; i < currentState.getEnemies().size(); i++) {
+			tempEnemy = currentState.getEnemies().get(i);
+			if(meleeSwing.intersects(tempEnemy.getHitbox()) || meleeSwing.contains(tempEnemy.getHitbox())) {
+				tempEnemy.hit(damage);
+			}
+		}
 	}
 	
 	private void checkDeath() {
@@ -199,10 +274,19 @@ public class Player extends Mob {
 	}
 	
 	private void checkCooldowns() {
+		//melee cooldown
+		if(!shouldMelee) {
+			currentMeleeCooldown++;
+			if(currentMeleeCooldown >= meleeCooldown) {
+				shouldMelee = true;
+				currentMeleeCooldown = 0;
+			}
+		}
+		
 		//shooting cooldown (ensure the player is in ranged form for the cooldown to count down) 
 		if(!shouldShoot && rangedForm) {
 			currentShootCooldown++;
-			if(currentShootCooldown == shootCooldown) {
+			if(currentShootCooldown >= shootCooldown) {
 				shouldShoot = true;
 				currentShootCooldown = 0;
 			}
@@ -262,6 +346,14 @@ public class Player extends Mob {
 		}
 	}
 	
+	//if the player changes gear, change the players stats too
+	private void updateStats() {
+		//health = (level * 5) + 10 + inventory.getArmor();
+		//meleeCooldown = inventory.getWeaponSpeed();
+		//shootCooldown = inventory.getRangedWeaponSpeed();
+		//projectileSpeed = inventory.getWeapon().getProjectileSpeed();
+	}
+	
 	public void keyPressed(int k) {
 		if(k == KeyEvent.VK_W) {
 			upHeld = true;
@@ -275,6 +367,7 @@ public class Player extends Mob {
 		if(k == KeyEvent.VK_A) {
 			leftHeld = true;
 		}
+		playerAnim.keyPressed(k);
 	}
 	
 	public void keyReleased(int k) {
@@ -290,6 +383,7 @@ public class Player extends Mob {
 		if(k == KeyEvent.VK_A) {
 			leftHeld = false;
 		}
+		playerAnim.keyReleased(k);
 	}
 	public void keyTyped(int k) {
 		

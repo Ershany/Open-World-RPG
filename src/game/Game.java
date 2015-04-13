@@ -25,7 +25,7 @@ public class Game extends Canvas implements Runnable {
 	public static JFrame frame;
 	public volatile boolean running;
 	private Thread gameThread;
-
+	
 	private BufferedImage image;
 	private BufferStrategy bs;
 	private Graphics2D g2;

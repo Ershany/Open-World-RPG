@@ -31,6 +31,7 @@ public class Slime extends Mob {
 		health = 1 + (level * 2);
 		currentHealth = health;
 		damage = level;
+		rangedDamage = 0;
 		speed = 0.6f;
 		width = 32;
 		height = 32;
@@ -153,11 +154,12 @@ public class Slime extends Mob {
 		return true;
 	}
 	
+	
 	private void checkDeath() {
 		if(currentHealth <= 0 && !dying) {
 			dying = true;
 			anim = 0;
-			new ParticleSpawner(currentState).spawn(x + (width / 2), y + (height / 2), 15, 1.4f, Color.GREEN, 15);
+			new ParticleSpawner(currentState).spawn(x + (width / 2), y + (height / 2), 15, 1.4f, Color.GREEN, 20);
 		}
 	}
 

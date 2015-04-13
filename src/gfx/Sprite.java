@@ -14,6 +14,20 @@ public class Sprite {
 	//logo
 	public static Sprite logo = new Sprite("/icons/gameLogo.png");
 	
+	//player
+	public static Sprite playerIdleDown = new Sprite(1, 0, Spritesheet.playerSheet);
+	public static Sprite playerWalkDown1 = new Sprite(0, 0, Spritesheet.playerSheet);
+	public static Sprite playerWalkDown2 = new Sprite(2, 0, Spritesheet.playerSheet);
+	public static Sprite playerIdleUp = new Sprite(1, 1, Spritesheet.playerSheet);
+	public static Sprite playerWalkUp1 = new Sprite(0, 1, Spritesheet.playerSheet);
+	public static Sprite playerWalkUp2 = new Sprite(2, 1, Spritesheet.playerSheet);
+	public static Sprite playerIdleRight = new Sprite(1, 2, Spritesheet.playerSheet);
+	public static Sprite playerWalkRight1 = new Sprite(0, 2, Spritesheet.playerSheet);
+	public static Sprite playerWalkRight2 = new Sprite(2, 2, Spritesheet.playerSheet);
+	public static Sprite playerIdleLeft = new Sprite(1, 3, Spritesheet.playerSheet);
+	public static Sprite playerWalkLeft1 = new Sprite(0, 3, Spritesheet.playerSheet);
+	public static Sprite playerWalkLeft2 = new Sprite(2, 3, Spritesheet.playerSheet);
+	
 	//tiles
 	public static Sprite grass = new Sprite(0, 0, Spritesheet.sheet1);
 	public static Sprite stone = new Sprite(1, 0, Spritesheet.sheet1);
@@ -49,10 +63,9 @@ public class Sprite {
 	public static Sprite deathSlime2 = new Sprite(4, 0, Spritesheet.enemySheet);
 	public static Sprite deathSlime3 = new Sprite(5, 0, Spritesheet.enemySheet);
 	
+	
 	private Spritesheet sheet;
-	
 	private BufferedImage sprite;
-	
 	private String path;
 	private int x, y;
 	
@@ -73,7 +86,7 @@ public class Sprite {
 	}
 	
 	private void load() {
-		sprite = sheet.getImage().getSubimage(x * sheet.getSize(), y * sheet.getSize(), sheet.getSize(), sheet.getSize());
+		sprite = sheet.getImage().getSubimage(x * sheet.getSpriteWidth(), y * sheet.getSpriteHeight(), sheet.getSpriteWidth(), sheet.getSpriteHeight());
 	}
 	
 	//getters

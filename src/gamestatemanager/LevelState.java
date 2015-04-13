@@ -146,13 +146,12 @@ public abstract class LevelState extends GameState{
 				Mob tempM = enemies.get(j);
 					
 				//if the projectile hits the enemy
-				if(tempP.getHitbox().intersects(tempM.getHitbox()) && !tempM.getDying()) {
+				if((tempP.getHitbox().intersects(tempM.getHitbox()) && !tempM.getDying()) || (tempM.getHitbox().contains(tempP.getHitbox()) && !tempM.getDying())) {
 					tempM.hit(tempP.getDamage());
 					projectiles.remove(i);
-					
-					//if the list of projecitles is now empty, get out of this method
-					if(projectiles.size() == 0) return;
 				}
+				//if the list of projecitles is now empty, get out of this method
+				if(projectiles.size() == 0) return;
 			}
 		}
 	}
