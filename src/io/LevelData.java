@@ -6,6 +6,8 @@ import entity.Player;
 
 public class LevelData implements Serializable {
 
+	private static final long serialVersionUID = 3152674545426627041L;
+	
 	transient private Player player;
 	public int level;
 	public int xp;
