@@ -59,7 +59,7 @@ public class Tilemap {
 				Tile toPlace = null;
 				switch (colorCode) {
 				case 0xFF008000:
-					toPlace = new InterchangeableFloorTile(x, y, Sprite.grass.getImage());
+					toPlace = new InterchangeableFloorTile(x, y, Sprite.grass.getImage(), "Grass");
 					break;
 				case 0xFF808080:
 					toPlace = new InterchangeableFloorTile(x, y, Sprite.stone.getImage());
@@ -136,6 +136,11 @@ public class Tilemap {
 			// screen
 			tiles[i].render(xOffset, yOffset, g);
 		}
+	}
+	
+	//tile precision
+	public void changeTile(int x, int y, Tile tile) {
+		tiles[x + y * width] = tile;
 	}
 
 	// getters

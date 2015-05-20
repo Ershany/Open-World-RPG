@@ -73,6 +73,24 @@ public class PlayerAnimate extends Animate {
 
 	@Override
 	public void keyPressed(int k) {
+		//if it is paused, accept no input to update the sprite (includes a text pause too)
+		if(mob.getCurrentState().getPaused() || mob.getCurrentState().getCurrentTextBox() != null) {
+			if(up) {
+				currentSprite = Sprite.playerIdleUp.getImage();
+			} else if(down) {
+				currentSprite = Sprite.playerIdleDown.getImage();
+			} else if(right) {
+				currentSprite = Sprite.playerIdleRight.getImage();
+			} else if(left) {
+				currentSprite = Sprite.playerIdleLeft.getImage();
+			}
+			up = false;
+			down = false;
+			left = false;
+			right = false;
+			return;
+		}
+		
 		switch(k) {
 		case KeyEvent.VK_W: up = true; break;
 		case KeyEvent.VK_S: down = true; break;
@@ -83,6 +101,9 @@ public class PlayerAnimate extends Animate {
 
 	@Override
 	public void keyReleased(int k) {
+		//if it is paused, accept no input to update the sprite (includes a text pause too)
+		if(mob.getCurrentState().getPaused() || mob.getCurrentState().getCurrentTextBox() != null) return;
+		
 		switch(k) {
 		case KeyEvent.VK_W: up = false; currentSprite = Sprite.playerIdleUp.getImage(); break;
 		case KeyEvent.VK_S: down = false; currentSprite = Sprite.playerIdleDown.getImage(); break;

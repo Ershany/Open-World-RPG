@@ -5,10 +5,12 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
+import npc.KingNPC;
+import npc.WisemanNPC;
 import tiles.Tile;
+import enemies.Slime;
 import entity.Mob;
 import entity.Player;
-import entity.Slime;
 import game.Game;
 import gfx.Sprite;
 
@@ -22,6 +24,13 @@ public class HUD {
 	private BufferedImage portrait;
 	private int healthBarX, healthBarY;
 	private String playerName;
+	
+	//xp bar
+	private BufferedImage xpBar;
+	private int xp;
+	private int currentXp;
+	private int xpWidth;
+	private boolean showXpBar = true;
 	
 	//focused mob info
 	private BufferedImage focusedPortrait;
@@ -66,6 +75,15 @@ public class HUD {
 		minimapTiles = new Tile[widthAndHeight * widthAndHeight];
 		currentTiles = player.getTileMap().getTiles();
 		tilemapWidth = player.getTileMap().getWidth();
+		
+		//init xpBar
+		xpBar = Sprite.xpBar.getImage();
+		currentXp = player.getCurrentXp();
+		xp = player.getXp();
+		xpWidth = (currentXp * 381) / xp;
+		if(player.getLevel() == Player.MAX_LEVEL) {
+			showXpBar = false;
+		}
 	}
 	
 	private int currentHealthWidth;
@@ -80,9 +98,9 @@ public class HUD {
 	
 	public void update() {
 		//player healthbar updating
-		currentHealthWidth = (int)(148 * (player.getCurrentHealth() / player.getHealth()));
-		currentPlayerHealth = (int)player.getCurrentHealth();
 		playerHealth = (int)player.getHealth();
+		currentPlayerHealth = (int)player.getCurrentHealth();
+		currentHealthWidth = (int)(148 * (player.getCurrentHealth() / player.getHealth()));
 		
 		//focused mob updating (if there is a focused mob get its info if we don't already have it
 		if(focusedMob != player.getFocusedMob()) { 
@@ -93,6 +111,9 @@ public class HUD {
 				focusedMob = player.getFocusedMob();
 				focusedName = focusedMob.getName();
 				focusedPortrait = getFocusedMobPortrait();
+				currentFocusedHealthWidth = (int)(148 * (focusedMob.getCurrentHealth() / focusedMob.getHealth()));
+				currentFocusedHealth = (int)focusedMob.getCurrentHealth();
+				focusedHealth = (int)focusedMob.getHealth();
 			}
 		} 
 		else if (focusedMob != null) {
@@ -109,6 +130,19 @@ public class HUD {
 				minimapTiles[x + y * widthAndHeight] = currentTiles[(int)((player.getX() / 32) + x - (widthAndHeight / 2)) + (int)((player.getY() / 32) + y - (widthAndHeight / 2)) * tilemapWidth];
 			}
 		}
+		
+		//xp bar updating
+		if(currentXp != player.getCurrentXp() || xp != player.getXp()) {
+			currentXp = player.getCurrentXp();
+			xp = player.getXp();
+			xpWidth = (currentXp * 381) / xp;
+			if(xpWidth > 381) {
+				xpWidth = 381;
+			}
+			if(player.getLevel() == Player.MAX_LEVEL) {
+				showXpBar = false;
+			}
+		}
 	}
 	
 	public void render(Graphics2D g) {
@@ -117,8 +151,19 @@ public class HUD {
 		
 		//render mini map
 		drawMinimap(g);
+		
+		drawXpBar(g);
 	}
 	
+	private void drawXpBar(Graphics2D g) {
+		if(!showXpBar) return;
+		
+		g.drawImage(xpBar, Game.WIDTH / 2 - 200, Game.HEIGHT - 60, null);
+		
+		//bar located at     x:Game.WIDTH / 2 - 190   y:Game.HEIGHT - 57    width:381     height:14
+		g.setColor(Color.RED);
+		g.fillRect(Game.WIDTH / 2 - 190, Game.HEIGHT - 57, xpWidth, 14);
+	}
 	
 	private void drawHealthBar(Graphics2D g) {
 		g.setColor(Color.RED);
@@ -165,6 +210,12 @@ public class HUD {
 	private BufferedImage getFocusedMobPortrait() {
 		if(focusedMob instanceof Slime) {
 			return Sprite.slimePortrait.getImage();
+		}
+		else if(focusedMob instanceof KingNPC) {
+			return Sprite.kingPortrait.getImage();
+		}
+		else if(focusedMob instanceof WisemanNPC) {
+			return Sprite.wisemanPortrait.getImage();
 		}
 		else return null;
 	}

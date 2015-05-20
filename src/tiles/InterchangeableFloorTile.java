@@ -8,6 +8,9 @@ public class InterchangeableFloorTile extends Tile {
 	public InterchangeableFloorTile(int x, int y, BufferedImage tileImage) {
 		super(x, y, tileImage);
 	}
+	public InterchangeableFloorTile(int x, int y, BufferedImage tileImage, String type) {
+		super(x, y, tileImage, type);
+	}
 
 	@Override
 	public void update() {

@@ -1,5 +1,6 @@
 package gameplaystates;
 
+import npc.WisemanNPC;
 import gamestatemanager.GameStateManager;
 import gamestatemanager.LevelState;
 import input.MouseMaster;
@@ -24,11 +25,18 @@ public class DevTestHouseState extends LevelState {
 			if(tile instanceof InterchangeableDoorTile) {
 				if(Math.abs((player.getX() + player.getWidth() / 2) - ((tile.getX() << 5) + 16)) <= 48 &&
 				   Math.abs((player.getY() + player.getHeight() / 2) - ((tile.getY() << 5) + 16)) <= 48) {
+					//inform the player class that the state is changing
+					player.changeInstance();
 					gsm.getStates().pop();
 					gsm.getStates().push(new DevTestState(gsm, "/maps/devtest.bmp", 154 * 32, (49 * 32) + 16));
 				}
 			}
 		}
+	}
+	
+	@Override
+	public void initSpawn() {
+		npcs.add(new WisemanNPC(32 * 48, 32 * 32, 1, this, tilemap));
 	}
 
 }

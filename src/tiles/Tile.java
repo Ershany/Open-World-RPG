@@ -10,6 +10,7 @@ public abstract class Tile {
 	
 	protected boolean solid;
 	protected boolean projectileSolid;
+	protected String type = "";
 	
 	protected BufferedImage tileImage;
 	protected int x, y;
@@ -18,6 +19,13 @@ public abstract class Tile {
 		this.x = x;
 		this.y = y;
 		this.tileImage = tileImage;
+	}
+	//used for interchangeable tiles, so we know what kind of tile it is (used for spawning mobs like how slimes only spawn on grass tiles)
+	public Tile(int x, int y, BufferedImage tileImage, String type) {
+		this.x = x;
+		this.y = y;
+		this.tileImage = tileImage;
+		this.type = type;
 	}
 	
 	public abstract void update();
@@ -39,5 +47,8 @@ public abstract class Tile {
 	}
 	public boolean getProjectileSolid() {
 		return projectileSolid;
+	}
+	public String getType() {
+		return type;
 	}
 }

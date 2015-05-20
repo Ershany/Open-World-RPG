@@ -36,7 +36,7 @@ public class CursorManager {
 		}
 		else if(cursorOption == 3) {
 			Image image = Toolkit.getDefaultToolkit().getImage(url3);
-			Point hotSpot = new Point(0, 0);
+			Point hotSpot = new Point(2, 2);
 			game.setCursor(Toolkit.getDefaultToolkit().createCustomCursor(image, hotSpot, "Ranged Cursor"));
 			currentCursor = 3;
 		}

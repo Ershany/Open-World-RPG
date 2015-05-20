@@ -3,10 +3,10 @@ package gamestatemanager;
 import input.MouseMaster;
 
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import projectile.Projectile;
 import spawners.SlimeSpawner;
@@ -14,15 +14,18 @@ import tilemap.Tilemap;
 import tiles.InterchangeableDoorTile;
 import ui.PauseMenu;
 import util.CursorManager;
+import util.TextBoxMaster;
+import enemies.Slime;
+import entity.Entity;
 import entity.Mob;
 import entity.Player;
-import entity.Slime;
 import gfx.Particle;
 
 public abstract class LevelState extends GameState{
 
 	//container
 	protected PauseMenu pauseMenu;
+	protected TextBoxMaster currentTextBox; //used to output text onto the screen
 	
 	protected String mapName;
 	
@@ -32,6 +35,10 @@ public abstract class LevelState extends GameState{
 	protected List<Particle> particles = new ArrayList<Particle>();
 	protected List<Projectile> projectiles = new ArrayList<Projectile>();
 	protected List<Mob> enemies = new ArrayList<Mob>();
+	protected List<Mob> npcs = new ArrayList<Mob>();
+	
+	//used for spawners
+	private Random random = new Random();
 	
 	//temp
 	private SlimeSpawner slimeSpawner;
@@ -40,22 +47,21 @@ public abstract class LevelState extends GameState{
 		super(gsm);
 		this.mapName = mapName;
 		tilemap = new Tilemap(mapName);
-		player = new Player(xSpawn, ySpawn, 1, this, tilemap);
+		player = new Player(xSpawn, ySpawn, this, tilemap);
+		pauseMenu = new PauseMenu(gsm, this, player.getLevelData());
 		
 		init();
+		initSpawn();
 	}
 	
 	@Override
 	public void init() {
-		//temp init for testing
 		slimeSpawner = new SlimeSpawner(this);
-		
-		pauseMenu = new PauseMenu(gsm, this);
 	}
 	
 	@Override
 	public void update() {
-		if(!paused) {
+		if(!paused && currentTextBox == null) {
 			tilemap.update();
 			player.update();
 			
@@ -75,6 +81,9 @@ public abstract class LevelState extends GameState{
 		renderLists(g);
 		player.render(g);
 		
+		if(currentTextBox != null) {
+			currentTextBox.render(g);
+		}
 		if (paused) {
 			pauseMenu.render(g);
 		}
@@ -91,6 +100,9 @@ public abstract class LevelState extends GameState{
 		for(int i = 0; i < enemies.size(); i++) {
 			enemies.get(i).update();
 		}
+		for(int i = 0; i < npcs.size(); i++) {
+			npcs.get(i).update();
+		}
 	}
 
 	private void renderLists(Graphics2D g) {
@@ -103,6 +115,9 @@ public abstract class LevelState extends GameState{
 		}
 		for(int i = 0; i < projectiles.size(); i++) {
 			projectiles.get(i).render(g);
+		}
+		for(int i = 0; i < npcs.size(); i++) {
+			npcs.get(i).render(g);
 		}
 	}
 	
@@ -117,41 +132,34 @@ public abstract class LevelState extends GameState{
 		for(int i = 0; i < enemies.size(); i++) {
 			if(enemies.get(i).getRemoved()) enemies.remove(i);
 		}
+		for(int i = 0; i < npcs.size(); i++) {
+			if(npcs.get(i).getRemoved()) npcs.remove(i);
+		}
 	}
 	
+	//random chance of spawning a mob
 	private void spawners() {
-		slimeSpawner.update();
+		if(random.nextInt(120) == 0) 
+			slimeSpawner.update();
 	}
 	
-	@Override
-	public void keyPressed(int k) {
-		player.keyPressed(k);
-		
-		if (k == KeyEvent.VK_P || k == KeyEvent.VK_ESCAPE) {
-			paused = !paused;
-
-		}
-		if (paused) {
-			pauseMenu.keyPressed(k);
-		}
-	}
-	
+	private Projectile tempP;
+	private Mob tempM;
 	//checks for things like bullet collision
 	private void checkBulletHit() {
 		//if there are no projectiles, do not bother checking for collision
 		if(projectiles.size() == 0) return;
+		
 		for(int i = 0; i < projectiles.size(); i++) {
 			for(int j = 0; j < enemies.size(); j++) {
-				Projectile tempP = projectiles.get(i);
-				Mob tempM = enemies.get(j);
+				tempP = projectiles.get(i);
+				tempM = enemies.get(j);
 					
 				//if the projectile hits the enemy
 				if((tempP.getHitbox().intersects(tempM.getHitbox()) && !tempM.getDying()) || (tempM.getHitbox().contains(tempP.getHitbox()) && !tempM.getDying())) {
 					tempM.hit(tempP.getDamage());
-					projectiles.remove(i);
+					tempP.setRemoved(true);
 				}
-				//if the list of projecitles is now empty, get out of this method
-				if(projectiles.size() == 0) return;
 			}
 		}
 	}
@@ -192,10 +200,59 @@ public abstract class LevelState extends GameState{
 		}
 	}
 	
+	//when the player hits 'f', this method gets called and checks for the closest NPC, and if that NPC is close enough to talk to, it will talk to that NPC
+	private void checkInteraction() {
+		//stats for the for loop
+		Entity closestNPC = null;
+		double closestDistance = 51;
+		
+		for(int i = 0; i < npcs.size(); i++) {
+			//use trig to get the hypot for the distance (can use pythagoreoms theroem because it doesn't matter if it is positive or negative, we just want the smallest value)
+			double xDiff = (npcs.get(i).getX() + npcs.get(i).getWidth() / 2) - (player.getX() + player.getWidth() / 2); 
+			double yDiff = (npcs.get(i).getY() + npcs.get(i).getHeight() / 2) - (player.getY() + player.getHeight() / 2);
+			double distance = Math.sqrt(((xDiff * xDiff) + (yDiff * yDiff))); 
+			
+			//now check if the distance is less then the closest distance
+			if(closestDistance > distance) {
+				closestDistance = distance;
+				closestNPC = npcs.get(i);
+			}
+		}
+		
+		if(closestNPC == null) return;
+		
+		//make the player focus that NPC, so the player knows which NPC he is talking to
+		player.setFocusedMob((Mob) closestNPC);
+		player.hud.update(); //update the hud to focus the NPC
+		
+		//now interact with the closest NPC, if it got to this point, a close NPC was found
+		currentTextBox = new TextBoxMaster(closestNPC.getInfo());
+	}
+	
 	//absract methods
 	public abstract void checkRightClickInteractions();
+	public abstract void initSpawn();
 	
 
+	@Override
+	public void keyPressed(int k) {
+		player.keyPressed(k);
+		
+		//interact
+		if(k == KeyEvent.VK_F) {
+			checkInteraction();
+		}
+		if(k == KeyEvent.VK_P || k == KeyEvent.VK_ESCAPE) {
+			paused = !paused;
+		}
+		if(k == KeyEvent.VK_SPACE) {
+			currentTextBox = null;
+		}
+		if(paused) {
+			pauseMenu.keyPressed(k);
+		}
+	}
+	
 	@Override
 	public void keyReleased(int k) {
 		player.keyReleased(k);
@@ -216,6 +273,18 @@ public abstract class LevelState extends GameState{
 	public List<Mob> getEnemies() {
 		return enemies;
 	}
+	public List<Mob> getNPCs() {
+		return npcs;
+	}
+	public TextBoxMaster getCurrentTextBox() {
+		return currentTextBox;
+	}
+	public boolean getPaused() {
+		return paused;
+	}
+	public GameStateManager getGSM() {
+		return gsm;
+	}
 	
 	//adding
 	public void addParticle(Particle p) {
@@ -224,7 +293,10 @@ public abstract class LevelState extends GameState{
 	public void addProjectile(Projectile p) {
 		projectiles.add(p);
 	}
-	public void addMob(Mob b) {
-		enemies.add(b);
+	public void addMob(Mob m) {
+		enemies.add(m);
+	}
+	public void addNPC(Mob m) {
+		npcs.add(m);
 	}
 }

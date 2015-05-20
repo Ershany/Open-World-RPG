@@ -169,7 +169,6 @@ public class Game extends Canvas implements Runnable {
 		
 		g.dispose();
 		bs.show();
-
 	}
 
 	public static void main(String[] args) {

@@ -5,13 +5,17 @@ import gamestatemanager.LevelState;
 import gfx.Sprite;
 import hud.HUD;
 import input.MouseMaster;
+import io.FileIO;
+import io.LevelData;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 
 import projectile.Projectile;
+import spawners.ParticleSpawner;
 import tilemap.Tilemap;
 import animate.PlayerAnimate;
 
@@ -23,8 +27,13 @@ public class Player extends Mob {
 	
 	//to be added in the future
 	//private Inventory inventory;
-	private HUD hud;
+	public HUD hud;
 	private Mob focusedMob;
+	
+	//xp stats
+	public static final int MAX_LEVEL = 10;
+	private int xp;
+	private int currentXp;
 	
 	private float projectileSpeed;
 	
@@ -32,7 +41,7 @@ public class Player extends Mob {
 	
 	private boolean shouldMelee;
 	private boolean shouldShoot;
-	private boolean rangedForm;
+	private boolean rangedForm; 
 	
 	//cooldowns
 	private int shootCooldown = 120; //it should be: shootCooldown = inventory.getRangedWeaponSpeed();
@@ -48,29 +57,57 @@ public class Player extends Mob {
 	private int meleeBase = 48;
 	private int meleeHeight = 32;
 	
+	//melee display marker info
+	private int markerX = 0; 
+	private int markerY = 0;
+	private BufferedImage markerImage;
+	private boolean displayMarker;
+	private int displayTime = 10;
+	
 	private float[] xVals, yVals;
 	private PlayerAnimate playerAnim;
 	
+	//serialization items
+	private LevelData levelData;
 	
-	public Player(int x, int y, int level, LevelState state, Tilemap tilemap) {
-		super(x, y, level, state, tilemap);
+	
+	public Player(int x, int y,  LevelState state, Tilemap tilemap) {
+		super(x, y, 10, state, tilemap);
 	}
 
 	@Override
 	public void init() {
+		//get the levelData and if it exists, set the info and if not start fresh.
+		levelData = FileIO.loadLevelData();
+		if(levelData == null) {
+			level = 1;
+			xp = 100 + (100 * level);
+			currentXp = 0;
+		}
+		else {
+			level = levelData.level;
+			xp = 100 + (100 * level);
+			currentXp = levelData.xp;
+			levelData.initPlayer(this);
+		}
+		
 		health = (level * 5) + 10; //it should be:    health = (level * 5) + inventory.getArmor();
 		currentHealth = health;
 		damage = level * 3;  //it should be:   damage = (level * 3) + inventory.getWeapon().getDamage();
 		rangedDamage = level * 2;
 		projectileSpeed = 14.2f; //it should be: projectileSpeed = inventory.getWeapon().getProjectileSpeed();
 		speed = 2.9f;
+		
 		width = 32;
 		height = 48;
+		
 		shouldMelee = true;
 		shouldShoot = true;
+		
 		name = "Player Name";
 		
 		hitbox = new Rectangle(width, height);
+		
 		
 		xVals = new float[5];
 		yVals = new float[5];
@@ -87,6 +124,11 @@ public class Player extends Mob {
 		
 		hud = new HUD(this);
 		playerAnim = new PlayerAnimate(this);
+		
+		//if levelData was not initialized/loaded then make one
+		if(levelData == null) {
+			levelData = new LevelData(this);
+		}
 	}
 
 	@Override	
@@ -99,6 +141,9 @@ public class Player extends Mob {
 		
 		//shooting
 		checkShooting();
+		
+		//check xp
+		checkXp();
 		
 		//check for focused mob
 		checkFocus();
@@ -126,12 +171,25 @@ public class Player extends Mob {
 		
 		//update HUD
 		hud.update(); 
+		
+		//update the levelData (used for serialization)
+		levelData.update();
 	}
 
+	private boolean flicker;
 	@Override
 	public void render(Graphics2D g) {
-		//render player
-		drawPlayer(g);
+		if(invincible) {
+			if(flicker) {
+				flicker = false;
+			} else {
+				drawPlayer(g);
+				flicker = true;
+			}
+		} else {
+			//render player
+			drawPlayer(g);
+		}
 		
 		//render reload bar
 		drawReloadBar(g);
@@ -142,6 +200,20 @@ public class Player extends Mob {
 	
 	private void drawPlayer(Graphics2D g) {
 		playerAnim.render(g);
+		
+		renderMarker(g);
+	}
+	
+	private void renderMarker(Graphics2D g) {
+		//if we shouldn't display the marker get out of the method
+		if(!displayMarker) return;
+		
+		g.drawImage(markerImage, markerX - currentTilemap.getXOffset(), markerY - currentTilemap.getYOffset(), null);
+		displayTime--;
+		if(displayTime == 0) {
+			displayTime = 10;
+			displayMarker = false;
+		}
 	}
 	
 	private void drawReloadBar(Graphics2D g) {
@@ -152,7 +224,7 @@ public class Player extends Mob {
 		g.fillRect(MouseMaster.getMouseX() + 30, MouseMaster.getMouseY(), 3, (int)(0.25 * (shootCooldown - currentShootCooldown)));
 	}
 	
-	private void move (float testSpeedX, float testSpeedY) {
+	private void move(float testSpeedX, float testSpeedY) {
 		if (currentTilemap.getTile((int) (x +  testSpeedX), (int)(y + testSpeedY)).getSolid()) {
 			return;
 		}
@@ -226,6 +298,10 @@ public class Player extends Mob {
 					meleeSwing.x = (int)x - meleeHeight; meleeSwing.y = (int)y;
 					meleeSwing.width = meleeHeight; meleeSwing.height = meleeBase;
 				}
+				//set marker info
+				markerX = meleeSwing.x;
+				markerY = meleeSwing.y;
+				markerImage = Sprite.playerHorizontalSwing.getImage(); //set the marker image 
 			}
 			else { //up or down attack
 				if(yDiff > 0) { //down attack
@@ -236,7 +312,13 @@ public class Player extends Mob {
 					meleeSwing.x = (int)x - (meleeHeight / 4); meleeSwing.y = (int)y - meleeHeight;
 					meleeSwing.width = meleeBase; meleeSwing.height = meleeHeight;
 				}
+				//set marker info
+				markerX = meleeSwing.x;
+				markerY = meleeSwing.y;
+				markerImage = Sprite.playerVerticalSwing.getImage(); //set the marker image
 			}
+			displayMarker = true; //display the visual swing
+			
 			//finally check meleeHit
 			checkMeleeHit();
 			//then clear the rectangle
@@ -308,15 +390,20 @@ public class Player extends Mob {
 	private void checkFocus() {
 		//if the player right clicks, check to see if he clicked an enemy
 		if(MouseMaster.getMouseB() == 3) {
+			//set mouse cords
+			mouse = MouseMaster.getHitbox();
+			mouse.x += currentState.getTilemap().getXOffset();
+			mouse.y += currentState.getTilemap().getYOffset();
+			
 			//enemies
 			for(int i = 0; i < currentState.getEnemies().size(); i++) {
-				//first iteration get the mouse coords
-				if(i == 0) {
-					mouse = MouseMaster.getHitbox();
-					mouse.x += currentState.getTilemap().getXOffset();
-					mouse.y += currentState.getTilemap().getYOffset();
-				}	
 				tempMob = currentState.getEnemies().get(i);
+				if(tempMob.getHitbox().contains(mouse)) {
+					focusedMob = tempMob;
+				}
+			}
+			for(int i = 0; i < currentState.getNPCs().size(); i++) {
+				tempMob = currentState.getNPCs().get(i);
 				if(tempMob.getHitbox().contains(mouse)) {
 					focusedMob = tempMob;
 				}
@@ -352,6 +439,39 @@ public class Player extends Mob {
 		//meleeCooldown = inventory.getWeaponSpeed();
 		//shootCooldown = inventory.getRangedWeaponSpeed();
 		//projectileSpeed = inventory.getWeapon().getProjectileSpeed();
+	}
+	
+	private void checkXp() {
+		if(level == MAX_LEVEL) return;
+		
+		if(currentXp >= xp) {
+			levelUp();
+			
+			int remainder = currentXp - xp;
+			currentXp = remainder;
+			xp = 100 + (100 * level);
+		}
+	}
+	
+	private void levelUp() {
+		level++;
+		health = (level * 5) + 10;
+		currentHealth = health;
+		damage = level * 3;
+		rangedDamage = level * 2;
+		
+		new ParticleSpawner(currentState).spawn(x, y, 240, 2.4f, Color.YELLOW, 2000);;
+	}
+	
+	//used when the player kills a mob or does a quest
+	public void giveXp(int xp) {
+		if(level == MAX_LEVEL) return;
+		currentXp += xp;
+	}
+	
+	//used when changing an instance (will save data)
+	public void changeInstance() {
+		FileIO.save(levelData);
 	}
 	
 	public void keyPressed(int k) {
@@ -402,5 +522,19 @@ public class Player extends Mob {
 	}
 	public boolean getRangedForm() {
 		return rangedForm;
+	}
+	public int getXp() {
+		return xp;
+	}
+	public int getCurrentXp() {
+		return currentXp;
+	}
+	public LevelData getLevelData() {
+		return levelData;
+	}
+	
+	//setters
+	public void setFocusedMob(Mob mob) {
+		focusedMob = mob;
 	}
 }

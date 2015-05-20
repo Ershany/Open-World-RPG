@@ -3,18 +3,13 @@ package gameplaystates;
 import gamestatemanager.GameStateManager;
 import gamestatemanager.LevelState;
 import input.MouseMaster;
-
-import java.awt.Graphics2D;
-import java.awt.event.KeyEvent;
-
-import tilemap.Tilemap;
+import npc.KingNPC;
+import npc.WisemanNPC;
 import tiles.InterchangeableDoorTile;
 import tiles.Tile;
-import ui.PauseMenu;
-import entity.Player;
 
 public class DevTestState extends LevelState {
-
+	
 	public DevTestState(GameStateManager gsm, String map, int xSpawn, int ySpawn) {
 		super(gsm, map, xSpawn, ySpawn);
 	}
@@ -30,11 +25,18 @@ public class DevTestState extends LevelState {
 			if(tile instanceof InterchangeableDoorTile) {
 				if(Math.abs((player.getX() + player.getWidth() / 2) - ((tile.getX() << 5) + 16)) <= 48 &&
 				   Math.abs((player.getY() + player.getHeight() / 2) - ((tile.getY() << 5) + 16)) <= 48) {
+					//inform the player class that the state is changing
+					player.changeInstance();
 					gsm.getStates().pop();
 					gsm.getStates().push(new DevTestHouseState(gsm, "/maps/devtestHouse.bmp", 48 * 32, 36 * 32));
 				}
 			}
 		}
+	}
+	
+	@Override
+	public void initSpawn() {
+		npcs.add(new KingNPC(32 * 138, 32 * 50, 10, this, tilemap));
 	}
 	
 }

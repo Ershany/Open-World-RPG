@@ -27,6 +27,36 @@ public class Sprite {
 	public static Sprite playerIdleLeft = new Sprite(1, 3, Spritesheet.playerSheet);
 	public static Sprite playerWalkLeft1 = new Sprite(0, 3, Spritesheet.playerSheet);
 	public static Sprite playerWalkLeft2 = new Sprite(2, 3, Spritesheet.playerSheet);
+	public static Sprite playerHorizontalSwing = new Sprite("/sprites/melee attacks/horizontal.png"); 
+	public static Sprite playerVerticalSwing = new Sprite("/sprites/melee attacks/vertical.png");
+	
+	//king
+	public static Sprite kingIdleDown = new Sprite(1, 3, Spritesheet.kingSheet);
+	public static Sprite kingWalkDown1 = new Sprite(0, 3, Spritesheet.kingSheet);
+	public static Sprite kingWalkDown2 = new Sprite(2, 3, Spritesheet.kingSheet);
+	public static Sprite kingIdleUp = new Sprite(1, 0, Spritesheet.kingSheet);
+	public static Sprite kingWalkUp1 = new Sprite(0, 0, Spritesheet.kingSheet);
+	public static Sprite kingWalkUp2 = new Sprite(2, 0, Spritesheet.kingSheet);
+	public static Sprite kingIdleRight = new Sprite(1, 1, Spritesheet.kingSheet);
+	public static Sprite kingWalkRight1 = new Sprite(0, 1, Spritesheet.kingSheet);
+	public static Sprite kingWalkRight2 = new Sprite(2, 1, Spritesheet.kingSheet);
+	public static Sprite kingIdleLeft = new Sprite(1, 2, Spritesheet.kingSheet);
+	public static Sprite kingWalkLeft1 = new Sprite(0, 2, Spritesheet.kingSheet);
+	public static Sprite kingWalkLeft2 = new Sprite(2, 2, Spritesheet.kingSheet);
+	
+	//wiseman
+	public static Sprite wisemanIdleUp = new Sprite(1, 0, Spritesheet.wisemanSheet);
+	public static Sprite wisemanWalkUp1 = new Sprite(0, 0, Spritesheet.wisemanSheet);
+	public static Sprite wisemanWalkUp2 = new Sprite(2, 0, Spritesheet.wisemanSheet);
+	public static Sprite wisemanIdleDown = new Sprite(1, 2, Spritesheet.wisemanSheet);
+	public static Sprite wisemanWalkDown1 = new Sprite(0, 2, Spritesheet.wisemanSheet);
+	public static Sprite wisemanWalkDown2 = new Sprite(2, 2, Spritesheet.wisemanSheet);
+	public static Sprite wisemanIdleRight = new Sprite(1, 1, Spritesheet.wisemanSheet);
+	public static Sprite wisemanWalkRight1 = new Sprite(0, 1, Spritesheet.wisemanSheet);
+	public static Sprite wisemanWalkRight2 = new Sprite(2, 1, Spritesheet.wisemanSheet);
+	public static Sprite wisemanIdleLeft = new Sprite(1, 3, Spritesheet.wisemanSheet);
+	public static Sprite wisemanWalkLeft1 = new Sprite(0, 3, Spritesheet.wisemanSheet);
+	public static Sprite wisemanWalkLeft2 = new Sprite(2, 3, Spritesheet.wisemanSheet);
 	
 	//tiles
 	public static Sprite grass = new Sprite(0, 0, Spritesheet.sheet1);
@@ -50,10 +80,14 @@ public class Sprite {
 	//HUD
 	public static Sprite healthHUD = new Sprite("/hudStuff/healthBar.bmp");
 	public static Sprite minimapOutline = new Sprite("/hudStuff/minimapOutline.bmp");
+	public static Sprite textBox = new Sprite("/hudStuff/textdisplay/textbar.png");
+	public static Sprite xpBar = new Sprite("/hudStuff/bars/xpBar.png");
 	
 	//portraits
 	public static Sprite playerPortrait = new Sprite("/hudStuff/portraits/playerPortrait.bmp");
 	public static Sprite slimePortrait = new Sprite("/hudStuff/portraits/slimePortrait.bmp");
+	public static Sprite kingPortrait = new Sprite("/hudStuff/portraits/kingPortrait.bmp");
+	public static Sprite wisemanPortrait = new Sprite("/hudStuff/portraits/wisemanPortrait.bmp");
 	
 	//slime
 	public static Sprite slime1 = new Sprite(0, 0, Spritesheet.enemySheet);

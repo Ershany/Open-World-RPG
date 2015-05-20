@@ -1,5 +1,6 @@
-package entity;
+package enemies;
 
+import entity.Mob;
 import gamestatemanager.LevelState;
 import gfx.Sprite;
 
@@ -15,11 +16,10 @@ import tilemap.Tilemap;
 public class Slime extends Mob {
 
 	private Random random = new Random();
+	private int xpWorth = 50;
 	
 	public float[] xVals, yVals;
 	private BufferedImage slimeSprite;
-	
-	private boolean moveUp, moveDown, moveRight, moveLeft;
 	
 	public Slime(float x, float y, int level, LevelState currentState,
 			Tilemap currentTilemap) {
@@ -32,12 +32,13 @@ public class Slime extends Mob {
 		currentHealth = health;
 		damage = level;
 		rangedDamage = 0;
-		speed = 0.6f;
+		speed = 0.5f + (level * 0.1f);
 		width = 32;
 		height = 32;
 		name = "Slime";
 		
 		hitbox = new Rectangle(width, height);
+		hitbox.x = (int)x; hitbox.y = (int)y;
 		
 		xVals = new float[3];
 		yVals = new float[3];
@@ -159,6 +160,7 @@ public class Slime extends Mob {
 		if(currentHealth <= 0 && !dying) {
 			dying = true;
 			anim = 0;
+			currentState.getPlayer().giveXp(xpWorth);
 			new ParticleSpawner(currentState).spawn(x + (width / 2), y + (height / 2), 15, 1.4f, Color.GREEN, 20);
 		}
 	}

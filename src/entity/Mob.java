@@ -40,6 +40,8 @@ public abstract class Mob extends Entity {
 	protected Tilemap currentTilemap;
 	protected LevelState currentState;
 	
+	protected boolean moveUp, moveDown, moveRight, moveLeft;
+	
 	public Mob(float x, float y, int level, LevelState currentState, Tilemap currentTilemap) {
 		super(x, y);
 		this.level = level;
@@ -100,5 +102,20 @@ public abstract class Mob extends Entity {
 	}
 	public boolean getDying() {
 		return dying;
+	}
+	public LevelState getCurrentState() {
+		return currentState;
+	}
+	public boolean getMoveUp() {
+		return moveUp;
+	}
+	public boolean getMoveDown() {
+		return moveDown;
+	}
+	public boolean getMoveRight() {
+		return moveRight;
+	}
+	public boolean getMoveLeft() {
+		return moveLeft;
 	}
 }

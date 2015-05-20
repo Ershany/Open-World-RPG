@@ -44,6 +44,7 @@ public class ControlsState extends GameState {
 		g.drawString("Opening Doors: Right Click", Game.WIDTH / 2 - 200, 410);
 		g.drawString("Menu: Escape Key", Game.WIDTH / 2 - 200, 435);
 		g.drawString("Form Swap: MouseWheel", Game.WIDTH / 2 - 200, 460);
+		g.drawString("Talk/Interact: F", Game.WIDTH / 2 - 200, 485);
 	}
 
 	@Override

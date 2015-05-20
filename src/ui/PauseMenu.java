@@ -1,21 +1,26 @@
 package ui;
 
 import game.Game;
-import gameplaystates.DevTestState;
 import gamestatemanager.GameState;
 import gamestatemanager.GameStateManager;
+import io.FileIO;
+import io.LevelData;
 
 import java.awt.Color;
 import java.awt.Font;
 
+import javax.imageio.stream.FileImageOutputStream;
+
 public class PauseMenu extends Menu {
 
-	GameState gameState;
+	private GameState gameState;
+	private LevelData data;
 
-	public PauseMenu(GameStateManager gsm, GameState gameState) {
+	public PauseMenu(GameStateManager gsm, GameState gameState, LevelData data) {
 		super(Game.WIDTH / 3, Game.HEIGHT / 3, Game.WIDTH / 3, Game.HEIGHT / 3,
 				gsm);
 		this.gameState = gameState;
+		this.data = data;
 	}
 
 	@Override
@@ -36,9 +41,10 @@ public class PauseMenu extends Menu {
 			public void doAction() {
 			}
 		};
-		Button quit = new Button(gsm, "Quit") {
+		Button quit = new Button(gsm, "Save and Quit") {
 			@Override
 			public void doAction() {
+				FileIO.save(data);
 				System.exit(0);
 			}
 		};
