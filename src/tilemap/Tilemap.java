@@ -34,7 +34,7 @@ public class Tilemap {
 		this.path = path;
 		xOffset = 0;
 		yOffset = 0;
-
+		
 		load();
 	}
 
@@ -61,8 +61,11 @@ public class Tilemap {
 				case 0xFF008000:
 					toPlace = new InterchangeableFloorTile(x, y, Sprite.grass.getImage(), "Grass");
 					break;
-				case 0xFF808080:
-					toPlace = new InterchangeableFloorTile(x, y, Sprite.stone.getImage());
+				case 0xFFFF884F:
+					toPlace = new InterchangeableFloorTile(x, y, Sprite.dirt.getImage());
+					break;
+				case 0xFF7F7F7F: 
+					toPlace = new InterchangeableFloorTile(x, y, Sprite.stoneFloor.getImage());
 					break;
 				case 0xFF00A2E8:
 					toPlace = new WaterTile(x, y);

@@ -58,12 +58,35 @@ public class Sprite {
 	public static Sprite wisemanWalkLeft1 = new Sprite(0, 3, Spritesheet.wisemanSheet);
 	public static Sprite wisemanWalkLeft2 = new Sprite(2, 3, Spritesheet.wisemanSheet);
 	
+	//knight
+	public static Sprite knightIdleUp = new Sprite(1, 3, Spritesheet.knightSheet);
+	public static Sprite knightWalkUp1 = new Sprite(0, 3, Spritesheet.knightSheet);
+	public static Sprite knightWalkUp2 = new Sprite(2, 3, Spritesheet.knightSheet);
+	public static Sprite knightIdleDown = new Sprite(1, 0, Spritesheet.knightSheet);
+	public static Sprite knightWalkDown1 = new Sprite(0, 0, Spritesheet.knightSheet);
+	public static Sprite knightWalkDown2 = new Sprite(2, 0, Spritesheet.knightSheet);
+	public static Sprite knightIdleRight = new Sprite(1, 2, Spritesheet.knightSheet);
+	public static Sprite knightWalkRight1 = new Sprite(0, 2, Spritesheet.knightSheet);
+	public static Sprite knightWalkRight2 = new Sprite(2, 2, Spritesheet.knightSheet);
+	public static Sprite knightIdleLeft = new Sprite(1, 1, Spritesheet.knightSheet);
+	public static Sprite knightWalkLeft1 = new Sprite(0, 1, Spritesheet.knightSheet);
+	public static Sprite knightWalkLeft2 = new Sprite(2, 1, Spritesheet.knightSheet);
+	
+	public static Sprite knightDeath1 = new Sprite(0, 0, Spritesheet.knightDeathSheet);
+	public static Sprite knightDeath2 = new Sprite(1, 0, Spritesheet.knightDeathSheet);
+	public static Sprite knightDeath3 = new Sprite(2, 0, Spritesheet.knightDeathSheet);
+	public static Sprite knightDeath4 = new Sprite(3, 0, Spritesheet.knightDeathSheet);
+	public static Sprite knightDeath5 = new Sprite(4, 0, Spritesheet.knightDeathSheet);
+	public static Sprite knightDeath6 = new Sprite(5, 0, Spritesheet.knightDeathSheet);
+	public static Sprite knightDeath7 = new Sprite(6, 0, Spritesheet.knightDeathSheet);
+	
 	//tiles
 	public static Sprite grass = new Sprite(0, 0, Spritesheet.sheet1);
-	public static Sprite stone = new Sprite(1, 0, Spritesheet.sheet1);
+	public static Sprite dirt = new Sprite(1, 0, Spritesheet.sheet1);
 	public static Sprite sand = new Sprite(2, 0, Spritesheet.sheet1);
 	public static Sprite redBrick = new Sprite(3, 0, Spritesheet.sheet1);
 	public static Sprite woodFloor = new Sprite(4, 0, Spritesheet.sheet1);
+	public static Sprite stoneFloor = new Sprite(5, 0, Spritesheet.sheet1);
 	
 	public static Sprite water1 = new Sprite(0, 1, Spritesheet.sheet1);
 	public static Sprite water2 = new Sprite(1, 1, Spritesheet.sheet1);
@@ -88,6 +111,7 @@ public class Sprite {
 	public static Sprite slimePortrait = new Sprite("/hudStuff/portraits/slimePortrait.bmp");
 	public static Sprite kingPortrait = new Sprite("/hudStuff/portraits/kingPortrait.bmp");
 	public static Sprite wisemanPortrait = new Sprite("/hudStuff/portraits/wisemanPortrait.bmp");
+	public static Sprite knightPortrait = new Sprite("/hudStuff/portraits/knightPortrait.bmp");
 	
 	//slime
 	public static Sprite slime1 = new Sprite(0, 0, Spritesheet.enemySheet);

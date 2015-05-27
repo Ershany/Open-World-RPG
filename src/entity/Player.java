@@ -96,7 +96,7 @@ public class Player extends Mob {
 		damage = level * 3;  //it should be:   damage = (level * 3) + inventory.getWeapon().getDamage();
 		rangedDamage = level * 2;
 		projectileSpeed = 14.2f; //it should be: projectileSpeed = inventory.getWeapon().getProjectileSpeed();
-		speed = 2.9f;
+		speed = 3.1f;
 		
 		width = 32;
 		height = 48;

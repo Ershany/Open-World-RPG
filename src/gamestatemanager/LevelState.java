@@ -5,16 +5,22 @@ import input.MouseMaster;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
 import projectile.Projectile;
 import spawners.SlimeSpawner;
+import tilemap.Node;
 import tilemap.Tilemap;
 import tiles.InterchangeableDoorTile;
+import tiles.Tile;
 import ui.PauseMenu;
 import util.CursorManager;
 import util.TextBoxMaster;
+import util.Vector2f;
 import enemies.Slime;
 import entity.Entity;
 import entity.Mob;
@@ -37,11 +43,19 @@ public abstract class LevelState extends GameState{
 	protected List<Mob> enemies = new ArrayList<Mob>();
 	protected List<Mob> npcs = new ArrayList<Mob>();
 	
-	//used for spawners
+	//spawners
 	private Random random = new Random();
-	
-	//temp
 	private SlimeSpawner slimeSpawner;
+	
+	//used for sorting nodes
+	private Comparator<Node> nodeSorter = new Comparator<Node>() {
+		public int compare(Node n1, Node n2) {
+			if(n1.fCost < n2.fCost) return -1; 
+			if(n1.fCost > n2.fCost) return +1; 
+			
+			return 0;
+		}
+	};
 	
 	public LevelState(GameStateManager gsm, String mapName, int xSpawn, int ySpawn) {
 		super(gsm);
@@ -227,6 +241,61 @@ public abstract class LevelState extends GameState{
 		
 		//now interact with the closest NPC, if it got to this point, a close NPC was found
 		currentTextBox = new TextBoxMaster(closestNPC.getInfo());
+	}
+	
+	//used in A* (nodes are on tiles)
+	public List<Node> findPath(Vector2f start, Vector2f goal) {
+		List<Node> openList = new ArrayList<Node>();
+		List<Node> closedList = new ArrayList<Node>();
+		Node current = new Node(start, null, 0, Vector2f.getDistance(start, goal));
+		openList.add(current);
+		
+		while(openList.size() > 0) {
+			Collections.sort(openList, nodeSorter); //sorts the nodes from shortest to smaller
+			current = openList.get(0);
+			if(current.tile.equals(goal)) { //if the current node is the goal, return the path
+				//return the goal path
+				List<Node> path = new ArrayList<Node>();
+				while(current.parent != null) {
+					path.add(current);
+					current = current.parent;
+				}
+				//Java's GC might not collect this if we don't clear the list
+				openList.clear();
+				closedList.clear();
+				return path;
+			}
+			openList.remove(current);
+			closedList.add(current);
+			//now lets consider the adjacent tiles (dont add previous/parent nodes or solid tiles)
+			for(int i = 0; i < 9; i++) { //8 adjacent tiles
+				if(i == 4) continue; //tile were on (don't add it)
+				int x = (int)current.tile.getX();
+				int y = (int)current.tile.getY();
+				int xi = (i % 3) - 1; //will result in -1 0 or 1
+				int yi = (i / 3) - 1; //will result in -1 0 or 1 (% would mess with order) 
+				Tile at = tilemap.getTile((x + xi) * Tile.TILESIZE, (y + yi) * Tile.TILESIZE);
+				if(at == null) continue;
+				if(at.getSolid()) continue;
+				Vector2f atVec = new Vector2f(x + xi, y + yi);
+				double gCost = current.gCost + Vector2f.getDistance(current.tile, atVec);
+				double hCost = Vector2f.getDistance(start, goal);
+				Node node = new Node(atVec, current, gCost, hCost);
+				if(vecInList(closedList, atVec) && gCost >= node.gCost) continue; //if the vector is in the closed list, and the gCost is greater or equal to the current gCost, don't bother with it
+				if(!vecInList(openList, atVec) || gCost < node.gCost) openList.add(node); //make sure there is not a duplicate before adding
+			}
+		}
+		//if no path is available, return null and the mob can deal with it
+		closedList.clear();
+		return null;
+	}
+	
+	//check if the vector is in the list
+	private boolean vecInList(List<Node> list, Vector2f vector) {
+		for(Node n: list) {
+			if(n.tile.equals(vector)) return true;
+		}
+		return false; 
 	}
 	
 	//absract methods

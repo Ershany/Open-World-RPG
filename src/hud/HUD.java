@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 import npc.KingNPC;
 import npc.WisemanNPC;
 import tiles.Tile;
+import enemies.Knight;
 import enemies.Slime;
 import entity.Mob;
 import entity.Player;
@@ -210,6 +211,9 @@ public class HUD {
 	private BufferedImage getFocusedMobPortrait() {
 		if(focusedMob instanceof Slime) {
 			return Sprite.slimePortrait.getImage();
+		}
+		else if(focusedMob instanceof Knight) {
+			return Sprite.knightPortrait.getImage();
 		}
 		else if(focusedMob instanceof KingNPC) {
 			return Sprite.kingPortrait.getImage();

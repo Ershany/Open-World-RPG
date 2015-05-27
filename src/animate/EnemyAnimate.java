@@ -4,12 +4,16 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 import entity.Mob;
-import gfx.Sprite;
 
-public class NPCAnimate extends Animate {
+public class EnemyAnimate extends Animate {
 
 	private int anim;
 	private int animSpeed = 20; //lower the value, faster the animation
+	
+	private int deathAnim = 0;
+	private int deathAnimXDiff, deathAnimYDiff;
+	public int deathSpeed = 5;
+	private int currentDeath = 0;
 	
 	//integer used determine which direciton the NPC was last walking when he/she stopped, so he/she can idle in the correct position
 	private int lastHeld = 0; //0 down, 1 left, 2 up, 3 right
@@ -21,9 +25,15 @@ public class NPCAnimate extends Animate {
 	//move left   left idle    move left
 	private BufferedImage[] images = new BufferedImage[12]; 
 	
-	public NPCAnimate(Mob mob, BufferedImage[] images) {
+	//death anim (logical order)
+	private BufferedImage[] deathImages;
+	
+	public EnemyAnimate(Mob mob, BufferedImage[] images, int deathAnimXDiff, int deathAnimYDiff, BufferedImage[] deathImages) {
 		super(mob);
+		this.deathAnimXDiff = deathAnimXDiff;
+		this.deathAnimYDiff = deathAnimYDiff;
 		this.images = images;
+		this.deathImages = deathImages;
 		
 		currentSprite = images[4];
 	}
@@ -35,7 +45,18 @@ public class NPCAnimate extends Animate {
 
 	@Override
 	public void render(Graphics2D g) {
-		g.drawImage(currentSprite, (int)mob.getX() - mob.getTileMap().getXOffset(), (int)mob.getY() - mob.getTileMap().getYOffset(), null);
+		if(mob.getDying()) {
+			deathAnim++;
+			if(deathAnim % deathSpeed == 0) currentDeath++;
+			if(currentDeath == deathImages.length) {
+				currentDeath--;
+			}
+			
+			g.drawImage(deathImages[currentDeath], (int)mob.getX() - mob.getTileMap().getXOffset() + deathAnimXDiff, (int)mob.getY() - mob.getTileMap().getYOffset() + deathAnimYDiff, null);
+		}
+		else {
+			g.drawImage(currentSprite, (int)mob.getX() - mob.getTileMap().getXOffset(), (int)mob.getY() - mob.getTileMap().getYOffset(), null);
+		}
 	}
 
 	@Override
@@ -107,5 +128,5 @@ public class NPCAnimate extends Animate {
 	public void setAnimSpeed(int speed) {
 		animSpeed = speed;
 	}
-
+	
 }

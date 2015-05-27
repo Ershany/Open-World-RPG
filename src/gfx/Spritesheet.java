@@ -13,9 +13,14 @@ public class Spritesheet {
 	public static Spritesheet sheet1 = new Spritesheet("/sprites/tiles.bmp", 32);
 	public static Spritesheet enemySheet = new Spritesheet("/sprites/enemies_1.png", 32);
 	
-	public static Spritesheet playerSheet = new Spritesheet("/sprites/player.png", 32, 48);
-	public static Spritesheet kingSheet = new Spritesheet("/sprites/king.png", 32, 48);
-	public static Spritesheet wisemanSheet = new Spritesheet("/sprites/wiseman.png", 32, 48);
+	public static Spritesheet playerSheet = new Spritesheet("/sprites/player/player.png", 32, 48);
+	
+	public static Spritesheet kingSheet = new Spritesheet("/sprites/king/king.png", 32, 48);
+	
+	public static Spritesheet wisemanSheet = new Spritesheet("/sprites/wiseman/wiseman.png", 32, 48);
+	
+	public static Spritesheet knightSheet = new Spritesheet("/sprites/knight/knight.png", 32, 32);
+	public static Spritesheet knightDeathSheet = new Spritesheet("/sprites/knight/knightDeath.png", 64, 64);
 	
 	private String path;
 	private int width, height;

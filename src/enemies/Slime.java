@@ -16,7 +16,7 @@ import tilemap.Tilemap;
 public class Slime extends Mob {
 
 	private Random random = new Random();
-	private int xpWorth = 50;
+	private int xpWorth = 25;
 	
 	public float[] xVals, yVals;
 	private BufferedImage slimeSprite;
