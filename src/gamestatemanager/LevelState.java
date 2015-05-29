@@ -5,7 +5,6 @@ import input.MouseMaster;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -42,6 +41,7 @@ public abstract class LevelState extends GameState{
 	protected List<Projectile> projectiles = new ArrayList<Projectile>();
 	protected List<Mob> enemies = new ArrayList<Mob>();
 	protected List<Mob> npcs = new ArrayList<Mob>();
+	protected List<Mob> bosses = new ArrayList<Mob>();
 	
 	//spawners
 	private Random random = new Random();
@@ -116,6 +116,9 @@ public abstract class LevelState extends GameState{
 		}
 		for(int i = 0; i < npcs.size(); i++) {
 			npcs.get(i).update();
+		}
+		for(int i = 0; i < bosses.size(); i++) {
+			bosses.get(i).update();
 		}
 	}
 
@@ -367,5 +370,8 @@ public abstract class LevelState extends GameState{
 	}
 	public void addNPC(Mob m) {
 		npcs.add(m);
+	}
+	public void addBoss(Mob b) {
+		bosses.add(b);
 	}
 }

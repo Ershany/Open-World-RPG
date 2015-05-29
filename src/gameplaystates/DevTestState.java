@@ -22,7 +22,7 @@ public class DevTestState extends LevelState {
 			tile = tilemap.getTile(MouseMaster.getMouseX() + tilemap.getXOffset(), MouseMaster.getMouseY() + tilemap.getYOffset());
 			
 			//this algorithm checks if you right clicked the door, and if you did it will check the position from the center of your body and to the center of the door, if you are close it will execute
-			if(tile instanceof InterchangeableDoorTile) {
+			if(tile instanceof InterchangeableDoorTile && tile.getX() == 154 && tile.getY() == 48) {
 				if(Math.abs((player.getX() + player.getWidth() / 2) - ((tile.getX() << 5) + 16)) <= 48 &&
 				   Math.abs((player.getY() + player.getHeight() / 2) - ((tile.getY() << 5) + 16)) <= 48) {
 					//inform the player class that the state is changing
@@ -31,13 +31,22 @@ public class DevTestState extends LevelState {
 					gsm.getStates().push(new DevTestHouseState(gsm, "/maps/devtestHouse.bmp", 48 * 32, 36 * 32));
 				}
 			}
+			else if(tile instanceof InterchangeableDoorTile && tile.getX() == 270 && tile.getY() == 29) {
+				if(Math.abs((player.getX() + player.getWidth() / 2) - ((tile.getX() << 5) + 16)) <= 48 &&
+					Math.abs((player.getY() + player.getHeight() / 2) - ((tile.getY() << 5) + 16)) <= 48) {
+					//inform the player class that the state is changing
+					player.changeInstance();
+					gsm.getStates().pop();
+					gsm.getStates().push(new KronosLairState(gsm));
+				}
+			}
 		}
 	}
 	
 	@Override
 	public void initSpawn() {
 		npcs.add(new KingNPC(32 * 138, 32 * 50, 10, this, tilemap));
-		enemies.add(new Knight(32 * 139, 32 * 50, 5, this, tilemap));
+		//enemies.add(new Knight(32 * 139, 32 * 50, 5, this, tilemap));
 	}
 	
 }

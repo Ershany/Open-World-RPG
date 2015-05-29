@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 import npc.KingNPC;
 import npc.WisemanNPC;
 import tiles.Tile;
+import boss.Kronos;
 import enemies.Knight;
 import enemies.Slime;
 import entity.Mob;
@@ -220,6 +221,9 @@ public class HUD {
 		}
 		else if(focusedMob instanceof WisemanNPC) {
 			return Sprite.wisemanPortrait.getImage();
+		}
+		else if(focusedMob instanceof Kronos) {
+			return Sprite.kronosPortrait.getImage();
 		}
 		else return null;
 	}

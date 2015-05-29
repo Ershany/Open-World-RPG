@@ -22,6 +22,9 @@ public class Spritesheet {
 	public static Spritesheet knightSheet = new Spritesheet("/sprites/knight/knight.png", 32, 32);
 	public static Spritesheet knightDeathSheet = new Spritesheet("/sprites/knight/knightDeath.png", 64, 64);
 	
+	//boss list
+	public static Spritesheet kronosSheet = new Spritesheet("/sprites/boss/Kronos/Kronos.png", 96, 48);
+	
 	private String path;
 	private int width, height;
 	private int spriteWidth, spriteHeight;

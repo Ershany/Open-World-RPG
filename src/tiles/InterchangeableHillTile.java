@@ -10,6 +10,11 @@ public class InterchangeableHillTile extends Tile {
 		solid = true;
 		projectileSolid = true;
 	}
+	public InterchangeableHillTile(int x, int y, BufferedImage tileImage, String type) {
+		super(x, y, tileImage, type);
+		solid = true;
+		projectileSolid = true;
+	}
 
 	@Override
 	public void update() {

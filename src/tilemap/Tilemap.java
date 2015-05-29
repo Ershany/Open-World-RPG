@@ -83,19 +83,35 @@ public class Tilemap {
 					toPlace = new InterchangeableWallTile(x, y, Sprite.wall1.getImage());
 					break;
 				case 0xFFD35400:
-					toPlace = new InterchangeableDoorTile(x, y, Sprite.door1.getImage());
+					if(getTile((x << 5) - 32, (y << 5)).getType().equals("Rock") || getTile((x << 5), (y << 5) - 32).getType().equals("Rock")) {
+						toPlace = new InterchangeableDoorTile(x, y, Sprite.rockCave.getImage());
+					} else if(getTile((x << 5) - 32, (y << 5)).getType().equals("Dungeon Rock") || getTile((x << 5), (y << 5) - 32).getType().equals("Dungeon Rock")) {
+						toPlace = new InterchangeableDoorTile(x, y, Sprite.dungeonCave.getImage());
+					} else {
+						toPlace = new InterchangeableDoorTile(x, y, Sprite.door1.getImage());
+					}
 					break;
 				case 0xFFD89A70:
 					toPlace = new InterchangeableFloorTile(x, y, Sprite.woodFloor.getImage());
 					break;
 				case 0xFF682900:
-					toPlace = new InterchangeableHillTile(x, y, Sprite.rockHill.getImage());
+					toPlace = new InterchangeableHillTile(x, y, Sprite.rockHill.getImage(), "Rock");
 					break;
 				case 0xFF685900:
-					toPlace = new InterchangeableHillTile(x, y, Sprite.rockHillTop.getImage());
+					toPlace = new InterchangeableHillTile(x, y, Sprite.rockHillTop.getImage(), "Rock");
 					break;
 				case 0xFF687C00:
-					toPlace = new InterchangeableHillTile(x, y, Sprite.rockHillBottom.getImage());
+					toPlace = new InterchangeableHillTile(x, y, Sprite.rockHillBottom.getImage(), "Rock");
+					break;
+				//dungeon tiles
+				case 0xFFC4673C: 
+					toPlace = new InterchangeableFloorTile(x, y, Sprite.dungeonDirt.getImage());
+					break;
+				case 0xFF3D3D3D:
+					toPlace = new InterchangeableWallTile(x, y, Sprite.dungeonWall.getImage());
+					break;
+				case 0xFF260E00:
+					toPlace = new InterchangeableHillTile(x, y, Sprite.dungeonRock.getImage(), "Dungeon Rock");
 					break;
 				default:
 					toPlace = new NullTile(x, y, null);

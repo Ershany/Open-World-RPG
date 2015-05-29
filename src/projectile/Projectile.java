@@ -12,9 +12,6 @@ import gamestatemanager.LevelState;
 
 public class Projectile extends Entity {
 
-	//TO-DO 
-	//CLEANUP
-	
 	private int ticksPassed;
 	private int projectileLife;
 	
@@ -59,13 +56,13 @@ public class Projectile extends Entity {
 			y += ya;
 			hitbox.x = (int)x; hitbox.y = (int)y;
 		} else {
-			particleSpawner.spawn(x, y, 10, 1.3f, Color.BLACK, 10);
+			particleSpawner.spawn(x, y, 10, 1.3f, Color.WHITE, 10);
 			removed = true;
 		}
 	}
 	
 	public void render(Graphics2D g) {
-		g.setColor(Color.BLACK);
+		g.setColor(Color.WHITE);
 		g.fillRect((int)x - tilemap.getXOffset(), (int)y - tilemap.getYOffset(), width, height);
 	}
 	

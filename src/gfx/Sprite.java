@@ -80,6 +80,20 @@ public class Sprite {
 	public static Sprite knightDeath6 = new Sprite(5, 0, Spritesheet.knightDeathSheet);
 	public static Sprite knightDeath7 = new Sprite(6, 0, Spritesheet.knightDeathSheet);
 	
+	//Kronos (Boss)
+	public static Sprite kronosIdleUp = new Sprite(1, 3, Spritesheet.kronosSheet);
+	public static Sprite kronosWalkUp1 = new Sprite(0, 3, Spritesheet.kronosSheet);
+	public static Sprite kronosWalkUp2 = new Sprite(2, 3, Spritesheet.kronosSheet);
+	public static Sprite kronosIdleDown = new Sprite(1, 0, Spritesheet.kronosSheet);
+	public static Sprite kronosWalkDown1 = new Sprite(0, 0, Spritesheet.kronosSheet);
+	public static Sprite kronosWalkDown2 = new Sprite(2, 0, Spritesheet.kronosSheet);
+	public static Sprite kronosIdleRight = new Sprite(1, 2, Spritesheet.kronosSheet);
+	public static Sprite kronosWalkRight1 = new Sprite(0, 2, Spritesheet.kronosSheet);
+	public static Sprite kronosWalkRight2 = new Sprite(2, 2, Spritesheet.kronosSheet);
+	public static Sprite kronosIdleLeft = new Sprite(1, 1, Spritesheet.kronosSheet);
+	public static Sprite kronosWalkLeft1 = new Sprite(0, 1, Spritesheet.kronosSheet);
+	public static Sprite kronosWalkLeft2 = new Sprite(2, 1, Spritesheet.kronosSheet);
+	
 	//tiles
 	public static Sprite grass = new Sprite(0, 0, Spritesheet.sheet1);
 	public static Sprite dirt = new Sprite(1, 0, Spritesheet.sheet1);
@@ -99,6 +113,13 @@ public class Sprite {
 	public static Sprite rockHillTop = new Sprite(0, 3, Spritesheet.sheet1);
 	public static Sprite rockHill = new Sprite(1, 3, Spritesheet.sheet1);
 	public static Sprite rockHillBottom = new Sprite(2, 3, Spritesheet.sheet1);
+	public static Sprite rockCave = new Sprite(3, 3, Spritesheet.sheet1);
+	
+	//dungeon tiles 
+	public static Sprite dungeonDirt = new Sprite(0, 4, Spritesheet.sheet1);
+	public static Sprite dungeonWall = new Sprite(1, 4, Spritesheet.sheet1);
+	public static Sprite dungeonRock = new Sprite(2, 4, Spritesheet.sheet1);
+	public static Sprite dungeonCave = new Sprite(3, 4, Spritesheet.sheet1);
 	
 	//HUD
 	public static Sprite healthHUD = new Sprite("/hudStuff/healthBar.bmp");
@@ -108,10 +129,13 @@ public class Sprite {
 	
 	//portraits
 	public static Sprite playerPortrait = new Sprite("/hudStuff/portraits/playerPortrait.bmp");
+	
 	public static Sprite slimePortrait = new Sprite("/hudStuff/portraits/slimePortrait.bmp");
 	public static Sprite kingPortrait = new Sprite("/hudStuff/portraits/kingPortrait.bmp");
 	public static Sprite wisemanPortrait = new Sprite("/hudStuff/portraits/wisemanPortrait.bmp");
 	public static Sprite knightPortrait = new Sprite("/hudStuff/portraits/knightPortrait.bmp");
+	
+	public static Sprite kronosPortrait = new Sprite("/hudStuff/portraits/kronosPortrait.bmp");
 	
 	//slime
 	public static Sprite slime1 = new Sprite(0, 0, Spritesheet.enemySheet);
