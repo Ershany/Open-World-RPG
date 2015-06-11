@@ -16,6 +16,7 @@ public class Projectile extends Entity {
 	private int projectileLife;
 	
 	private float xa, ya;
+	private float speed;
 	private double angle;
 	
 	private LevelState currentState;
@@ -34,6 +35,7 @@ public class Projectile extends Entity {
 		this.damage = damage;
 		this.width = width;
 		this.height = height;
+		this.speed = speed;
 		hitbox = new Rectangle(width, height);
 		
 		angle = AngleMaster.calculateAngle((int)xOrig, (int)yOrig, (int)xDest, (int)yDest);
@@ -61,6 +63,11 @@ public class Projectile extends Entity {
 		}
 	}
 	
+	public void resetDirection(double angle) {
+		xa = (float)Math.cos(angle) * speed;
+		ya = (float)Math.sin(angle) * speed;
+	}
+	
 	public void render(Graphics2D g) {
 		g.setColor(Color.WHITE);
 		g.fillRect((int)x - tilemap.getXOffset(), (int)y - tilemap.getYOffset(), width, height);
@@ -70,6 +77,9 @@ public class Projectile extends Entity {
 	//getters
 	public float getDamage() {
 		return damage;
+	}
+	public double getAngle() {
+		return angle;
 	}
 	public Rectangle getHitbox() {
 		return hitbox;

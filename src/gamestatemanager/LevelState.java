@@ -10,6 +10,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
+import boss.Boss;
 import projectile.Projectile;
 import spawners.SlimeSpawner;
 import tilemap.Node;
@@ -41,7 +42,7 @@ public abstract class LevelState extends GameState{
 	protected List<Projectile> projectiles = new ArrayList<Projectile>();
 	protected List<Mob> enemies = new ArrayList<Mob>();
 	protected List<Mob> npcs = new ArrayList<Mob>();
-	protected List<Mob> bosses = new ArrayList<Mob>();
+	protected List<Boss> bosses = new ArrayList<Boss>();
 	
 	//spawners
 	private Random random = new Random();
@@ -136,6 +137,9 @@ public abstract class LevelState extends GameState{
 		for(int i = 0; i < npcs.size(); i++) {
 			npcs.get(i).render(g);
 		}
+		for(int i = 0; i < bosses.size(); i++) {
+			bosses.get(i).render(g);
+		}
 	}
 	
 	private void checkRemoved() {
@@ -151,6 +155,9 @@ public abstract class LevelState extends GameState{
 		}
 		for(int i = 0; i < npcs.size(); i++) {
 			if(npcs.get(i).getRemoved()) npcs.remove(i);
+		}
+		for(int i = 0; i < bosses.size(); i++) {
+			if(bosses.get(i).getRemoved()) bosses.remove(i);
 		}
 	}
 	
@@ -178,16 +185,25 @@ public abstract class LevelState extends GameState{
 					tempP.setRemoved(true);
 				}
 			}
+			for(int j = 0; j < bosses.size(); j++) {
+				tempP = projectiles.get(i);
+				tempM = bosses.get(j);
+				
+				//if the projectile hits the enemy
+				if((tempP.getHitbox().intersects(tempM.getHitbox()) && !tempM.getDying()) || (tempM.getHitbox().contains(tempP.getHitbox()) && !tempM.getDying())) {
+					tempM.projectileHit(tempP);
+				}
+			}
 		}
 	}
 	
 	//melee collision
 	private void checkHit() {
+		//check if there is a player
+		if(player == null) return;
+		
 		//check if an enemy hits you
 		for(int i = 0; i < enemies.size(); i++) {
-			//check if there is a player
-			if(player == null) return;
-			
 			Mob temp = enemies.get(i);
 			
 			//slime
@@ -348,6 +364,9 @@ public abstract class LevelState extends GameState{
 	public List<Mob> getNPCs() {
 		return npcs;
 	}
+	public List<Boss> getBosses() {
+		return bosses;
+	}
 	public TextBoxMaster getCurrentTextBox() {
 		return currentTextBox;
 	}
@@ -371,7 +390,7 @@ public abstract class LevelState extends GameState{
 	public void addNPC(Mob m) {
 		npcs.add(m);
 	}
-	public void addBoss(Mob b) {
+	public void addBoss(Boss b) {
 		bosses.add(b);
 	}
 }

@@ -336,6 +336,12 @@ public class Player extends Mob {
 				tempEnemy.hit(damage);
 			}
 		}
+		for(int i = 0; i < currentState.getBosses().size(); i++) {
+			tempEnemy = currentState.getBosses().get(i);
+			if(meleeSwing.intersects(tempEnemy.getHitbox()) || meleeSwing.contains(tempEnemy.getHitbox())) {
+				tempEnemy.hit(damage);
+			}
+		}
 	}
 	
 	private void checkDeath() {
@@ -404,6 +410,12 @@ public class Player extends Mob {
 			}
 			for(int i = 0; i < currentState.getNPCs().size(); i++) {
 				tempMob = currentState.getNPCs().get(i);
+				if(tempMob.getHitbox().contains(mouse)) {
+					focusedMob = tempMob;
+				}
+			}
+			for(int i = 0; i < currentState.getBosses().size(); i++) {
+				tempMob = currentState.getBosses().get(i);
 				if(tempMob.getHitbox().contains(mouse)) {
 					focusedMob = tempMob;
 				}

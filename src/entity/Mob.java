@@ -6,6 +6,7 @@ import gamestatemanager.LevelState;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
+import projectile.Projectile;
 import tilemap.Tilemap;
 
 public abstract class Mob extends Entity {
@@ -55,6 +56,11 @@ public abstract class Mob extends Entity {
 	public abstract void init(); //initialize stats, hitbox, and more
 	public abstract void update();
 	public abstract void render(Graphics2D g);
+	
+	//boss methods
+	public void projectileHit(Projectile p) {
+			
+	}
 
 	public void hit(float damage) {
 		if(!invincible) {

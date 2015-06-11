@@ -1,22 +1,24 @@
 package boss;
 
+import gamestatemanager.LevelState;
+import gfx.Sprite;
+
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.util.Random;
 
 import projectile.Projectile;
 import tilemap.Tilemap;
 import animate.EnemyAnimate;
-import entity.Mob;
-import gamestatemanager.LevelState;
-import gfx.Sprite;
 
-public class Kronos extends Mob {
+public class Kronos extends Boss {
 
 	private int xpWorth = 300;
 	private EnemyAnimate animate;
 	
 	public float[] xVals, yVals;
+	private Random random = new Random();
 	
 	public Kronos(float x, float y, LevelState currentState,
 			Tilemap currentTilemap) {
@@ -93,8 +95,15 @@ public class Kronos extends Mob {
 	}
 	
 	//boss methods (only get called if the entity is in the boss list)
-	public void projectileHit(Projectile P) {
-		
+	private int reflectionValue = 90;
+	@Override
+	public void projectileHit(Projectile p) {
+		//change the projectiles direction by 45 degrees + or - depending on chance
+		if(random.nextBoolean()) {
+			p.resetDirection(p.getAngle() - reflectionValue);
+		} else {
+			p.resetDirection(p.getAngle() + reflectionValue);
+		}
 	}
 	
 }

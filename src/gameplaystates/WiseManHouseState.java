@@ -1,19 +1,18 @@
 package gameplaystates;
 
-import enemies.Knight;
 import gamestatemanager.GameStateManager;
 import gamestatemanager.LevelState;
 import input.MouseMaster;
-import npc.KingNPC;
+import npc.WisemanNPC;
 import tiles.InterchangeableDoorTile;
 import tiles.Tile;
 
-public class DevTestState extends LevelState {
-	
-	public DevTestState(GameStateManager gsm, String map, int xSpawn, int ySpawn) {
-		super(gsm, map, xSpawn, ySpawn);
+public class WiseManHouseState extends LevelState {
+
+	public WiseManHouseState(GameStateManager gsm) {
+		super(gsm, "/maps/WiseManHouse.bmp", 48 * 32, 36 * 32);
 	}
-	
+
 	private Tile tile;
 	//checks for any right click interactions, like right clicking to enter a door
 	public void checkRightClickInteractions() {
@@ -22,22 +21,13 @@ public class DevTestState extends LevelState {
 			tile = tilemap.getTile(MouseMaster.getMouseX() + tilemap.getXOffset(), MouseMaster.getMouseY() + tilemap.getYOffset());
 			
 			//this algorithm checks if you right clicked the door, and if you did it will check the position from the center of your body and to the center of the door, if you are close it will execute
-			if(tile instanceof InterchangeableDoorTile && tile.getX() == 154 && tile.getY() == 48) {
+			if(tile instanceof InterchangeableDoorTile) {
 				if(Math.abs((player.getX() + player.getWidth() / 2) - ((tile.getX() << 5) + 16)) <= 48 &&
 				   Math.abs((player.getY() + player.getHeight() / 2) - ((tile.getY() << 5) + 16)) <= 48) {
 					//inform the player class that the state is changing
 					player.changeInstance();
 					gsm.getStates().pop();
-					gsm.getStates().push(new DevTestHouseState(gsm, "/maps/devtestHouse.bmp", 48 * 32, 36 * 32));
-				}
-			}
-			else if(tile instanceof InterchangeableDoorTile && tile.getX() == 270 && tile.getY() == 29) {
-				if(Math.abs((player.getX() + player.getWidth() / 2) - ((tile.getX() << 5) + 16)) <= 48 &&
-					Math.abs((player.getY() + player.getHeight() / 2) - ((tile.getY() << 5) + 16)) <= 48) {
-					//inform the player class that the state is changing
-					player.changeInstance();
-					gsm.getStates().pop();
-					gsm.getStates().push(new KronosLairState(gsm));
+					gsm.getStates().push(new StartingIslandState(gsm, 154 * 32, (49 * 32) + 16));
 				}
 			}
 		}
@@ -45,8 +35,7 @@ public class DevTestState extends LevelState {
 	
 	@Override
 	public void initSpawn() {
-		npcs.add(new KingNPC(32 * 138, 32 * 50, 10, this, tilemap));
-		//enemies.add(new Knight(32 * 139, 32 * 50, 5, this, tilemap));
+		npcs.add(new WisemanNPC(32 * 48, 32 * 32, 1, this, tilemap));
 	}
-	
+
 }
