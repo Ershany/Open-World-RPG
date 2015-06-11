@@ -1,5 +1,6 @@
 package gameplaystates;
 
+import enemies.Knight;
 import gamestatemanager.GameStateManager;
 import gamestatemanager.LevelState;
 import input.MouseMaster;
@@ -45,7 +46,7 @@ public class StartingIslandState extends LevelState {
 	@Override
 	public void initSpawn() {
 		npcs.add(new KingNPC(32 * 138, 32 * 50, 10, this, tilemap));
-		//enemies.add(new Knight(32 * 139, 32 * 50, 5, this, tilemap));
+		enemies.add(new Knight(32 * 130, 32 * 50, 5, this, tilemap));
 	}
 	
 }

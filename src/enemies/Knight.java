@@ -16,6 +16,8 @@ import gfx.Sprite;
 
 public class Knight extends Mob {
 
+	public static final int AGGRO_RANGE = 10;
+	
 	private int xpWorth = 50;
 	private EnemyAnimate animate;
 	
@@ -35,7 +37,7 @@ public class Knight extends Mob {
 		currentHealth = health;
 		damage = level * 2 + 1;
 		rangedDamage = 0;
-		speed = 3.0f;
+		speed = 2.3f; //should be 3.0f
 		width = 32;
 		height = 32;
 		name = "Knight";
@@ -99,12 +101,13 @@ public class Knight extends Mob {
 		currentTick++;
 		if(currentTick > 100000) currentTick = 0;
 		
-		if(currentTick % 20 == 0) {
+		if(currentTick % 30 == 0) {
 			int px = (int)currentState.getPlayer().getX() / 32;
 			int py = (int)currentState.getPlayer().getY() / 32; 
 			
 			Vector2f mobPos = new Vector2f(x / 32, y / 32);
 			Vector2f playerPos = new Vector2f(px, py);
+			if(Vector2f.getDistance(mobPos, playerPos) > AGGRO_RANGE) return; //aggro range
 		
 			path = currentState.findPath(mobPos, playerPos);
 			currentNode = 1;
@@ -149,28 +152,8 @@ public class Knight extends Mob {
 		}
 	}
 	
-	
-	private int collisionTune = 0; //higher, the less strict collision is
+	//does not need collision, because it does not path onto solid blocks
 	private void move(float testSpeedX, float testSpeedY) {
-		if(currentTilemap.getTile((int) (x +  testSpeedX + collisionTune), (int)(y + testSpeedY + collisionTune)).getSolid()) {
-			return;
-		}
-		if(currentTilemap.getTile((int)(xVals[0] + testSpeedX - collisionTune), (int)(yVals[0] + testSpeedY + collisionTune)).getSolid()) {
-			return;
-		}
-		if(currentTilemap.getTile((int)(xVals[1] + testSpeedX + collisionTune), (int)(yVals[0] + testSpeedY - collisionTune)).getSolid()) {
-			return;
-		}
-		if(currentTilemap.getTile((int)(xVals[2] + testSpeedX - collisionTune), (int)(yVals[0] + testSpeedY - collisionTune)).getSolid()) {
-			return;
-		}
-		if(currentTilemap.getTile((int)(xVals[3] + testSpeedX + collisionTune), (int)(yVals[0] + testSpeedY)).getSolid()) {
-			return;
-		}
-		if(currentTilemap.getTile((int)(xVals[4] + testSpeedX - collisionTune), (int)(yVals[0] + testSpeedY)).getSolid()) {
-			return;
-		}
-
 		x += testSpeedX;
 		y += testSpeedY;
 		for (int i = 0; i<= xVals.length-1; i++) {
@@ -179,26 +162,6 @@ public class Knight extends Mob {
 		}
 		hitbox.x = (int)x; hitbox.y = (int)y;
 	}
-	
-	/*private void move(float testSpeedX, float testSpeedY) {
-		if(currentTilemap.getTile((int) (x +  testSpeedX), (int)(y + testSpeedY)).getSolid()) {
-			return;
-		}
-		for (int i = 0; i<= xVals.length-1; i++) {
-			if (currentTilemap.getTile((int) (xVals[i] +  testSpeedX), (int)(yVals[i] + testSpeedY)).getSolid()) {
-				return;
-			}
-		}
-		
-
-		x += testSpeedX;
-		y += testSpeedY;
-		for (int i = 0; i<= xVals.length-1; i++) {
-				xVals[i]  += testSpeedX;
-				yVals[i]  += testSpeedY;	
-		}
-		hitbox.x = (int)x; hitbox.y = (int)y;
-	}*/
 	
 	private int lifeTime = 180;
 	private void checkDeath() {		
