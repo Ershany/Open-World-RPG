@@ -2,18 +2,23 @@ package ui;
 
 import game.Game;
 import gameplaystates.StartingIslandState;
-import gamestatemanager.GameStateManager;
 import gamestatemanager.ControlsState;
+import gamestatemanager.GameStateManager;
 import gamestatemanager.SettingsState;
 
 import java.awt.Color;
 
+import sfx.AudioPlayer;
 import tiles.Tile;
 
 public class MainMenu extends Menu {
 
+	private AudioPlayer music;
+	
 	public MainMenu(GameStateManager gsm) {
 		super(0, 0, Game.WIDTH, Game.HEIGHT, gsm);
+		music = new AudioPlayer("/sfx/songs/Menu.mp3", true);
+		music.play();
 	}
 
 	@Override
@@ -21,6 +26,9 @@ public class MainMenu extends Menu {
 		Button play = new Button(gsm, "Play") {
 			@Override
 			public void doAction() {
+				//stop the music
+				music.stop();
+				
 				//gsm.getStates().push(new DevTestState(gsm));
 				gsm.getStates().push(new StartingIslandState(gsm, 134 * Tile.TILESIZE, 58 * Tile.TILESIZE));
 			}
