@@ -15,6 +15,7 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
 import projectile.Projectile;
+import sfx.AudioPlayer;
 import spawners.ParticleSpawner;
 import tilemap.Tilemap;
 import animate.PlayerAnimate;
@@ -70,6 +71,9 @@ public class Player extends Mob {
 	//serialization items
 	private LevelData levelData;
 	
+	//Audio
+	private AudioPlayer meleeSound;
+	private AudioPlayer rangedSound;
 	
 	public Player(int x, int y,  LevelState state, Tilemap tilemap) {
 		super(x, y, 10, state, tilemap);
@@ -129,6 +133,10 @@ public class Player extends Mob {
 		if(levelData == null) {
 			levelData = new LevelData(this);
 		}
+		
+		//load audio
+		meleeSound = new AudioPlayer("/sfx/player/MeleeSwing.wav", false);
+		rangedSound = new AudioPlayer("/sfx/player/Shoot.wav", false);
 	}
 
 	@Override	
@@ -270,6 +278,9 @@ public class Player extends Mob {
 		if(!rangedForm) return;
 		
 		if(MouseMaster.getMouseB() == 1 && shouldShoot) {
+			//play shooting sound
+			rangedSound.play();
+			
 			//pass in the xDest and yDest with the xOffsets and yOffsets
 			currentState.addProjectile(new Projectile(x, y, MouseMaster.getMouseX() + currentState.getTilemap().getXOffset(), MouseMaster.getMouseY() + currentState.getTilemap().getYOffset(), 3, 3, projectileSpeed, 240, rangedDamage, currentState));
 			shouldShoot = false;
@@ -330,6 +341,9 @@ public class Player extends Mob {
 	private Mob tempEnemy;
 	//helper method for checkMelee
 	private void checkMeleeHit() {
+		//play the melee swing audio
+		meleeSound.play();
+		
 		for(int i = 0; i < currentState.getEnemies().size(); i++) {
 			tempEnemy = currentState.getEnemies().get(i);
 			if(meleeSwing.intersects(tempEnemy.getHitbox()) || meleeSwing.contains(tempEnemy.getHitbox())) {
