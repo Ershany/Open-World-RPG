@@ -3,12 +3,13 @@ package projectile;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 
+import entity.Entity;
+import gamestatemanager.LevelState;
 import spawners.ParticleSpawner;
 import tilemap.Tilemap;
 import util.AngleMaster;
-import entity.Entity;
-import gamestatemanager.LevelState;
 
 public class Projectile extends Entity {
 
@@ -26,6 +27,8 @@ public class Projectile extends Entity {
 	private int width, height;
 	private Rectangle hitbox;
 	
+	private BufferedImage image;
+	
 	//spawner for particles
 	private ParticleSpawner particleSpawner;
 	
@@ -36,6 +39,26 @@ public class Projectile extends Entity {
 		this.width = width;
 		this.height = height;
 		this.speed = speed;
+		hitbox = new Rectangle(width, height);
+		
+		angle = AngleMaster.calculateAngle((int)xOrig, (int)yOrig, (int)xDest, (int)yDest);
+		xa = (float)Math.cos(angle) * speed;
+		ya = (float)Math.sin(angle) * speed;
+		
+		this.currentState = currentState;
+		tilemap = currentState.getTilemap();
+		
+		particleSpawner = new ParticleSpawner(currentState);
+	}
+	
+	public Projectile(float xOrig, float yOrig, float xDest, float yDest, float speed, int projectileLife, float damage, LevelState currentState, BufferedImage image) {
+		super(xOrig, yOrig);
+		this.projectileLife = projectileLife;
+		this.damage = damage;
+		this.speed = speed;
+		this.image = image;
+		this.width = image.getWidth();
+		this.height = image.getHeight();
 		hitbox = new Rectangle(width, height);
 		
 		angle = AngleMaster.calculateAngle((int)xOrig, (int)yOrig, (int)xDest, (int)yDest);
@@ -69,8 +92,12 @@ public class Projectile extends Entity {
 	}
 	
 	public void render(Graphics2D g) {
-		g.setColor(Color.WHITE);
-		g.fillRect((int)x - tilemap.getXOffset(), (int)y - tilemap.getYOffset(), width, height);
+		if(image == null) {
+			g.setColor(Color.WHITE);
+			g.fillRect((int)x - tilemap.getXOffset(), (int)y - tilemap.getYOffset(), width, height);
+		} else {
+			g.drawImage(image, (int)x - tilemap.getXOffset(), (int)y - tilemap.getYOffset(), null);
+		}
 	}
 	
 	

@@ -40,7 +40,7 @@ public class Tilemap {
 
 	private void load() {
 		try {
-			map = ImageIO.read(Tilemap.class.getResource(path));
+			map = ImageIO.read(Tilemap.class.getResourceAsStream(path));
 			width = map.getWidth();
 			height = map.getHeight();
 			tiles = new Tile[width * height];

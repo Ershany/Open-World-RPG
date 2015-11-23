@@ -7,11 +7,27 @@ import javax.imageio.ImageIO;
 
 public class Spritesheet {
 
+	//TODO 
+	//Develop an actual system to manage objects, so extra memory is not being used up when not needed
+	
 	//objects (we can keep them here or init them in the states we use them)
 	//or just keep universal stuff like player and such and have rare
 	//sprites get initialized in the states initialization 
-	public static Spritesheet sheet1 = new Spritesheet("/sprites/tiles.bmp", 32);
+	
+	
+	//Tiles
+	public static Spritesheet tileSheet = new Spritesheet("/sprites/tiles.bmp", 32);
+	
+	
+	//Ships
+	public static Spritesheet basicShipSheet = new Spritesheet("/ships/BasicShip.png", 64, 64);
+	
+	
+	//Mobs
 	public static Spritesheet enemySheet = new Spritesheet("/sprites/enemies_1.png", 32);
+	
+	public static Spritesheet knightSheet = new Spritesheet("/sprites/knight/knight.png", 32, 32);
+	public static Spritesheet knightDeathSheet = new Spritesheet("/sprites/knight/knightDeath.png", 64, 64);
 	
 	public static Spritesheet playerSheet = new Spritesheet("/sprites/player/player.png", 32, 48);
 	
@@ -19,11 +35,10 @@ public class Spritesheet {
 	
 	public static Spritesheet wisemanSheet = new Spritesheet("/sprites/wiseman/wiseman.png", 32, 48);
 	
-	public static Spritesheet knightSheet = new Spritesheet("/sprites/knight/knight.png", 32, 32);
-	public static Spritesheet knightDeathSheet = new Spritesheet("/sprites/knight/knightDeath.png", 64, 64);
 	
-	//boss list
+	//Bosses
 	public static Spritesheet kronosSheet = new Spritesheet("/sprites/boss/Kronos/Kronos.png", 96, 48);
+	
 	
 	private String path;
 	private int width, height;

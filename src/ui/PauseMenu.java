@@ -34,11 +34,7 @@ public class PauseMenu extends Menu {
 		Button save = new Button(gsm, "Save") {
 			@Override
 			public void doAction() {
-			}
-		};
-		Button load = new Button(gsm, "Load") {
-			@Override
-			public void doAction() {
+				FileIO.save(data);
 			}
 		};
 		Button quit = new Button(gsm, "Save and Quit") {
@@ -49,7 +45,7 @@ public class PauseMenu extends Menu {
 			}
 		};
 
-		buttons = new Button[] { play, save, load, quit };
+		buttons = new Button[] { play, save, quit };
 	}
 
 	@Override
@@ -57,6 +53,6 @@ public class PauseMenu extends Menu {
 		setFillColor(new Color(0, 0, 0, 100));
 		setDefaultColor(Color.WHITE);
 		setFont(new Font("Algerian", Font.PLAIN, 20));
-		setButtonGap(30);
+		setButtonGap(45);
 	}
 }

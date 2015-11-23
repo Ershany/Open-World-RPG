@@ -19,7 +19,7 @@ import javax.sound.sampled.FloatControl;
  * Asset management class used to retrieve sound and audio files. Prevents
  * accumulation of redundant assets by use of HashMaps,
  *
- *
+ * This current system is not being used in the game
  */
 
 public class AssetManager {

@@ -6,6 +6,9 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class Sprite {
+	
+	//TODO 
+	//Develop an actual system to manage objects, so extra memory is not being used up when not needed
 
 	//objects (we can keep them here or init them in the states we use them)
 	//or just keep universal stuff like player and such and have rare
@@ -13,6 +16,7 @@ public class Sprite {
 	
 	//logo
 	public static Sprite logo = new Sprite("/icons/gameLogo.png");
+	public static Sprite splashScreen = new Sprite("/hudStuff/SplashScreen.png");
 	
 	//player
 	public static Sprite playerIdleDown = new Sprite(1, 0, Spritesheet.playerSheet);
@@ -29,6 +33,8 @@ public class Sprite {
 	public static Sprite playerWalkLeft2 = new Sprite(2, 3, Spritesheet.playerSheet);
 	public static Sprite playerHorizontalSwing = new Sprite("/sprites/melee attacks/horizontal.png"); 
 	public static Sprite playerVerticalSwing = new Sprite("/sprites/melee attacks/vertical.png");
+	
+	public static Sprite wasted = new Sprite("/sprites/player/Wasted.png");
 	
 	//king
 	public static Sprite kingIdleDown = new Sprite(1, 3, Spritesheet.kingSheet);
@@ -93,33 +99,34 @@ public class Sprite {
 	public static Sprite kronosIdleLeft = new Sprite(1, 1, Spritesheet.kronosSheet);
 	public static Sprite kronosWalkLeft1 = new Sprite(0, 1, Spritesheet.kronosSheet);
 	public static Sprite kronosWalkLeft2 = new Sprite(2, 1, Spritesheet.kronosSheet);
+	public static Sprite kronosProjectile = new Sprite("/sprites/boss/Kronos/ranged.bmp");
 	
 	//tiles
-	public static Sprite grass = new Sprite(0, 0, Spritesheet.sheet1);
-	public static Sprite dirt = new Sprite(1, 0, Spritesheet.sheet1);
-	public static Sprite sand = new Sprite(2, 0, Spritesheet.sheet1);
-	public static Sprite redBrick = new Sprite(3, 0, Spritesheet.sheet1);
-	public static Sprite woodFloor = new Sprite(4, 0, Spritesheet.sheet1);
-	public static Sprite stoneFloor = new Sprite(5, 0, Spritesheet.sheet1);
+	public static Sprite grass = new Sprite(0, 0, Spritesheet.tileSheet);
+	public static Sprite dirt = new Sprite(1, 0, Spritesheet.tileSheet);
+	public static Sprite sand = new Sprite(2, 0, Spritesheet.tileSheet);
+	public static Sprite redBrick = new Sprite(3, 0, Spritesheet.tileSheet);
+	public static Sprite woodFloor = new Sprite(4, 0, Spritesheet.tileSheet);
+	public static Sprite stoneFloor = new Sprite(5, 0, Spritesheet.tileSheet);
 	
-	public static Sprite water1 = new Sprite(0, 1, Spritesheet.sheet1);
-	public static Sprite water2 = new Sprite(1, 1, Spritesheet.sheet1);
-	public static Sprite water3 = new Sprite(2, 1, Spritesheet.sheet1);
+	public static Sprite water1 = new Sprite(0, 1, Spritesheet.tileSheet);
+	public static Sprite water2 = new Sprite(1, 1, Spritesheet.tileSheet);
+	public static Sprite water3 = new Sprite(2, 1, Spritesheet.tileSheet);
 	
-	public static Sprite roof1 = new Sprite(0, 2, Spritesheet.sheet1);
-	public static Sprite wall1 = new Sprite(1, 2, Spritesheet.sheet1);
-	public static Sprite door1 = new Sprite(2, 2, Spritesheet.sheet1);
+	public static Sprite roof1 = new Sprite(0, 2, Spritesheet.tileSheet);
+	public static Sprite wall1 = new Sprite(1, 2, Spritesheet.tileSheet);
+	public static Sprite door1 = new Sprite(2, 2, Spritesheet.tileSheet);
 	
-	public static Sprite rockHillTop = new Sprite(0, 3, Spritesheet.sheet1);
-	public static Sprite rockHill = new Sprite(1, 3, Spritesheet.sheet1);
-	public static Sprite rockHillBottom = new Sprite(2, 3, Spritesheet.sheet1);
-	public static Sprite rockCave = new Sprite(3, 3, Spritesheet.sheet1);
+	public static Sprite rockHillTop = new Sprite(0, 3, Spritesheet.tileSheet);
+	public static Sprite rockHill = new Sprite(1, 3, Spritesheet.tileSheet);
+	public static Sprite rockHillBottom = new Sprite(2, 3, Spritesheet.tileSheet);
+	public static Sprite rockCave = new Sprite(3, 3, Spritesheet.tileSheet);
 	
 	//dungeon tiles 
-	public static Sprite dungeonDirt = new Sprite(0, 4, Spritesheet.sheet1);
-	public static Sprite dungeonWall = new Sprite(1, 4, Spritesheet.sheet1);
-	public static Sprite dungeonRock = new Sprite(2, 4, Spritesheet.sheet1);
-	public static Sprite dungeonCave = new Sprite(3, 4, Spritesheet.sheet1);
+	public static Sprite dungeonDirt = new Sprite(0, 4, Spritesheet.tileSheet);
+	public static Sprite dungeonWall = new Sprite(1, 4, Spritesheet.tileSheet);
+	public static Sprite dungeonRock = new Sprite(2, 4, Spritesheet.tileSheet);
+	public static Sprite dungeonCave = new Sprite(3, 4, Spritesheet.tileSheet);
 	
 	//HUD
 	public static Sprite healthHUD = new Sprite("/hudStuff/healthBar.bmp");
@@ -144,6 +151,23 @@ public class Sprite {
 	public static Sprite deathSlime1 = new Sprite(3, 0, Spritesheet.enemySheet);
 	public static Sprite deathSlime2 = new Sprite(4, 0, Spritesheet.enemySheet);
 	public static Sprite deathSlime3 = new Sprite(5, 0, Spritesheet.enemySheet);
+	
+	//particles
+	public static Sprite heart = new Sprite("/particles/healParticle.png");
+	
+	//ships
+	public static Sprite basicShipIdleUp = new Sprite(1, 0, Spritesheet.basicShipSheet);
+	public static Sprite basicShipMoveUp1 = new Sprite(0, 0, Spritesheet.basicShipSheet);
+	public static Sprite basicShipMoveUp2 = new Sprite(2, 0, Spritesheet.basicShipSheet);
+	public static Sprite basicShipIdleRight = new Sprite(1, 1, Spritesheet.basicShipSheet);
+	public static Sprite basicShipMoveRight1 = new Sprite(0, 1, Spritesheet.basicShipSheet);
+	public static Sprite basicShipMoveRight2 = new Sprite(2, 1, Spritesheet.basicShipSheet);
+	public static Sprite basicShipIdleLeft = new Sprite(1, 2, Spritesheet.basicShipSheet);
+	public static Sprite basicShipMoveLeft1 = new Sprite(0, 2, Spritesheet.basicShipSheet);
+	public static Sprite basicShipMoveLeft2 = new Sprite(2, 2, Spritesheet.basicShipSheet);
+	public static Sprite basicShipIdleDown = new Sprite(1, 3, Spritesheet.basicShipSheet);
+	public static Sprite basicShipMoveDown1 = new Sprite(0, 3, Spritesheet.basicShipSheet);
+	public static Sprite basicShipMoveDown2 = new Sprite(2, 3, Spritesheet.basicShipSheet);
 	
 	
 	private Spritesheet sheet;

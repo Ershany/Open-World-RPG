@@ -34,8 +34,11 @@ public class WisemanNPC extends Mob {
 		width = 32;
 		height = 48;
 		name = "Wiseman";
-		info = new String[] {"Be aware of the king and his henchmen!",
-							 "They can get away with anything they want..."};
+		//info = new String[] {"Be aware of the king and his henchmen!",
+							 //"They can get away with anything they want..."};
+		info = new String[] {"Our poor island is doomed because of that beast!",
+							 "Some think he lives in a cave on our island.",
+							 "I don't know what to believe."};
 		
 		hitbox = new Rectangle(width, height);
 		hitbox.x = (int)x; hitbox.y = (int)y;

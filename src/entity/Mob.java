@@ -124,4 +124,27 @@ public abstract class Mob extends Entity {
 	public boolean getMoveLeft() {
 		return moveLeft;
 	}
+	
+	//setters
+	public void setHitBox(Rectangle hitbox) {
+		this.hitbox = hitbox;
+	}
+	public void setXHitBox(int x) {
+		hitbox.x = x;
+	}
+	public void setYHitBox(int y) {
+		hitbox.y = y;
+	}
+	public void setMoveUp(boolean decide) {
+		this.moveUp = decide;
+	}
+	public void setMoveDown(boolean decide) {
+		this.moveDown = decide;
+	}
+	public void setMoveRight(boolean decide) {
+		this.moveRight = decide;
+	}
+	public void setMoveLeft(boolean decide) {
+		this.moveLeft = decide;
+	}
 }

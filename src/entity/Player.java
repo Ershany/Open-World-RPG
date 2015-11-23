@@ -1,24 +1,29 @@
 package entity;
 
-import game.Game;
-import gamestatemanager.LevelState;
-import gfx.Sprite;
-import hud.HUD;
-import input.MouseMaster;
-import io.FileIO;
-import io.LevelData;
-
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
+import animate.PlayerAnimate;
+import game.Game;
+import gameplaystates.StartingIslandState;
+import gamestatemanager.LevelState;
+import gfx.Sprite;
+import hud.HUD;
+import input.MouseMaster;
+import io.FileIO;
+import io.LevelData;
 import projectile.Projectile;
 import sfx.AudioPlayer;
+import ships.BasicShip;
+import ships.Ship;
 import spawners.ParticleSpawner;
 import tilemap.Tilemap;
-import animate.PlayerAnimate;
+import tiles.Tile;
+import tiles.WaterTile;
+import util.Vector2f;
 
 public class Player extends Mob {
 
@@ -28,6 +33,7 @@ public class Player extends Mob {
 	
 	//to be added in the future
 	//private Inventory inventory;
+	
 	public HUD hud;
 	private Mob focusedMob;
 	
@@ -35,14 +41,18 @@ public class Player extends Mob {
 	public static final int MAX_LEVEL = 10;
 	private int xp;
 	private int currentXp;
+	private int deathTimer = 240;
 	
 	private float projectileSpeed;
 	
-	private boolean upHeld, downHeld, rightHeld, leftHeld;
+	//PROBLEM WITH SHIP
+	//private boolean upHeld, downHeld, rightHeld, leftHeld;
 	
 	private boolean shouldMelee;
 	private boolean shouldShoot;
 	private boolean rangedForm; 
+	
+	private Vector2f knockback = new Vector2f(0.0f, 0.0f);
 	
 	//cooldowns
 	private int shootCooldown = 120; //it should be: shootCooldown = inventory.getRangedWeaponSpeed();
@@ -68,12 +78,10 @@ public class Player extends Mob {
 	private float[] xVals, yVals;
 	private PlayerAnimate playerAnim;
 	
+	private Ship ship;
+	
 	//serialization items
 	private LevelData levelData;
-	
-	//Audio
-	private AudioPlayer meleeSound;
-	private AudioPlayer rangedSound;
 	
 	public Player(int x, int y,  LevelState state, Tilemap tilemap) {
 		super(x, y, 10, state, tilemap);
@@ -95,12 +103,12 @@ public class Player extends Mob {
 			levelData.initPlayer(this);
 		}
 		
-		health = (level * 5) + 10; //it should be:    health = (level * 5) + inventory.getArmor();
+		health = level * 10; //it should be:    health = (level * 5) + inventory.getArmor();
 		currentHealth = health;
 		damage = level * 3;  //it should be:   damage = (level * 3) + inventory.getWeapon().getDamage();
 		rangedDamage = level * 2;
 		projectileSpeed = 14.2f; //it should be: projectileSpeed = inventory.getWeapon().getProjectileSpeed();
-		speed = 3.1f;
+		speed = 3.3f;
 		
 		width = 32;
 		height = 48;
@@ -128,27 +136,44 @@ public class Player extends Mob {
 		
 		hud = new HUD(this);
 		playerAnim = new PlayerAnimate(this);
+		ship = new BasicShip(this);
 		
 		//if levelData was not initialized/loaded then make one
 		if(levelData == null) {
 			levelData = new LevelData(this);
 		}
-		
-		//load audio
-		meleeSound = new AudioPlayer("/sfx/player/MeleeSwing.wav", false);
-		rangedSound = new AudioPlayer("/sfx/player/Shoot.wav", false);
 	}
 
 	@Override	
 	public void update() {
-		//movement
-		checkMovement();
+		if(dying) {
+			deathTimer--;
+			if(deathTimer == 0) {
+				FileIO.save(levelData);
+				currentState.getGSM().getStates().pop();
+				currentState.getGSM().getStates().push(new StartingIslandState(currentState.getGSM(), 144 * Tile.TILESIZE, 58 * Tile.TILESIZE));
+			}
+			return;
+		}
 		
-		//melee
-		checkMelee();
-		
-		//shooting
-		checkShooting();
+		if(ship.active) {
+			ship.update();
+		} else {
+			//check knockback
+			checkKnockback();
+			
+			//movement (also checks to see if you enter the water)
+			checkMovement();
+			
+			//melee
+			checkMelee();
+			
+			//shooting
+			checkShooting();
+			
+			//update player anim
+			playerAnim.update();
+		}
 		
 		//check xp
 		checkXp();
@@ -174,9 +199,6 @@ public class Player extends Mob {
 		//set offsets
 		updateOffset();
 		
-		//update player anim
-		playerAnim.update();
-		
 		//update HUD
 		hud.update(); 
 		
@@ -187,20 +209,34 @@ public class Player extends Mob {
 	private boolean flicker;
 	@Override
 	public void render(Graphics2D g) {
-		if(invincible) {
-			if(flicker) {
-				flicker = false;
+		if(!dying) {
+			if(invincible) {
+				if(flicker) {
+					flicker = false;
+				} else {
+					if(!ship.active) {
+						drawPlayer(g);
+						flicker = true;
+					}
+				}
 			} else {
-				drawPlayer(g);
-				flicker = true;
+				if(!ship.active) {
+					//render player
+					drawPlayer(g);
+				}
+			}
+			
+			if(!ship.active) {
+				//render reload bar
+				drawReloadBar(g);
+			}
+			else {
+				ship.render(g);
 			}
 		} else {
-			//render player
-			drawPlayer(g);
+			g.drawImage(Sprite.wasted.getImage(), (Game.WIDTH / 2) - 147, (Game.HEIGHT / 2) - 147, null);
 		}
 		
-		//render reload bar
-		drawReloadBar(g);
 		
 		//render HUD
 		hud.render(g);
@@ -232,13 +268,46 @@ public class Player extends Mob {
 		g.fillRect(MouseMaster.getMouseX() + 30, MouseMaster.getMouseY(), 3, (int)(0.25 * (shootCooldown - currentShootCooldown)));
 	}
 	
+	//checks movement and also checks if you are entering the water (to transition to a boat)
 	private void move(float testSpeedX, float testSpeedY) {
 		if (currentTilemap.getTile((int) (x +  testSpeedX), (int)(y + testSpeedY)).getSolid()) {
-			return;
+			//Check to see if the player is trying to enter the water (and if the player has a boat)
+			if(ship != null && currentTilemap.getTile((int) (x +  testSpeedX), (int)(y + testSpeedY)) instanceof WaterTile) {
+				//Check to see what direction the player is heading, and give them enough movement to enter the water
+				if(testSpeedX < 0) {
+					testSpeedX = -48f;
+				} else if(testSpeedX > 0) {
+					testSpeedX = 48f;
+				}
+				if(testSpeedY < 0) {
+					testSpeedY = -72f;
+				} else if(testSpeedY > 0) {
+					testSpeedY = 72f;
+				}
+				ship.active = true;
+			} else {
+				return;
+			}
 		}
 		for (int i = 0; i<= xVals.length-1; i++) {
 			if (currentTilemap.getTile((int) (xVals[i] +  testSpeedX), (int)(yVals[i] + testSpeedY)).getSolid()) {
-				return;
+				//Check to see if the player is trying to enter the water (and if the player has a boat)
+				if(ship != null && currentTilemap.getTile((int) (xVals[i] +  testSpeedX), (int)(yVals[i] + testSpeedY)) instanceof WaterTile) {
+					//Check to see what direction the player is heading, and give them enough movement to enter the water
+					if(testSpeedX < 0) {
+						testSpeedX = -48f;
+					} else if(testSpeedX > 0) {
+						testSpeedX = 48f;
+					}
+					if(testSpeedY < 0) {
+						testSpeedY = -72f;
+					} else if(testSpeedY > 0) {
+						testSpeedY = 72f;
+					}
+					ship.active = true;
+				} else {
+					return;
+				}
 			}
 		}
 
@@ -251,18 +320,31 @@ public class Player extends Mob {
 		hitbox.x = (int)x; hitbox.y = (int)y;
 	}
 	
+	private void checkKnockback() {
+		//If the knockback is small, stop adding it to the player
+		if(knockback.getLength() < 0.5f) 
+			return;
+		
+		//Now add the knockback to the player
+		move(knockback.getX(), 0);
+		move(0, knockback.getY());
+		
+		//Now make the knockback values smaller
+		knockback.set(knockback.getX() * 0.8f, knockback.getY() * 0.8f);
+	}
+	
 	private void checkMovement() {
-		//TODO : Fix diag
-		if (upHeld) {
+		//TODO : Fix diag e.g. move(10, 10) would not work correctly (if you intersect something below you it would stop)
+		if (this.getMoveUp()) {
 			move(0,-speed);
 		}
-		if (downHeld) {
+		if (this.getMoveDown()) {
 			move(0,speed);
 		}
-		if (leftHeld) {
+		if (this.getMoveLeft()) {
 			move(-speed,0);
 		}
-		if (rightHeld) {
+		if (this.getMoveRight()) {
 			move(speed,0);
 		}
 		
@@ -273,16 +355,17 @@ public class Player extends Mob {
 		currentTilemap.setYOffset((int)y - (Game.HEIGHT / 2) + (height / 2));
 	}
 	
+	
 	private void checkShooting() {
 		//firstly ensure we are in range form, if not get out of this method
 		if(!rangedForm) return;
 		
 		if(MouseMaster.getMouseB() == 1 && shouldShoot) {
 			//play shooting sound
-			rangedSound.play();
+			AudioPlayer.rangedSound.play();
 			
 			//pass in the xDest and yDest with the xOffsets and yOffsets
-			currentState.addProjectile(new Projectile(x, y, MouseMaster.getMouseX() + currentState.getTilemap().getXOffset(), MouseMaster.getMouseY() + currentState.getTilemap().getYOffset(), 3, 3, projectileSpeed, 240, rangedDamage, currentState));
+			currentState.addProjectile(new Projectile(x + (width / 2), y + (height / 2), MouseMaster.getMouseX() + currentState.getTilemap().getXOffset(), MouseMaster.getMouseY() + currentState.getTilemap().getYOffset(), 3, 3, projectileSpeed, 240, rangedDamage, currentState));
 			shouldShoot = false;
 		}
 	}
@@ -342,7 +425,7 @@ public class Player extends Mob {
 	//helper method for checkMelee
 	private void checkMeleeHit() {
 		//play the melee swing audio
-		meleeSound.play();
+		AudioPlayer.meleeSound.play();
 		
 		for(int i = 0; i < currentState.getEnemies().size(); i++) {
 			tempEnemy = currentState.getEnemies().get(i);
@@ -361,8 +444,7 @@ public class Player extends Mob {
 	private void checkDeath() {
 		//casted to int to avoid HUD confusion, so if the HUD rounds and shows the player has 0 life, he won't die, but with me rounding the currentHealth, we can find out  what the HUD is displaying and act accordingly
 		if((int)currentHealth <= 0) {
-			//temp
-			System.out.println("dead");
+			dying = true;
 		}
 	}
 	
@@ -502,32 +584,32 @@ public class Player extends Mob {
 	
 	public void keyPressed(int k) {
 		if(k == KeyEvent.VK_W) {
-			upHeld = true;
+			this.setMoveUp(true);
 		}
 		if(k == KeyEvent.VK_S) {
-			downHeld = true;
+			this.setMoveDown(true);
 		}
 		if(k == KeyEvent.VK_D) {
-			rightHeld = true;
+			this.setMoveRight(true);
 		}
 		if(k == KeyEvent.VK_A) {
-			leftHeld = true;
+			this.setMoveLeft(true);
 		}
 		playerAnim.keyPressed(k);
 	}
 	
 	public void keyReleased(int k) {
 		if(k == KeyEvent.VK_W) {
-			upHeld = false;
+			this.setMoveUp(false);
 		}
 		if(k == KeyEvent.VK_S) {
-			downHeld = false;
+			this.setMoveDown(false);
 		}
 		if(k == KeyEvent.VK_D) {
-			rightHeld = false;
+			this.setMoveRight(false);
 		}
 		if(k == KeyEvent.VK_A) {
-			leftHeld = false;
+			this.setMoveLeft(false);
 		}
 		playerAnim.keyReleased(k);
 	}
@@ -542,6 +624,12 @@ public class Player extends Mob {
 	}
 	public float getY() {
 		return y;
+	}
+	public float[] getXVals() {
+		return xVals;
+	}
+	public float[] getYVals() {
+		return yVals;
 	}
 	public Mob getFocusedMob() {
 		return focusedMob;
@@ -558,9 +646,30 @@ public class Player extends Mob {
 	public LevelData getLevelData() {
 		return levelData;
 	}
+	public Ship getShip() {
+		return ship;
+	}
 	
 	//setters
 	public void setFocusedMob(Mob mob) {
 		focusedMob = mob;
+	}
+	public void setX(float x) {
+		this.x = x;
+	}
+	public void setY(float y) {
+		this.y = y;
+	}
+	public void setXVals(float[] xVals) {
+		this.xVals = xVals;
+	}
+	public void setYVals(float[] yVals) {
+		this.yVals = yVals;
+	}
+	public void setKnockback(Vector2f vec) {
+		knockback.set(vec);
+	}
+	public void setKnockback(int x, int y) {
+		knockback.set(x, y);
 	}
 }

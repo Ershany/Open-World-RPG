@@ -34,7 +34,12 @@ public class KingNPC extends Mob {
 		width = 32;
 		height = 48;
 		name = "King";
-		info = new String[] {"I am the king, bow down to me."};
+		//info = new String[] {"I am the king, bow down to me."};
+		info = new String[] {"You sir you need to do something about these raiders!",
+						     "I believe I know what we need to do!",
+						     "You need to find the beast and slay him!",
+						     "Ask the villagers information about where to find this beast",
+						     "You might also need to train first! Fight things on the island."};
 		
 		hitbox = new Rectangle(width, height);
 		hitbox.x = (int)x; hitbox.y = (int)y;

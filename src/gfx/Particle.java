@@ -2,6 +2,7 @@ package gfx;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.util.Random;
 
 import entity.Entity;
@@ -17,6 +18,7 @@ public class Particle extends Entity {
 	private float xa, ya;
 	private int particleLife;
 	private Color color;
+	private BufferedImage image;
 	
 	private int updatesGoneBy;
 	
@@ -25,6 +27,16 @@ public class Particle extends Entity {
 		super(x, y);
 		this.particleLife = particleLife;
 		this.color = color;
+		
+		xa = (float)random.nextGaussian() * speed;
+		ya = (float)random.nextGaussian() * speed;
+		updatesGoneBy = 0;
+	}
+	
+	public Particle(float x, float y, int particleLife, float speed, BufferedImage image) {
+		super(x, y);
+		this.particleLife = particleLife;
+		this.image = image;
 		
 		xa = (float)random.nextGaussian() * speed;
 		ya = (float)random.nextGaussian() * speed;
@@ -55,6 +67,28 @@ public class Particle extends Entity {
 		updatesGoneBy = 0;
 	}
 	
+	public Particle(float x, float y, int particleLife, float speed, BufferedImage image, Type type) {
+		super(x, y);
+		this.particleLife = particleLife;
+		this.image = image;
+		
+		xa = (float)random.nextGaussian() * speed;
+		ya = (float)random.nextGaussian() * speed;
+		
+		switch(type) {
+		case NORTH: 	if(ya > 0) ya *= -1; 							break;
+		case EAST: 		if(xa < 0) xa *= -1; 							break;
+		case SOUTH: 	if(ya < 0) ya *= -1; 							break;
+		case WEST: 		if(xa > 0) xa *= -1; 							break;
+		case NORTHEAST: if(ya > 0) ya *= -1;    if(xa < 0) xa *= -1;	break;
+		case NORTHWEST: if(ya > 0) ya *= -1;	if(xa > 0) xa *= -1; 	break;
+		case SOUTHEAST: if(ya < 0) ya *= -1;    if(xa < 0) xa *= -1;	break;
+		case SOUTHWEST: if(ya < 0) ya *= -1;    if(xa > 0) xa *= -1;	break;
+		}
+		
+		updatesGoneBy = 0;
+	}
+	
 	public void update() {
 		x += xa;
 		y += ya;
@@ -64,7 +98,11 @@ public class Particle extends Entity {
 	}
 	
 	public void render(int xOffset, int yOffset, Graphics2D g) {
-		g.setColor(color);
-		g.fillRect((int) x - xOffset, (int) y - yOffset, 2, 2);
+		if(image == null) {
+			g.setColor(color);
+			g.fillRect((int) x - xOffset, (int) y - yOffset, 2, 2);
+		} else {
+			g.drawImage(image, (int)x - xOffset, (int)y - yOffset, null);
+		}
 	}
 }

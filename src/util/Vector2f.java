@@ -36,6 +36,7 @@ public class Vector2f {
 		this.y = vec.getY();
 	}
 	
+	//Not used very often
 	public void changeToPixelPrecision() {
 		x = Tile.TILESIZE * x; 
 		y = Tile.TILESIZE * y;
@@ -49,6 +50,10 @@ public class Vector2f {
 		double dx = start.getX() - goal.getX();
 		double dy = start.getY() - goal.getY();
 		return Math.sqrt((dx * dx) + (dy * dy));
+	}
+	
+	public float getLength() {
+		return (float) Math.sqrt((this.x * this.x) + (this.y * this.y));
 	}
 	
 	//getters

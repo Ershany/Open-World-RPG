@@ -1,10 +1,5 @@
 package game;
 
-import gamestatemanager.GameStateManager;
-import gfx.Sprite;
-import input.KeyMaster;
-import input.MouseMaster;
-
 import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Frame;
@@ -15,6 +10,10 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
 
+import gamestatemanager.GameStateManager;
+import gfx.Sprite;
+import input.KeyMaster;
+import input.MouseMaster;
 import util.CursorManager;
 
 public class Game extends Canvas implements Runnable {
@@ -85,7 +84,8 @@ public class Game extends Canvas implements Runnable {
 		addMouseWheelListener(mm);
 		addMouseListener(mm);
 		addMouseMotionListener(mm);
-
+		
+		
 		gameThread = new Thread(this, "Game Thread");
 		gameThread.start();
 	}
@@ -165,6 +165,9 @@ public class Game extends Canvas implements Runnable {
 				(int) Settings.FULLSCREEN_RESOLUTION.getHeight());
 		g.fillRect(0, 0, (int) Settings.FULLSCREEN_RESOLUTION.getWidth(),
 				(int) Settings.FULLSCREEN_RESOLUTION.getHeight());
+		
+		
+		//draw the game onto the screen
 		g.drawImage(image, xOffset, yOffset, null);
 		
 		g.dispose();

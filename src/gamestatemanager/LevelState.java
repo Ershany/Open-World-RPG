@@ -25,6 +25,8 @@ import enemies.Slime;
 import entity.Entity;
 import entity.Mob;
 import entity.Player;
+import game.Game;
+import game.Settings;
 import gfx.Particle;
 
 public abstract class LevelState extends GameState{
@@ -40,6 +42,7 @@ public abstract class LevelState extends GameState{
 	
 	protected List<Particle> particles = new ArrayList<Particle>();
 	protected List<Projectile> projectiles = new ArrayList<Projectile>();
+	protected List<Projectile> enemyProjectiles = new ArrayList<Projectile>();
 	protected List<Mob> enemies = new ArrayList<Mob>();
 	protected List<Mob> npcs = new ArrayList<Mob>();
 	protected List<Boss> bosses = new ArrayList<Boss>();
@@ -87,6 +90,7 @@ public abstract class LevelState extends GameState{
 			spawners();
 			checkCursor();
 			checkRightClickInteractions();
+			checkDayNightCycle();
 		}
 	}
 	
@@ -95,6 +99,7 @@ public abstract class LevelState extends GameState{
 		tilemap.render(g);
 		renderLists(g);
 		player.render(g);
+		renderDayNightCycle(g);
 		
 		if(currentTextBox != null) {
 			currentTextBox.render(g);
@@ -108,6 +113,9 @@ public abstract class LevelState extends GameState{
 		//loop through and update all of the entities in the lists
 		for(int i = 0; i < projectiles.size(); i++) {
 			projectiles.get(i).update();
+		}
+		for(int i = 0; i < enemyProjectiles.size(); i++) {
+			enemyProjectiles.get(i).update();
 		}
 		for(int i = 0; i < particles.size(); i++) {
 			particles.get(i).update();
@@ -134,6 +142,9 @@ public abstract class LevelState extends GameState{
 		for(int i = 0; i < projectiles.size(); i++) {
 			projectiles.get(i).render(g);
 		}
+		for(int i = 0; i < enemyProjectiles.size(); i++) {
+			enemyProjectiles.get(i).render(g);
+		}
 		for(int i = 0; i < npcs.size(); i++) {
 			npcs.get(i).render(g);
 		}
@@ -146,6 +157,9 @@ public abstract class LevelState extends GameState{
 		//loop through lists and check if the entities should be removed
 		for(int i = 0; i < projectiles.size(); i++) {
 			if(projectiles.get(i).getRemoved()) projectiles.remove(i);
+		}
+		for(int i = 0; i < enemyProjectiles.size(); i++) {
+			if(enemyProjectiles.get(i).getRemoved()) enemyProjectiles.remove(i);
 		}
 		for(int i = 0; i < particles.size(); i++) {
 			if(particles.get(i).getRemoved()) particles.remove(i);
@@ -163,36 +177,50 @@ public abstract class LevelState extends GameState{
 	
 	//random chance of spawning a mob
 	private void spawners() {
-		if(random.nextInt(120) == 0) 
+		if(random.nextInt(50) == 0) 
 			slimeSpawner.update();
 	}
 	
 	private Projectile tempP;
 	private Mob tempM;
+	private Boss tempB;
 	//checks for things like bullet collision
 	private void checkBulletHit() {
-		//if there are no projectiles, do not bother checking for collision
-		if(projectiles.size() == 0) return;
-		
-		for(int i = 0; i < projectiles.size(); i++) {
-			for(int j = 0; j < enemies.size(); j++) {
-				tempP = projectiles.get(i);
-				tempM = enemies.get(j);
+		//if there are no projectiles, do not check for collision
+		if(projectiles.size() != 0) {
+			for(int i = 0; i < projectiles.size(); i++) {
+				for(int j = 0; j < enemies.size(); j++) {
+					tempP = projectiles.get(i);
+					tempM = enemies.get(j);
 					
-				//if the projectile hits the enemy
-				if((tempP.getHitbox().intersects(tempM.getHitbox()) && !tempM.getDying()) || (tempM.getHitbox().contains(tempP.getHitbox()) && !tempM.getDying())) {
-					tempM.hit(tempP.getDamage());
-					tempP.setRemoved(true);
+					//if the projectile hits the enemy
+					if((tempP.getHitbox().intersects(tempM.getHitbox()) && !tempM.getDying()) || (tempM.getHitbox().contains(tempP.getHitbox()) && !tempM.getDying())) {
+						tempM.hit(tempP.getDamage());
+						tempP.setRemoved(true);
+					}
+				}
+				for(int j = 0; j < bosses.size(); j++) {
+					tempP = projectiles.get(i);
+					tempB = bosses.get(j);
+				
+					//if the projectile hits the enemy
+					if((tempP.getHitbox().intersects(tempB.getHitbox()) && !tempB.getDying()) || (tempB.getHitbox().contains(tempP.getHitbox()) && !tempB.getDying())) {
+						tempB.projectileHit(tempP);
+						tempB.stun(60);
+					}
 				}
 			}
-			for(int j = 0; j < bosses.size(); j++) {
-				tempP = projectiles.get(i);
-				tempM = bosses.get(j);
-				
-				//if the projectile hits the enemy
-				if((tempP.getHitbox().intersects(tempM.getHitbox()) && !tempM.getDying()) || (tempM.getHitbox().contains(tempP.getHitbox()) && !tempM.getDying())) {
-					tempM.projectileHit(tempP);
-				}
+		}
+		
+		if(enemyProjectiles.size() != 0) {
+			for(int i = 0; i < enemyProjectiles.size(); i++) {
+				 tempP = enemyProjectiles.get(i);
+				 
+				 //if the enemy projectile hits the player
+				 if((tempP.getHitbox().intersects(player.getHitbox()) || (player.getHitbox().contains(tempP.getHitbox())))) {
+					 player.hit(tempP.getDamage());
+					 tempP.setRemoved(true);
+				 }
 			}
 		}
 	}
@@ -317,6 +345,14 @@ public abstract class LevelState extends GameState{
 		return false; 
 	}
 	
+	private void checkDayNightCycle() {
+		
+	}
+	
+	private void renderDayNightCycle(Graphics2D g) {
+		
+	}
+	
 	//absract methods
 	public abstract void checkRightClickInteractions();
 	public abstract void initSpawn();
@@ -383,6 +419,9 @@ public abstract class LevelState extends GameState{
 	}
 	public void addProjectile(Projectile p) {
 		projectiles.add(p);
+	}
+	public void addEnemyProjectile(Projectile p) {
+		enemyProjectiles.add(p);
 	}
 	public void addMob(Mob m) {
 		enemies.add(m);

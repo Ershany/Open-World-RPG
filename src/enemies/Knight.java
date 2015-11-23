@@ -11,14 +11,15 @@ import tilemap.Tilemap;
 import util.Vector2f;
 import animate.EnemyAnimate;
 import entity.Mob;
+import entity.Player;
 import gamestatemanager.LevelState;
 import gfx.Sprite;
 
 public class Knight extends Mob {
 
-	public static final int AGGRO_RANGE = 10;
+	public static final int AGGRO_RANGE = 30;
 	
-	private int xpWorth = 50;
+	private int xpWorth;
 	private EnemyAnimate animate;
 	
 	public float[] xVals, yVals;
@@ -35,12 +36,13 @@ public class Knight extends Mob {
 	public void init() {
 		health = level * 10;
 		currentHealth = health;
-		damage = level * 2 + 1;
+		damage = level * 1;
 		rangedDamage = 0;
-		speed = 2.3f; //should be 3.0f
+		speed = 3.2f;
 		width = 32;
 		height = 32;
 		name = "Knight";
+		xpWorth = 100 + (level * 20);
 		
 		hitbox = new Rectangle(width, height);
 		hitbox.x = (int)x; hitbox.y = (int)y;
@@ -79,12 +81,15 @@ public class Knight extends Mob {
 			
 			checkMovement();
 			
+			checkHit();
+			
 			animate.update();
 		}
 	}
 	
 	@Override
 	public void render(Graphics2D g) {
+		//rendering path
 		if(path != null) {
 			for(int i = 0; i < path.size(); i++) {
 				g.setColor(Color.red);
@@ -101,7 +106,7 @@ public class Knight extends Mob {
 		currentTick++;
 		if(currentTick > 100000) currentTick = 0;
 		
-		if(currentTick % 30 == 0) {
+		if(currentTick % 30 == 0 && !currentState.getPlayer().getShip().active) {
 			int px = (int)currentState.getPlayer().getX() / 32;
 			int py = (int)currentState.getPlayer().getY() / 32; 
 			
@@ -121,15 +126,16 @@ public class Knight extends Mob {
 			
 			if(currentNode > path.size()) currentNode = path.size();
 			Vector2f placeToMove = path.get(path.size() - currentNode).tile;
+			Vector2f placeToLook = path.get(0).tile;
 			
 			//if the mob makes it close to the node, move to the next node
 			if(Math.abs((placeToMove.getX() * 32)  - x) <= 5 && Math.abs((placeToMove.getY() * 32) - y) <= 5) {
-				//only move to the next node, if currentNode doesnt surpass or equal the size of the array
+				//only move to the next node, if currentNode doesn't surpass or equal the size of the array
 				if(path.size() > currentNode)
 					currentNode++;
 			}
 			
-			if(placeToMove.getX() * 32 > x) {
+			/*if(placeToMove.getX() * 32 > x) {
 				move(speed, 0);
 				moveRight = true;
 				moveLeft = false;
@@ -148,6 +154,43 @@ public class Knight extends Mob {
 				move(0, -speed);
 				moveUp = true;
 				moveDown = false;
+			}*/
+			if(placeToMove.getX() > x / 32) {
+				move(speed, 0);
+			} 
+			if(placeToMove.getX()  < x / 32) {
+				move(-speed, 0);
+			}
+			if(placeToMove.getY()  > y / 32) {
+				move(0, speed);
+			} 
+			if(placeToMove.getY() < y / 32) {
+				move(0, -speed);
+			}
+			
+			if(placeToLook.getX() > (int)(x / 32)) {
+				moveRight = true;
+				moveLeft = false;
+				moveUp = false;
+				moveDown = false;
+			} 
+			if(placeToLook.getX()  < (int)(x / 32)) {
+				moveLeft = true;
+				moveRight = false;
+				moveUp = false;
+				moveDown = false;
+			}
+			if(placeToLook.getY()  > (int)(y / 32)) {
+				moveDown = true;
+				moveUp = false;
+				moveLeft = false;
+				moveRight = false;
+			} 
+			if(placeToLook.getY() < (int)(y / 32)) {
+				moveUp = true;
+				moveDown = false;
+				moveLeft = false;
+				moveRight = false;
 			}
 		}
 	}
@@ -176,6 +219,12 @@ public class Knight extends Mob {
 			dying = true;
 			
 			currentState.getPlayer().giveXp(xpWorth);
+		}
+	}
+	
+	private void checkHit() {
+		if(hitbox.intersects(currentState.getPlayer().getHitbox())) {
+			currentState.getPlayer().hit(damage);
 		}
 	}
 

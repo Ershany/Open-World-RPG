@@ -30,5 +30,6 @@ public abstract class Boss extends Mob {
 	}
 	
 	public abstract void projectileHit(Projectile p);
+	public abstract void stun(int stunTimer);
 
 }

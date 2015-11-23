@@ -5,6 +5,7 @@ import gamestatemanager.GameStateManager;
 import gamestatemanager.LevelState;
 import input.MouseMaster;
 import npc.KingNPC;
+import sfx.AudioPlayer;
 import tiles.InterchangeableDoorTile;
 import tiles.Tile;
 
@@ -36,6 +37,7 @@ public class StartingIslandState extends LevelState {
 					Math.abs((player.getY() + player.getHeight() / 2) - ((tile.getY() << 5) + 16)) <= 48) {
 					//inform the player class that the state is changing
 					player.changeInstance();
+					AudioPlayer.gameTheme.stop();
 					gsm.getStates().pop();
 					gsm.getStates().push(new KronosLairState(gsm));
 				}
@@ -46,7 +48,7 @@ public class StartingIslandState extends LevelState {
 	@Override
 	public void initSpawn() {
 		npcs.add(new KingNPC(32 * 138, 32 * 50, 10, this, tilemap));
-		enemies.add(new Knight(32 * 130, 32 * 50, 5, this, tilemap));
+		enemies.add(new Knight(32 * 150, 32 * 50, 1, this, tilemap));
 	}
 	
 }

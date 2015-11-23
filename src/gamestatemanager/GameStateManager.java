@@ -17,8 +17,7 @@ public class GameStateManager {
 		this.g = g;
 		states = new Stack<GameState>();
 		
-		//states.push(new MenuState(this));
-		states.push(new MenuExampleState(this));
+		states.push(new SplashState(this));
 		
 	}
 

@@ -8,6 +8,15 @@ import javax.sound.sampled.FloatControl;
 
 public class AudioPlayer {
 	
+	public static AudioPlayer splashSound = new AudioPlayer("/sfx/Opening.mp3", false, Type.Effect);
+	public static AudioPlayer kronosGreeting = new AudioPlayer("/sfx/Kronos/PhaseOneKronos.mp3", false, Type.Effect);
+	public static AudioPlayer kronosExplain = new AudioPlayer("/sfx/Kronos/FinalPhaseKronos.mp3", false, Type.Effect);
+	public static AudioPlayer meleeSound = new AudioPlayer("/sfx/player/MeleeSwing.mp3", false, AudioPlayer.Type.Effect);
+	public static AudioPlayer rangedSound = new AudioPlayer("/sfx/player/Shoot.mp3", false, AudioPlayer.Type.Effect);
+	public static AudioPlayer kronosBattle = new AudioPlayer("/sfx/songs/Kronos Battle.mp3", true, AudioPlayer.Type.Music);
+	public static AudioPlayer menuMusic = new AudioPlayer("/sfx/songs/Menu.mp3", true, AudioPlayer.Type.Music);
+	public static AudioPlayer gameTheme = new AudioPlayer("/sfx/songs/GameTheme.mp3", true, AudioPlayer.Type.Music);
+	
 	//Options menu allows users to tune down the decibel levels of the sounds. The sounds will be organized into categorys
 	public enum Type {
 		Music, Effect;
@@ -15,9 +24,11 @@ public class AudioPlayer {
 	
 	private Clip clip;
 	private boolean loop;
+	private Type type;
 	
-	public AudioPlayer(String path, boolean loop) {
+	public AudioPlayer(String path, boolean loop, Type type) {
 		this.loop = loop;
+		this.type = type;
 		
 		try {
 			AudioInputStream ais = AudioSystem.getAudioInputStream(AudioPlayer.class.getResourceAsStream(path));
@@ -28,7 +39,8 @@ public class AudioPlayer {
 			clip = AudioSystem.getClip();
 			clip.open(dais);
 			FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-			gainControl.setValue(0.0f); //audio level
+			if(type == Type.Effect) gainControl.setValue(-5.0f);
+			else if(type == Type.Music) gainControl.setValue(-28.0f);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

@@ -12,25 +12,23 @@ import sfx.AudioPlayer;
 import tiles.Tile;
 
 public class MainMenu extends Menu {
-
-	private AudioPlayer music;
 	
 	public MainMenu(GameStateManager gsm) {
 		super(0, 0, Game.WIDTH, Game.HEIGHT, gsm);
-		music = new AudioPlayer("/sfx/songs/Menu.mp3", true);
-		music.play();
+		
+		AudioPlayer.menuMusic.stop();
+		AudioPlayer.menuMusic.play();
 	}
 
 	@Override
 	protected void buildButtons() {
 		Button play = new Button(gsm, "Play") {
 			@Override
-			public void doAction() {
-				//stop the music
-				music.stop();
+			public void doAction() {	
+				AudioPlayer.menuMusic.stop();
+				AudioPlayer.gameTheme.play();
 				
-				//gsm.getStates().push(new DevTestState(gsm));
-				gsm.getStates().push(new StartingIslandState(gsm, 134 * Tile.TILESIZE, 58 * Tile.TILESIZE));
+				gsm.getStates().push(new StartingIslandState(gsm, 144 * Tile.TILESIZE, 58 * Tile.TILESIZE));
 			}
 		};
 		Button settings = new Button(gsm, "Settings") {
@@ -48,6 +46,10 @@ public class MainMenu extends Menu {
 		Button credits = new Button(gsm, "Credits") {
 			@Override
 			public void doAction() {
+				AudioPlayer.menuMusic.stop();
+				Game.frame.setVisible(false);
+				Game.currentGame.toRestart = true;
+				Game.currentGame.running = false;
 			}
 		};
 		Button quit = new Button(gsm, "Quit") {
