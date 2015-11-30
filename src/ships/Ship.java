@@ -26,41 +26,11 @@ public abstract class Ship {
 		float[] newYVals = player.getYVals();
 		
 		if (!(player.getTileMap().getTile((int) (newX +  testSpeedX), (int)(newY + testSpeedY)) instanceof WaterTile)) {
-			if(!player.getTileMap().getTile((int)(newX + testSpeedX), (int)(newY + testSpeedY)).getSolid()) {
-				if(testSpeedX < 0) {
-					testSpeedX = -48f;
-				} else if(testSpeedX > 0) {
-					testSpeedX = 48f;
-				}
-				if(testSpeedY < 0) {
-					testSpeedY = -72f;
-				} else if(testSpeedY > 0) {
-					testSpeedY = 72f;
-				}
-				player.getShip().active = false;
-			}
-			else {
-				return;
-			}
+			return;
 		}
 		for (int i = 0; i<= newXVals.length-1; i++) {
 			if (!(player.getTileMap().getTile((int) (newXVals[i] +  testSpeedX), (int)(newYVals[i] + testSpeedY)) instanceof WaterTile)) {
-				if(!player.getTileMap().getTile((int)(newXVals[i] + testSpeedX), (int)(newYVals[i] + testSpeedY)).getSolid()) {
-					if(testSpeedX < 0) {
-						testSpeedX = -48f;
-					} else if(testSpeedX > 0) {
-						testSpeedX = 48f;
-					}
-					if(testSpeedY < 0) {
-						testSpeedY = -72f;
-					} else if(testSpeedY > 0) {
-						testSpeedY = 72f;
-					}
-					player.getShip().active = false;
-				}
-				else {
-					return;
-				}
+				return;
 			}
 		}
 		

@@ -19,21 +19,21 @@ public class ShipAnimate {
 	public ShipAnimate(Player player, BufferedImage[] images) {
 		this.player = player;
 		this.images = images; 
-		currentSprite = images[4];
+		currentSprite = images[8];
 	}
 	
 	public void update() {
-		if(player.getMoveRight()) {
-			currentSprite = images[7];
-		}
-		if(player.getMoveLeft()) {
-			currentSprite = images[10];
-		}
 		if(player.getMoveUp()) {
-			currentSprite = images[1];
+			
 		}
 		if(player.getMoveDown()) {
-			currentSprite = images[4];
+			
+		}
+		if(player.getMoveRight()) {
+			
+		}
+		if(player.getMoveLeft()) {
+			
 		}
 	}
 	
