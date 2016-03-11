@@ -169,6 +169,9 @@ public class Sprite {
 	public static Sprite basicShipMoveDown1 = new Sprite(0, 3, Spritesheet.basicShipSheet);
 	public static Sprite basicShipMoveDown2 = new Sprite(2, 3, Spritesheet.basicShipSheet);
 	
+	//environment
+	public static Sprite tree1 = new Sprite("/sprites/environment/tree1.png");
+	
 	
 	private Spritesheet sheet;
 	private BufferedImage sprite;

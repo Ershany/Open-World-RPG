@@ -13,6 +13,7 @@ import java.util.Random;
 import boss.Boss;
 import projectile.Projectile;
 import spawners.SlimeSpawner;
+import tilemap.EnvironmentHandler;
 import tilemap.Node;
 import tilemap.Tilemap;
 import tiles.InterchangeableDoorTile;
@@ -34,6 +35,7 @@ public abstract class LevelState extends GameState{
 	//container
 	protected PauseMenu pauseMenu;
 	protected TextBoxMaster currentTextBox; //used to output text onto the screen
+	protected EnvironmentHandler environment;
 	
 	protected String mapName;
 	
@@ -98,6 +100,7 @@ public abstract class LevelState extends GameState{
 	public void render(Graphics2D g) {
 		tilemap.render(g);
 		renderLists(g);
+		renderEnvironment(g, tilemap.getXOffset(), tilemap.getYOffset());
 		player.render(g);
 		renderDayNightCycle(g);
 		
@@ -351,6 +354,12 @@ public abstract class LevelState extends GameState{
 	
 	private void renderDayNightCycle(Graphics2D g) {
 		
+	}
+	
+	private void renderEnvironment(Graphics2D g, int xOffset, int yOffset) {
+		if(environment != null) {
+			environment.render(g, xOffset, yOffset);
+		}
 	}
 	
 	//absract methods

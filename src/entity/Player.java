@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 
 import animate.PlayerAnimate;
 import game.Game;
+import game.Settings;
 import gameplaystates.StartingIslandState;
 import gamestatemanager.LevelState;
 import gfx.Sprite;
@@ -355,6 +356,7 @@ public class Player extends Mob {
 		currentTilemap.setYOffset((int)y - (Game.HEIGHT / 2) + (height / 2));
 	}
 	
+
 	
 	private void checkShooting() {
 		//firstly ensure we are in range form, if not get out of this method

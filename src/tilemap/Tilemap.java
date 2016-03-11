@@ -187,15 +187,13 @@ public class Tilemap {
 		return tiles[(x / Tile.TILESIZE) + (y / Tile.TILESIZE) * width];
 	}
 
-	// setters
+	// setters 
 	public void setXOffset(int newOffset) {
 		xOffset = newOffset;
 	}
-
 	public void setYOffset(int newOffset) {
 		yOffset = newOffset;
 	}
-
 	public void addOffset(int xOffset, int yOffset) {
 		this.xOffset += xOffset;
 		this.yOffset += yOffset;

@@ -1,3 +1,19 @@
 
+/gfx/
+/hud/
+/input/
+/io/
+/npc/
+/projectile/
+/sfx/
 /ships/
-/animate/
+/spawners/
+/tilemap/
+/tiles/
+/ui/
+/util/
+/sprites/
+/entity/
+/gameplaystates/
+/gamestatemanager/
+/spawns/
