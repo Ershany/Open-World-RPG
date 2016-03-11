@@ -26,13 +26,23 @@ public class EnvironmentHandler {
 	
 	private void init() {
 		//load trees (Make it read out of a file instead)
-		trees = new Vector2f[6];
+		trees = new Vector2f[16];
 		trees[0] = new Vector2f(131 << 5, 62 << 5);
 		trees[1] = new Vector2f(141 << 5, 49 << 5);
 		trees[2] = new Vector2f(126 << 5, 48 << 5);
 		trees[3] = new Vector2f(129 << 5, 67 << 5);
 		trees[4] = new Vector2f(162 << 5, 65 << 5);
 		trees[5] = new Vector2f(123 << 5, 32 << 5);
+		trees[6] = new Vector2f(198 << 5, 61 << 5);
+		trees[7] = new Vector2f(226 << 5, 67 << 5);
+		trees[8] = new Vector2f(260 << 5, 47 << 5);
+		trees[9] = new Vector2f(270 << 5, 67 << 5);
+		trees[10] = new Vector2f(253 << 5, 105 << 5);
+		trees[11] = new Vector2f(262 << 5, 127 << 5);
+		trees[12] = new Vector2f(266 << 5, 188 << 5);
+		trees[13] = new Vector2f(202 << 5, 186 << 5);
+		trees[14] = new Vector2f(135 << 5, 185 << 5);
+		trees[15] = new Vector2f(113 << 5, 193 << 5);
 	}
 	
 	public void render(Graphics2D g, int xOffset, int yOffset) {

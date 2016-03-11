@@ -23,7 +23,7 @@ public class Tilemap {
 	private BufferedImage map;
 	private int width, height;
 	private String path;
-	private Tile[] tiles;
+	private Tile[][] tiles;
 	private int[] pixels;
 
 	private int xOffset;
@@ -43,7 +43,7 @@ public class Tilemap {
 			map = ImageIO.read(Tilemap.class.getResourceAsStream(path));
 			width = map.getWidth();
 			height = map.getHeight();
-			tiles = new Tile[width * height];
+			tiles = new Tile[height][width];
 			pixels = map.getRGB(0, 0, width, height, null, 0, width);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -113,53 +113,40 @@ public class Tilemap {
 				case 0xFF260E00:
 					toPlace = new InterchangeableHillTile(x, y, Sprite.dungeonRock.getImage(), "Dungeon Rock");
 					break;
+				case 0xFF00FF21:
+					toPlace = new InterchangeableWallTile(x, y, Sprite.woodFence.getImage());
+					break;
+				case 0xFFFF6219:
+					toPlace = new InterchangeableFloorTile(x, y, Sprite.woodBridge.getImage());
+					break;
 				default:
 					toPlace = new NullTile(x, y, null);
 					break;
 				}
-				tiles[loc] = toPlace;
+				tiles[y][x] = toPlace;
 			}
 		}
 	}
 
 	public void update() {
-		for (int i = 0; i < tiles.length; i++) {
-			tiles[i].update();
+		for(int y = 0; y < height; y++) {
+			for(int x = 0; x < width; x++) {
+				tiles[y][x].update();
+			}
 		}
 	}
 
-	public void render(Graphics2D g) {
-		// optimized rendering
-		// it does not iterate through the whole array, instead it closer to
-		// your position
-		// it also will not render anything off of the screen
-		for (int i = (xOffset / Tile.TILESIZE) + (yOffset / Tile.TILESIZE)
-				* width; i < ((xOffset + Game.WIDTH + 50) / Tile.TILESIZE + (yOffset
-				+ Game.HEIGHT + 50)
-				/ Tile.TILESIZE * width); i++) {
-			try {
-				if (tiles[i].getX() * Tile.TILESIZE < xOffset - 32)
-					continue;
-				if (tiles[i].getX() * Tile.TILESIZE > xOffset + Game.WIDTH + 0)
-					continue;
-				if (tiles[i].getY() * Tile.TILESIZE < yOffset - 32)
-					continue;
-				if (tiles[i].getY() * Tile.TILESIZE > yOffset + Game.HEIGHT
-						+ 0)
-					continue;
-			} catch (ArrayIndexOutOfBoundsException e) {
-				continue;
+	public void render(Graphics2D g) {	
+		for(int y = yOffset >> 5; y < (yOffset >> 5) + (Game.HEIGHT >> 5) + 2; y++) {
+			for(int x = xOffset >> 5; x < (xOffset >> 5) + (Game.WIDTH >> 5) + 2; x++) {
+				tiles[y][x].render(xOffset, yOffset, g);
 			}
-
-			// if it made it to this point, render the tile as it is on the
-			// screen
-			tiles[i].render(xOffset, yOffset, g);
 		}
 	}
 	
 	//tile precision
 	public void changeTile(int x, int y, Tile tile) {
-		tiles[x + y * width] = tile;
+		tiles[y][x] = tile;
 	}
 
 	// getters
@@ -172,7 +159,7 @@ public class Tilemap {
 	public int[] getPixels() {
 		return pixels;
 	}
-	public Tile[] getTiles() {
+	public Tile[][] getTiles() {
 		return tiles;
 	}
 	public int getWidth() {
@@ -184,7 +171,7 @@ public class Tilemap {
 
 	// pass in pixel precision x and y
 	public Tile getTile(int x, int y) {
-		return tiles[(x / Tile.TILESIZE) + (y / Tile.TILESIZE) * width];
+		return tiles[y >> 5][x >> 5];
 	}
 
 	// setters 

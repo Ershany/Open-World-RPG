@@ -155,7 +155,7 @@ public class Game extends Canvas implements Runnable {
 		bs = getBufferStrategy();
 		if (bs == null) {
 			requestFocus();
-			createBufferStrategy(3);
+			createBufferStrategy(2);
 			return;
 		}
 

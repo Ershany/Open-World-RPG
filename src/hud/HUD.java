@@ -43,7 +43,7 @@ public class HUD {
 	private BufferedImage minimapOutline;
 	private int minimapX, minimapY;
 	private Tile[] minimapTiles;
-	private Tile[] currentTiles;
+	private Tile[][] currentTiles;
 	private int minimapDepth = 5;
 	private int widthAndHeight = 40;
 	
@@ -129,7 +129,7 @@ public class HUD {
 		if(tilemapWidth != player.getTileMap().getWidth()) tilemapWidth = player.getTileMap().getWidth();
 		for(int y = 0; y < widthAndHeight; y++) {
 			for(int x = 0; x < widthAndHeight; x++) {
-				minimapTiles[x + y * widthAndHeight] = currentTiles[(int)((player.getX() / 32) + x - (widthAndHeight / 2)) + (int)((player.getY() / 32) + y - (widthAndHeight / 2)) * tilemapWidth];
+				minimapTiles[x + y * widthAndHeight] = currentTiles[y + (((int)(player.getY() - Game.HEIGHT / 2) >> 5) - 2)][x + (((int)(player.getX() - (Game.WIDTH / 2)) >> 5) + 10)]; 
 			}
 		}
 		

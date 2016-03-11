@@ -36,9 +36,14 @@ public class WisemanNPC extends Mob {
 		name = "Wiseman";
 		//info = new String[] {"Be aware of the king and his henchmen!",
 							 //"They can get away with anything they want..."};
-		info = new String[] {"Our poor island is doomed because of that beast!",
-							 "Some think he lives in a cave on our island.",
-							 "I don't know what to believe."};
+		info = new String[] {"                            Our poor island is doomed because of that beast!",
+							 "                            Some think he lives in a cave on our island.",
+							 "                            I don't know what to believe.",
+							 "                            Will you help us?",
+							 "",
+							 "                                              1: Yes I will slay that beast!",
+							 "                                              2: No, goodluck.",
+							 "                                              3: Maybe for a reward."};
 		
 		hitbox = new Rectangle(width, height);
 		hitbox.x = (int)x; hitbox.y = (int)y;

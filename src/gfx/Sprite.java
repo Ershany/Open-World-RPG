@@ -108,6 +108,8 @@ public class Sprite {
 	public static Sprite redBrick = new Sprite(3, 0, Spritesheet.tileSheet);
 	public static Sprite woodFloor = new Sprite(4, 0, Spritesheet.tileSheet);
 	public static Sprite stoneFloor = new Sprite(5, 0, Spritesheet.tileSheet);
+	public static Sprite woodFence = new Sprite(6, 0, Spritesheet.tileSheet);
+	public static Sprite woodBridge = new Sprite(7, 0, Spritesheet.tileSheet);
 	
 	public static Sprite water1 = new Sprite(0, 1, Spritesheet.tileSheet);
 	public static Sprite water2 = new Sprite(1, 1, Spritesheet.tileSheet);
