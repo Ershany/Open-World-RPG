@@ -18,8 +18,9 @@ import util.CursorManager;
 
 public class Game extends Canvas implements Runnable {
 
-	//TODO : Cleanup. So. Much Cleanup.
 	public static int WIDTH, HEIGHT;
+	public static boolean multiplayer;
+	public static boolean hosting;
 	
 	public static JFrame frame;
 	public volatile boolean running;
@@ -117,16 +118,16 @@ public class Game extends Canvas implements Runnable {
 			
 			if (delta >= 1) {
 				delta--;
-				//frames++;
+				frames++;
 				updates++;
 
 				update();
-				//render();
-				//renderToScreen();
+				render();
+				renderToScreen();
 			}
-			frames++; // temp for testing FPS
-			render(); // temp for testing FPS
-			renderToScreen(); // temp for testing FPS
+			//frames++; // temp for testing FPS
+			//render(); // temp for testing FPS
+			//renderToScreen(); // temp for testing FPS
 			if (System.currentTimeMillis() - timer >= 1000) {
 				System.out.println("FPS:" + frames + "  UPS:" + updates);
 				updates = 0;

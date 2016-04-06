@@ -120,6 +120,7 @@ public class Knight extends Mob {
 	}
 	
 	private int currentNode = 1;
+	private float prevX, prevY;
 	private void checkMovement() {
 		if(path != null) {
 			if(path.size() == 0) return;
@@ -135,26 +136,9 @@ public class Knight extends Mob {
 					currentNode++;
 			}
 			
-			/*if(placeToMove.getX() * 32 > x) {
-				move(speed, 0);
-				moveRight = true;
-				moveLeft = false;
-			} 
-			if(placeToMove.getX() * 32 < x) {
-				move(-speed, 0);
-				moveLeft = true;
-				moveRight = false;
-			}
-			if(placeToMove.getY() * 32 > y) {
-				move(0, speed);
-				moveDown = true;
-				moveUp = false;
-			} 
-			if(placeToMove.getY() * 32 < y) {
-				move(0, -speed);
-				moveUp = true;
-				moveDown = false;
-			}*/
+			prevX = x;
+			prevY = y;
+			
 			if(placeToMove.getX() > x / 32) {
 				move(speed, 0);
 			} 
@@ -168,29 +152,21 @@ public class Knight extends Mob {
 				move(0, -speed);
 			}
 			
-			if(placeToLook.getX() > (int)(x / 32)) {
-				moveRight = true;
-				moveLeft = false;
-				moveUp = false;
-				moveDown = false;
-			} 
-			if(placeToLook.getX()  < (int)(x / 32)) {
+			moveUp = false;
+			moveDown = false;
+			moveRight = false;
+			moveLeft = false;
+			if(prevX > x) {
 				moveLeft = true;
-				moveRight = false;
-				moveUp = false;
-				moveDown = false;
 			}
-			if(placeToLook.getY()  > (int)(y / 32)) {
-				moveDown = true;
-				moveUp = false;
-				moveLeft = false;
-				moveRight = false;
-			} 
-			if(placeToLook.getY() < (int)(y / 32)) {
+			else if(prevX < x) {
+				moveRight = true;
+			}
+			if(prevY > y) {
 				moveUp = true;
-				moveDown = false;
-				moveLeft = false;
-				moveRight = false;
+			}
+			else if(prevY < y) {
+				moveDown = true;
 			}
 		}
 	}

@@ -1,4 +1,11 @@
 
+/animate/
+/boss/
+/enemies/
+/entity/
+/game/
+/gameplaystates/
+/gamestatemanager/
 /gfx/
 /hud/
 /input/
@@ -8,15 +15,9 @@
 /sfx/
 /ships/
 /spawners/
+/sprites/
 /tilemap/
 /tiles/
 /ui/
 /util/
-/sprites/
-/entity/
-/gameplaystates/
-/gamestatemanager/
-/spawns/
-/game/
-/animate/
-/maps/
+/network/

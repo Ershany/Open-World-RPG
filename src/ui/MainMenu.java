@@ -8,6 +8,8 @@ import gamestatemanager.SettingsState;
 
 import java.awt.Color;
 
+import javax.swing.JOptionPane;
+
 import sfx.AudioPlayer;
 import tiles.Tile;
 
@@ -29,6 +31,36 @@ public class MainMenu extends Menu {
 				AudioPlayer.gameTheme.play();
 				
 				gsm.getStates().push(new StartingIslandState(gsm, 144 * Tile.TILESIZE, 58 * Tile.TILESIZE));
+			}
+		};
+		Button multiplayer = new Button(gsm, "Multiplayer") {
+			@Override
+			public void doAction() {
+				Button host = new Button(gsm, "Host") {
+					@Override
+					public void doAction() {
+						Game.multiplayer = true;
+						Game.hosting = true;
+						gsm.instantiateMultiplayer("");
+						
+						AudioPlayer.menuMusic.stop();
+						AudioPlayer.gameTheme.play();
+						gsm.getStates().push(new StartingIslandState(gsm, 144 * Tile.TILESIZE, 58 * Tile.TILESIZE));
+					}
+				};
+				Button join = new Button(gsm, "Join") {
+					@Override
+					public void doAction() {
+						Game.multiplayer = true;
+						String ip = JOptionPane.showInputDialog("Enter the IP of the server you want to connect to");
+						gsm.instantiateMultiplayer(ip);
+						
+						AudioPlayer.menuMusic.stop();
+						AudioPlayer.gameTheme.play();
+						gsm.getStates().push(new StartingIslandState(gsm, 144 * Tile.TILESIZE, 58 * Tile.TILESIZE));
+					}
+				};
+				buttons = new Button[] { host, join };
 			}
 		};
 		Button settings = new Button(gsm, "Settings") {
@@ -59,7 +91,7 @@ public class MainMenu extends Menu {
 			}
 		};
 
-		buttons = new Button[] { play, settings, controls, credits, quit };
+		buttons = new Button[] { play, multiplayer, settings, controls, credits, quit };
 
 	}
 
