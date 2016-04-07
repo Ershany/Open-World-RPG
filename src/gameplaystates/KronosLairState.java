@@ -1,6 +1,7 @@
 package gameplaystates;
 
 import boss.Kronos;
+import game.Game;
 import gamestatemanager.GameStateManager;
 import gamestatemanager.LevelState;
 import gamestatemanager.LudumDareEndingState;
@@ -38,7 +39,9 @@ public class KronosLairState extends LevelState {
 
 	@Override
 	public void initSpawn() {
-		addBoss(new Kronos(32 * 59 - 16, 32 * 97, this, tilemap));
+		if(Game.hosting || !Game.multiplayer) {
+			addBoss(new Kronos(32 * 59 - 16, 32 * 97, this, tilemap));
+		}
 	}
 
 }

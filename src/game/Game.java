@@ -129,7 +129,7 @@ public class Game extends Canvas implements Runnable {
 			//render(); // temp for testing FPS
 			//renderToScreen(); // temp for testing FPS
 			if (System.currentTimeMillis() - timer >= 1000) {
-				System.out.println("FPS:" + frames + "  UPS:" + updates);
+				//System.out.println("FPS:" + frames + "  UPS:" + updates);
 				updates = 0;
 				frames = 0;
 				timer += 1000;

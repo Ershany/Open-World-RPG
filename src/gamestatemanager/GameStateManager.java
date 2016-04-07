@@ -16,8 +16,8 @@ public class GameStateManager {
 	private Stack<GameState> states;
 	
 	// The player will be only one of these
-	private GameClient client;
-	private GameServer server;
+	public GameClient client;
+	public GameServer server;
 
 	public GameStateManager(Graphics2D g) {
 		this.g = g;
@@ -30,12 +30,11 @@ public class GameStateManager {
 	public void instantiateMultiplayer(String serverIP) {
 		if(Game.multiplayer && Game.hosting) {
 			server = new GameServer(this);
-			server.start();
+			System.out.println("Host");
 		}
 		else if(Game.multiplayer) {
 			client = new GameClient(this, serverIP);
-			client.start();
-			client.sendData(new String("ping").getBytes());
+			System.out.println("Client");
 		}
 	}
 

@@ -1,6 +1,7 @@
 package gameplaystates;
 
 import enemies.Knight;
+import game.Game;
 import gamestatemanager.GameStateManager;
 import gamestatemanager.LevelState;
 import input.MouseMaster;
@@ -50,8 +51,10 @@ public class StartingIslandState extends LevelState {
 	public void initSpawn() {
 		environment = new EnvironmentHandler(player, "\\spawns\\startingIslandTrees.txt");
 		
-		npcs.add(new KingNPC(32 * 138, 32 * 50, 10, this, tilemap));
-		enemies.add(new Knight(32 * 150, 32 * 50, 1, this, tilemap));
+		if(Game.hosting || !Game.multiplayer) {
+			npcs.add(new KingNPC(32 * 138, 32 * 50, 10, this, tilemap));
+			enemies.add(new Knight(32 * 150, 32 * 50, 1, this, tilemap));
+		}
 	}
 	
 }

@@ -10,14 +10,13 @@
 /hud/
 /input/
 /io/
+/network/
 /npc/
 /projectile/
 /sfx/
 /ships/
 /spawners/
-/sprites/
 /tilemap/
 /tiles/
 /ui/
 /util/
-/network/

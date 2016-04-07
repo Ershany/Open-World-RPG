@@ -1,5 +1,6 @@
 package gameplaystates;
 
+import game.Game;
 import gamestatemanager.GameStateManager;
 import gamestatemanager.LevelState;
 import input.MouseMaster;
@@ -35,7 +36,9 @@ public class WiseManHouseState extends LevelState {
 	
 	@Override
 	public void initSpawn() {
-		npcs.add(new WisemanNPC(32 * 48, 32 * 32, 1, this, tilemap));
+		if(Game.hosting || !Game.multiplayer) {
+			npcs.add(new WisemanNPC(32 * 48, 32 * 32, 1, this, tilemap));
+		}
 	}
 
 }

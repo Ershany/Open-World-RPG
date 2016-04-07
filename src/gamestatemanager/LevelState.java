@@ -1,7 +1,5 @@
 package gamestatemanager;
 
-import input.MouseMaster;
-
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -11,6 +9,14 @@ import java.util.List;
 import java.util.Random;
 
 import boss.Boss;
+import enemies.Slime;
+import entity.Entity;
+import entity.Mob;
+import entity.OnlinePlayer;
+import entity.Player;
+import game.Game;
+import gfx.Particle;
+import input.MouseMaster;
 import projectile.Projectile;
 import spawners.SlimeSpawner;
 import tilemap.EnvironmentHandler;
@@ -22,13 +28,6 @@ import ui.PauseMenu;
 import util.CursorManager;
 import util.TextBoxMaster;
 import util.Vector2f;
-import enemies.Slime;
-import entity.Entity;
-import entity.Mob;
-import entity.Player;
-import game.Game;
-import game.Settings;
-import gfx.Particle;
 
 public abstract class LevelState extends GameState{
 
@@ -48,6 +47,8 @@ public abstract class LevelState extends GameState{
 	protected List<Mob> enemies = new ArrayList<Mob>();
 	protected List<Mob> npcs = new ArrayList<Mob>();
 	protected List<Boss> bosses = new ArrayList<Boss>();
+	
+	public OnlinePlayer onlinePlayer;
 	
 	//spawners
 	private Random random = new Random();
@@ -70,6 +71,10 @@ public abstract class LevelState extends GameState{
 		player = new Player(xSpawn, ySpawn, this, tilemap);
 		pauseMenu = new PauseMenu(gsm, this, player.getLevelData());
 		
+		if(Game.multiplayer) {
+			onlinePlayer = new OnlinePlayer(-100, -100);
+		}
+		
 		init();
 		initSpawn();
 	}
@@ -89,11 +94,17 @@ public abstract class LevelState extends GameState{
 			checkBulletHit();
 			updateLists();
 			checkRemoved();
-			spawners();
+			if(Game.hosting || !Game.multiplayer) {
+				spawners();
+			}
 			checkCursor();
 			checkRightClickInteractions();
 			checkDayNightCycle();
 		}
+		if(onlinePlayer != null) {
+			onlinePlayer.update();
+		}
+		networkInfo();
 	}
 	
 	@Override
@@ -101,6 +112,9 @@ public abstract class LevelState extends GameState{
 		tilemap.render(g);
 		renderLists(g);
 		renderEnvironment(g, tilemap.getXOffset(), tilemap.getYOffset());
+		if(onlinePlayer != null) {
+			onlinePlayer.render(tilemap.getXOffset(), tilemap.getYOffset(), g);
+		}
 		player.render(g);
 		renderDayNightCycle(g);
 		
@@ -109,6 +123,24 @@ public abstract class LevelState extends GameState{
 		}
 		if (paused) {
 			pauseMenu.render(g);
+		}
+	}
+	
+	private int packetTimer = 0;
+	private int packetSpeed = 5; // lower value means more packets get sent
+	private void networkInfo() {
+		packetTimer++;
+		
+		if(packetTimer > packetSpeed) {
+			if(Game.multiplayer && Game.hosting) {
+				gsm.server.sendData(new String("player-" + player.getX() + "-" + player.getY()).getBytes());
+			}
+			else if(Game.multiplayer) {
+				gsm.client.sendData(new String("player-" + player.getX() + "-" + player.getY()).getBytes());
+			}
+			
+			// Reset packetTimer
+			packetTimer = 0;
 		}
 	}
 	
@@ -377,6 +409,7 @@ public abstract class LevelState extends GameState{
 		}
 		if(k == KeyEvent.VK_P || k == KeyEvent.VK_ESCAPE) {
 			paused = !paused;
+
 		}
 		if(k == KeyEvent.VK_SPACE) {
 			currentTextBox = null;
