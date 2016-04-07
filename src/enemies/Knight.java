@@ -90,13 +90,13 @@ public class Knight extends Mob {
 	@Override
 	public void render(Graphics2D g) {
 		//rendering path
-		if(path != null) {
+		/*if(path != null) {
 			for(int i = 0; i < path.size(); i++) {
 				g.setColor(Color.red);
 				Vector2f tempo = path.get(i).tile;
 				g.fillRect((int)(tempo.getX() * 32) - currentTilemap.getXOffset(), (int)(tempo.getY() * 32) - currentTilemap.getYOffset(), 32, 32);
 			}
-		}
+		}*/
 		
 		animate.render(g);
 	}

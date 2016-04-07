@@ -40,6 +40,7 @@ public abstract class LevelState extends GameState{
 	
 	protected Player player;
 	protected Tilemap tilemap;
+	public String levelName;
 	
 	protected List<Particle> particles = new ArrayList<Particle>();
 	protected List<Projectile> projectiles = new ArrayList<Projectile>();
@@ -133,10 +134,10 @@ public abstract class LevelState extends GameState{
 		
 		if(packetTimer > packetSpeed) {
 			if(Game.multiplayer && Game.hosting) {
-				gsm.server.sendData(new String("player-" + player.getX() + "-" + player.getY()).getBytes());
+				gsm.server.sendData(new String("player-" + player.getX() + "-" + player.getY() + "-" + System.currentTimeMillis() + "-" + levelName).getBytes());
 			}
 			else if(Game.multiplayer) {
-				gsm.client.sendData(new String("player-" + player.getX() + "-" + player.getY()).getBytes());
+				gsm.client.sendData(new String("player-" + player.getX() + "-" + player.getY() + "-" + System.currentTimeMillis() + "-" + levelName).getBytes());
 			}
 			
 			// Reset packetTimer

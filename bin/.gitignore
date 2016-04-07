@@ -1,22 +1,8 @@
 
-/animate/
-/boss/
-/enemies/
-/entity/
-/game/
-/gameplaystates/
-/gamestatemanager/
-/gfx/
-/hud/
-/input/
-/io/
 /network/
-/npc/
+/gamestatemanager/
+/entity/
 /projectile/
-/sfx/
-/ships/
-/spawners/
-/tilemap/
-/tiles/
-/ui/
-/util/
+/gameplaystates/
+/enemies/
+/hud/

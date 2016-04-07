@@ -6,6 +6,7 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import entity.Entity;
+import game.Game;
 import gamestatemanager.LevelState;
 import spawners.ParticleSpawner;
 import tilemap.Tilemap;
@@ -32,7 +33,8 @@ public class Projectile extends Entity {
 	//spawner for particles
 	private ParticleSpawner particleSpawner;
 	
-	public Projectile(float xOrig, float yOrig, float xDest, float yDest, int width, int height, float speed, int projectileLife, float damage, LevelState currentState) {
+	// networkProjectile is a boolean that you set to true if you want it to be sent accross the network
+	public Projectile(float xOrig, float yOrig, float xDest, float yDest, int width, int height, float speed, int projectileLife, float damage, LevelState currentState, boolean networkProjectile) {
 		super(xOrig, yOrig);
 		this.projectileLife = projectileLife;
 		this.damage = damage;
@@ -49,6 +51,13 @@ public class Projectile extends Entity {
 		tilemap = currentState.getTilemap();
 		
 		particleSpawner = new ParticleSpawner(currentState);
+		
+		// Send data across server (check if player is host or server)
+		if(networkProjectile && Game.multiplayer && Game.hosting) {
+			currentState.getGSM().server.sendData(("projectile-" + xOrig + "-" + yOrig + "-" + xDest + "-" + yDest + "-" + width + "-" + height + "-" + speed + "-" + projectileLife + "-" + currentState.levelName).getBytes());
+		} else if(networkProjectile && Game.multiplayer) {
+			currentState.getGSM().client.sendData(("projectile-" + xOrig + "-" + yOrig + "-" + xDest + "-" + yDest + "-" + width + "-" + height + "-" + speed + "-" + projectileLife + "-" + currentState.levelName).getBytes());
+		}
 	}
 	
 	public Projectile(float xOrig, float yOrig, float xDest, float yDest, float speed, int projectileLife, float damage, LevelState currentState, BufferedImage image) {

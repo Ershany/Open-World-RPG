@@ -23,6 +23,7 @@ public class OnlinePlayer {
 	private int currentSet = 0;    // 0 - down, 1 - up, 2 - right, 3 - left
 	private int currentSprite = 1; // 0 - walk1, 1 - idle, 2 - walk2
 	private boolean moving;
+	public boolean hide;
 	
 	public OnlinePlayer(float x, float y) {
 		this.x = x;
@@ -84,8 +85,8 @@ public class OnlinePlayer {
 	
 	
 	public void render(int xOffset, int yOffset, Graphics2D g) {
-		g.setColor(Color.BLACK);
-		g.drawImage(images[currentSet][currentSprite].getImage(), (int)(x - xOffset), (int)(y - yOffset), null);
+		if(!hide) 
+			g.drawImage(images[currentSet][currentSprite].getImage(), (int)(x - xOffset), (int)(y - yOffset), null);
 	}
 	
 }

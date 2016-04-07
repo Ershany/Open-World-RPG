@@ -8,8 +8,10 @@ import java.awt.image.BufferedImage;
 
 import animate.PlayerAnimate;
 import game.Game;
-import game.Settings;
+import gameplaystates.KronosLairState;
 import gameplaystates.StartingIslandState;
+import gameplaystates.WiseManHouseState;
+import gamestatemanager.GameState;
 import gamestatemanager.LevelState;
 import gfx.Sprite;
 import hud.HUD;
@@ -147,6 +149,7 @@ public class Player extends Mob {
 
 	@Override	
 	public void update() {
+		checkCurrentState();
 		if(dying) {
 			deathTimer--;
 			if(deathTimer == 0) {
@@ -269,6 +272,16 @@ public class Player extends Mob {
 		g.fillRect(MouseMaster.getMouseX() + 30, MouseMaster.getMouseY(), 3, (int)(0.25 * (shootCooldown - currentShootCooldown)));
 	}
 	
+	private void checkCurrentState() {
+		GameState temp = currentState.getGSM().getStates().peek();
+		if(temp instanceof KronosLairState) 
+			currentState.levelName = "kronoslair";
+		else if(temp instanceof StartingIslandState) 
+			currentState.levelName = "startingisland";
+		else if(temp instanceof WiseManHouseState) 
+			currentState.levelName = "wisemanhouse";
+	}
+	
 	//checks movement and also checks if you are entering the water (to transition to a boat)
 	private void move(float testSpeedX, float testSpeedY) {
 		if (currentTilemap.getTile((int) (x +  testSpeedX), (int)(y + testSpeedY)).getSolid()) {
@@ -367,7 +380,7 @@ public class Player extends Mob {
 			AudioPlayer.rangedSound.play();
 			
 			//pass in the xDest and yDest with the xOffsets and yOffsets
-			currentState.addProjectile(new Projectile(x + (width / 2), y + (height / 2), MouseMaster.getMouseX() + currentState.getTilemap().getXOffset(), MouseMaster.getMouseY() + currentState.getTilemap().getYOffset(), 3, 3, projectileSpeed, 240, rangedDamage, currentState));
+			currentState.addProjectile(new Projectile(x + (width / 2), y + (height / 2), MouseMaster.getMouseX() + currentState.getTilemap().getXOffset(), MouseMaster.getMouseY() + currentState.getTilemap().getYOffset(), 3, 3, projectileSpeed, 240, rangedDamage, currentState, true));
 			shouldShoot = false;
 		}
 	}
