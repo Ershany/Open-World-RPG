@@ -112,8 +112,6 @@ public class Sprite {
 	public static Sprite woodBridge = new Sprite(7, 0, Spritesheet.tileSheet);
 	
 	public static Sprite water1 = new Sprite(0, 1, Spritesheet.tileSheet);
-	public static Sprite water2 = new Sprite(1, 1, Spritesheet.tileSheet);
-	public static Sprite water3 = new Sprite(2, 1, Spritesheet.tileSheet);
 	
 	public static Sprite roof1 = new Sprite(0, 2, Spritesheet.tileSheet);
 	public static Sprite wall1 = new Sprite(1, 2, Spritesheet.tileSheet);

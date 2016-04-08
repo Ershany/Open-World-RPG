@@ -1,8 +1,2 @@
 
-/network/
-/gamestatemanager/
-/entity/
-/projectile/
-/gameplaystates/
-/enemies/
-/hud/
+/game/

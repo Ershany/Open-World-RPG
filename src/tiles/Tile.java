@@ -51,4 +51,13 @@ public abstract class Tile {
 	public String getType() {
 		return type;
 	}
+	
+	//setters
+	public void setSolid(boolean decide) {
+		solid = decide;
+	}
+	public void setProjectileSolid(boolean decide) {
+		projectileSolid = decide;
+	}
+	
 }

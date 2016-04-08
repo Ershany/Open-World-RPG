@@ -119,6 +119,9 @@ public class Tilemap {
 				case 0xFFFF6219:
 					toPlace = new InterchangeableFloorTile(x, y, Sprite.woodBridge.getImage());
 					break;
+				case 0xFF004968:
+					toPlace = new InterchangeableWallTile(x, y, Sprite.water1.getImage());
+					break;
 				default:
 					toPlace = new NullTile(x, y, null);
 					break;
@@ -129,11 +132,7 @@ public class Tilemap {
 	}
 
 	public void update() {
-		for(int y = 0; y < height; y++) {
-			for(int x = 0; x < width; x++) {
-				tiles[y][x].update();
-			}
-		}
+		
 	}
 
 	public void render(Graphics2D g) {	
