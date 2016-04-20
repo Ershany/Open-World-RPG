@@ -8,6 +8,7 @@ import java.util.Random;
 import animate.NPCAnimate;
 import tilemap.Tilemap;
 import entity.Mob;
+import game.Game;
 import gamestatemanager.LevelState;
 import gfx.Sprite;
 
@@ -71,32 +72,13 @@ public class WisemanNPC extends Mob {
 
 	@Override
 	public void update() {
-		checkMovement();
+		if(Game.hosting || !Game.multiplayer) {
+			super.setRandomMovement();
+		}
 		
 		doMovement();
 		
 		updateAnimate();
-	}
-	
-	private int decide;
-	private void checkMovement() {
-		if(random.nextInt(200) == 0) {
-			moveUp = false; moveDown = false; moveRight = false; moveLeft = false;
-			decide = random.nextInt(16) + 1;
-			if(decide % 2 == 0) return;
-			else {
-				switch(decide) {
-				case 1: moveUp = true; break;
-				case 3: moveDown = true; break;
-				case 5: moveRight = true; break;
-				case 7: moveLeft = true; break;
-				case 9: moveUp = true; moveRight = true; break;
-				case 11: moveUp = true; moveLeft = true; break;
-				case 13: moveDown = true; moveRight = true; break;
-				case 15: moveDown = true; moveLeft = true; break;
-				}
-			}
-		}
 	}
 	
 	private void doMovement() {

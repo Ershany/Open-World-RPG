@@ -73,7 +73,7 @@ public abstract class LevelState extends GameState{
 		pauseMenu = new PauseMenu(gsm, this, player.getLevelData());
 		
 		if(Game.multiplayer) {
-			onlinePlayer = new OnlinePlayer(-100, -100);
+			onlinePlayer = new OnlinePlayer(-100, -100, this);
 		}
 		
 		init();
@@ -127,16 +127,18 @@ public abstract class LevelState extends GameState{
 		}
 	}
 	
-	private int packetTimer = 0;
-	private int packetSpeed = 5; // lower value means more packets get sent
+	private int packetTimer = 0; // don't change this value
+	private int packetSpeed = 5; // lower value means more packets get sent per second
 	private void networkInfo() {
 		packetTimer++;
 		
 		if(packetTimer > packetSpeed) {
 			if(Game.multiplayer && Game.hosting) {
+				// Send Player Data
 				gsm.server.sendData(new String("player-" + player.getX() + "-" + player.getY() + "-" + System.currentTimeMillis() + "-" + levelName).getBytes());
 			}
 			else if(Game.multiplayer) {
+				// Send Player Data
 				gsm.client.sendData(new String("player-" + player.getX() + "-" + player.getY() + "-" + System.currentTimeMillis() + "-" + levelName).getBytes());
 			}
 			

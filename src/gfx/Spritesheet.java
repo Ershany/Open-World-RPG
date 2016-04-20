@@ -30,6 +30,7 @@ public class Spritesheet {
 	public static Spritesheet knightDeathSheet = new Spritesheet("/sprites/knight/knightDeath.png", 64, 64);
 	
 	public static Spritesheet playerSheet = new Spritesheet("/sprites/player/player.png", 32, 48);
+	public static Spritesheet onlineSheet = new Spritesheet("/sprites/player/online_player.png", 32, 48);
 	
 	public static Spritesheet kingSheet = new Spritesheet("/sprites/king/king.png", 32, 48);
 	

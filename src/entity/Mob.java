@@ -1,11 +1,11 @@
 package entity;
 
-import gamestatemanager.GameState;
-import gamestatemanager.LevelState;
-
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.util.Random;
 
+import game.Game;
+import gamestatemanager.LevelState;
 import projectile.Projectile;
 import tilemap.Tilemap;
 
@@ -66,6 +66,35 @@ public abstract class Mob extends Entity {
 		if(!invincible) {
 			currentHealth -= damage;
 			if(currentHealth < 0) currentHealth = 0;
+		}
+	}
+	
+	private int decide;
+	protected void setRandomMovement() {
+		long seed = System.currentTimeMillis();
+		
+		// If you are playing multiplayer and you are the host, send the seed to the other client
+		if(Game.hosting || !Game.multiplayer) {
+			
+		}
+		
+		Random random = new Random(seed);
+		if(random.nextInt(200) == 0) {
+			moveUp = false; moveDown = false; moveRight = false; moveLeft = false;
+			decide = random.nextInt(16) + 1;
+			if(decide % 2 == 0) return;
+			else {
+				switch(decide) {
+				case 1: moveUp = true; break;
+				case 3: moveDown = true; break;
+				case 5: moveRight = true; break;
+				case 7: moveLeft = true; break;
+				case 9: moveUp = true; moveRight = true; break;
+				case 11: moveUp = true; moveLeft = true; break;
+				case 13: moveDown = true; moveRight = true; break;
+				case 15: moveDown = true; moveLeft = true; break;
+				}
+			}
 		}
 	}
 	

@@ -34,6 +34,22 @@ public class Sprite {
 	public static Sprite playerHorizontalSwing = new Sprite("/sprites/melee attacks/horizontal.png"); 
 	public static Sprite playerVerticalSwing = new Sprite("/sprites/melee attacks/vertical.png");
 	
+	// online player
+	public static Sprite onlineIdleDown = new Sprite(1, 0, Spritesheet.onlineSheet);
+	public static Sprite onlineWalkDown1 = new Sprite(0, 0, Spritesheet.onlineSheet);
+	public static Sprite onlineWalkDown2 = new Sprite(2, 0, Spritesheet.onlineSheet);
+	public static Sprite onlineIdleUp = new Sprite(1, 1, Spritesheet.onlineSheet);
+	public static Sprite onlineWalkUp1 = new Sprite(0, 1, Spritesheet.onlineSheet);
+	public static Sprite onlineWalkUp2 = new Sprite(2, 1, Spritesheet.onlineSheet);
+	public static Sprite onlineIdleRight = new Sprite(1, 2, Spritesheet.onlineSheet);
+	public static Sprite onlineWalkRight1 = new Sprite(0, 2, Spritesheet.onlineSheet);
+	public static Sprite onlineWalkRight2 = new Sprite(2, 2, Spritesheet.onlineSheet);
+	public static Sprite onlineIdleLeft = new Sprite(1, 3, Spritesheet.onlineSheet);
+	public static Sprite onlineWalkLeft1 = new Sprite(0, 3, Spritesheet.onlineSheet);
+	public static Sprite onlineWalkLeft2 = new Sprite(2, 3, Spritesheet.onlineSheet);
+	public static Sprite onlineHorizontalSwing = new Sprite("/sprites/melee attacks/horizontal.png"); 
+	public static Sprite onlineVerticalSwing = new Sprite("/sprites/melee attacks/vertical.png");
+	
 	public static Sprite wasted = new Sprite("/sprites/player/Wasted.png");
 	
 	//king

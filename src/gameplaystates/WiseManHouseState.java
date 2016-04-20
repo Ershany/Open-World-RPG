@@ -36,9 +36,7 @@ public class WiseManHouseState extends LevelState {
 	
 	@Override
 	public void initSpawn() {
-		if(Game.hosting || !Game.multiplayer) {
-			npcs.add(new WisemanNPC(32 * 48, 32 * 32, 1, this, tilemap));
-		}
+		npcs.add(new WisemanNPC(32 * 48, 32 * 32, 1, this, tilemap));
 	}
 
 }

@@ -8,9 +8,16 @@ import gfx.Sprite;
 
 public class PlayerAnimate extends Animate {
 
-	private boolean up, down, left, right;
-	private int anim;
-	private int animSpeed = 20; //lower the value, faster the animation
+	private float prevX, prevY;
+	private Sprite[][] images = { { Sprite.playerWalkDown1, Sprite.playerIdleDown, Sprite.playerWalkDown2 },
+			{ Sprite.playerWalkUp1, Sprite.playerIdleUp, Sprite.playerWalkUp2 },
+			{ Sprite.playerWalkRight1, Sprite.playerIdleRight, Sprite.playerWalkRight2 },
+			{ Sprite.playerWalkLeft1, Sprite.playerIdleLeft, Sprite.playerWalkLeft2 } };
+	private int currentSet = 0; // 0 - down, 1 - up, 2 - right, 3 - left
+	private int currentSprite = 1; // 0 - walk1, 1 - idle, 2 - walk2
+	private boolean moving;
+	
+	private int animSpeed = 15; //lower the value, faster the animation
 	
 	public PlayerAnimate(Mob mob) {
 		super(mob);
@@ -18,98 +25,71 @@ public class PlayerAnimate extends Animate {
 
 	@Override
 	public void init() {
-		currentSprite = Sprite.playerIdleDown.getImage();
-		anim = 0;
+		prevX = mob.getX();
+		prevY = mob.getY();
 	}
 
 	@Override
 	public void render(Graphics2D g) {
-		g.drawImage(currentSprite, (int)mob.getX() - mob.getTileMap().getXOffset(), (int)mob.getY() - mob.getTileMap().getYOffset(), null);
+		g.drawImage(images[currentSet][currentSprite].getImage(), (int)mob.getX() - mob.getTileMap().getXOffset(), (int)mob.getY() - mob.getTileMap().getYOffset(), null);
 	}
 
+	private int counter = 0;
 	@Override
 	public void update() {
-		//if the user is moving, up the anim variable, if they are not moving, reset it!
-		if(up || down || right || left) {
-			anim++;
-			
-			if(up) {
-				if(anim % animSpeed == 0 || anim == 1) {
-					currentSprite = Sprite.playerWalkUp1.getImage();
-				}
-				else if(anim % (animSpeed/2) == 0) {
-					currentSprite = Sprite.playerWalkUp2.getImage();
-				}
-			}
-			else if(down) {
-				if(anim % animSpeed == 0 || anim == 1) {
-					currentSprite = Sprite.playerWalkDown1.getImage();
-				}
-				else if(anim % (animSpeed/2) == 0) {
-					currentSprite = Sprite.playerWalkDown2.getImage();
-				}
-			}
-			else if(right) {
-				if(anim % animSpeed == 0 || anim == 1) {
-					currentSprite = Sprite.playerWalkRight1.getImage();
-				}
-				else if(anim % (animSpeed/2) == 0) {
-					currentSprite = Sprite.playerWalkRight2.getImage();
-				}
-			} 
-			else if(left) {
-				if(anim % animSpeed == 0 || anim == 1) {
-					currentSprite = Sprite.playerWalkLeft1.getImage();
-				}
-				else if(anim % (animSpeed/2) == 0) {
-					currentSprite = Sprite.playerWalkLeft2.getImage();
-				}
-			}
-			
-		} else {
-			anim = 0;
+		moving = false;
+		
+		// Check x movement
+		if(mob.getX() > prevX) {
+			currentSet = 2;
+			moving = true;
 		}
+		else if(mob.getX() < prevX) {
+			currentSet = 3;
+			moving = true;
+		}
+		
+		// Check y movement
+		if(mob.getY() > prevY) {
+			currentSet = 0;
+			moving = true;
+		}
+		else if(mob.getY() < prevY) {
+			currentSet = 1;
+			moving = true;
+		}
+		
+		// Check if the player is moving and change their sprite accordingly
+		if(moving) {
+			if(counter == 0) 
+				currentSprite = 0;
+			
+			counter++;
+			if(counter >= animSpeed) {
+				counter = 1;
+				
+				if(currentSprite == 0)
+					currentSprite = 2;
+				else 
+					currentSprite = 0;
+			}
+		} else {
+			currentSprite = 1;
+			counter = 0;
+		}
+		
+		prevX = mob.getX();
+		prevY = mob.getY();
 	}
 
 	@Override
 	public void keyPressed(int k) {
-		//if it is paused, accept no input to update the sprite (includes a text pause too)
-		if(mob.getCurrentState().getPaused() || mob.getCurrentState().getCurrentTextBox() != null) {
-			if(up) {
-				currentSprite = Sprite.playerIdleUp.getImage();
-			} else if(down) {
-				currentSprite = Sprite.playerIdleDown.getImage();
-			} else if(right) {
-				currentSprite = Sprite.playerIdleRight.getImage();
-			} else if(left) {
-				currentSprite = Sprite.playerIdleLeft.getImage();
-			}
-			up = false;
-			down = false;
-			left = false;
-			right = false;
-			return;
-		}
 		
-		switch(k) {
-		case KeyEvent.VK_W: up = true; break;
-		case KeyEvent.VK_S: down = true; break;
-		case KeyEvent.VK_D: right = true; break;
-		case KeyEvent.VK_A: left = true; break;
-		}
 	}
 
 	@Override
 	public void keyReleased(int k) {
-		//if it is paused, accept no input to update the sprite (includes a text pause too)
-		if(mob.getCurrentState().getPaused() || mob.getCurrentState().getCurrentTextBox() != null) return;
 		
-		switch(k) {
-		case KeyEvent.VK_W: up = false; currentSprite = Sprite.playerIdleUp.getImage(); break;
-		case KeyEvent.VK_S: down = false; currentSprite = Sprite.playerIdleDown.getImage(); break;
-		case KeyEvent.VK_D: right = false; currentSprite = Sprite.playerIdleRight.getImage(); break;
-		case KeyEvent.VK_A: left = false; currentSprite = Sprite.playerIdleLeft.getImage(); break;
-		}
 	}
 	
 }

@@ -78,7 +78,7 @@ public class GameClient {
 			} 
 			
 			if (messageData[0].equals("player")) {
-				if(messageData[messageData.length - 1].equals(state.levelName)) {
+				if(messageData[messageData.length - 1].equalsIgnoreCase(state.levelName)) {
 					state.onlinePlayer.hide = false;
 					state.onlinePlayer.xTarg = Float.parseFloat(messageData[1]);
 					state.onlinePlayer.yTarg = Float.parseFloat(messageData[2]);
@@ -88,7 +88,7 @@ public class GameClient {
 				}
 			}
 			else if (messageData[0].equals("projectile")) {
-				if(messageData[messageData.length - 1].equals(state.levelName)) {
+				if(messageData[messageData.length - 1].equalsIgnoreCase(state.levelName)) {
 					state.addProjectile(
 							new Projectile(Float.parseFloat(messageData[1]), Float.parseFloat(messageData[2]),
 									Float.parseFloat(messageData[3]), Float.parseFloat(messageData[4]),
